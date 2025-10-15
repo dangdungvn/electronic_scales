@@ -1,0 +1,463 @@
+{
+	"info": {
+		"_postman_id": "ac6a1bd5-33c5-413f-8e80-55233dc310b7",
+		"name": "SCM_API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33915872"
+	},
+	"item": [
+		{
+			"name": "0.get_token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{SCM_SERVER}}/scm/token_auth",
+					"protocol": "http",
+					"host": [
+						"{{SCM_SERVER}}"
+					],
+					"path": [
+						"scm",
+						"token_auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetUserGroupList",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{SCM_SERVER}}/scm/GetUserGroupList",
+					"protocol": "http",
+					"host": [
+						"{{SCM_SERVER}}"
+					],
+					"path": [
+						"scm",
+						"GetUserGroupList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddUserGroup",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"TenNhom\": \"eee\",\r\n    \"MauQuanLyNguoiDung\": false,\r\n    \"MauCauHinhHeThong\": false,\r\n    \"MauBaoCaoLog\": false,\r\n    \"MauBaoCaoThongKe\": false,\r\n    \"MauQuanLyDuLieu\": \"Xem=True;Them=False;Sua=False;Xoa=False\",\r\n    \"MauBaoCaoTongHop\": \"Xem=True;Them=False;Sua=False;Xoa=False\",\r\n    \"MauBaoCaoChoCanLan2\": \"Xem=True;Them=False;Sua=False;Xoa=False\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{SCM_SERVER}}/scm/AddUserGroup",
+					"protocol": "http",
+					"host": [
+						"{{SCM_SERVER}}"
+					],
+					"path": [
+						"scm",
+						"AddUserGroup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateUserGroup",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ID\": \"16b2496e-50e4-44c5-b292-d54e64c9fa30\",\r\n    \"TenNhom\": \"eee\",\r\n    \"MauQuanLyNguoiDung\": false,\r\n    \"MauCauHinhHeThong\": false,\r\n    \"MauBaoCaoLog\": false,\r\n    \"MauBaoCaoThongKe\": false,\r\n    \"MauQuanLyDuLieu\": \"Xem=True;Them=False;Sua=False;Xoa=False\",\r\n    \"MauBaoCaoTongHop\": \"Xem=True;Them=False;Sua=False;Xoa=False\",\r\n    \"MauBaoCaoChoCanLan2\": \"Xem=True;Them=False;Sua=False;Xoa=False\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{SCM_SERVER}}/scm/AddUserGroup",
+					"protocol": "http",
+					"host": [
+						"{{SCM_SERVER}}"
+					],
+					"path": [
+						"scm",
+						"AddUserGroup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteUserGroup",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ID\": \"16b2496e-50e4-44c5-b292-d54e64c9fa30\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{SCM_SERVER}}/scm/DeleteUserGroup",
+					"protocol": "http",
+					"host": [
+						"{{SCM_SERVER}}"
+					],
+					"path": [
+						"scm",
+						"DeleteUserGroup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetUserList",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{SCM_SERVER}}/scm/GetUserList",
+					"protocol": "http",
+					"host": [
+						"{{SCM_SERVER}}"
+					],
+					"path": [
+						"scm",
+						"GetUserList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddUser",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Name\": \"baove\",\r\n    \"Login\": \"baove123\",\r\n    \"Password\": \"12345\",\r\n    \"IdNhomUser\":\"8e924015-5dad-4da7-be0e-7776482c14c9\",\r\n    \"Description\": \"\",\r\n    \"QuanLyNguoiDung\": false,\r\n    \"CauHinhHeThong\": false,\r\n    \"BaoCaoLog\": false,\r\n    \"BaoCaoThongKe\": false,\r\n    \"QuanLyDuLieu\": \"Xem=True;Them=False;Sua=False;Xoa=False\",\r\n    \"BaoCaoTongHop\": \"Xem=True;Them=False;Sua=False;Xoa=False\",\r\n    \"BaoCaoChoCanLan2\": \"Xem=True;Them=False;Sua=False;Xoa=False\",\r\n    \"XuatExcel\": false,\r\n    \"XuatPDF\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{SCM_SERVER}}/scm/AddUser",
+					"protocol": "http",
+					"host": [
+						"{{SCM_SERVER}}"
+					],
+					"path": [
+						"scm",
+						"AddUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateUser",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ID\": \"a1d06240-6b4f-4c4b-8235-8a33475687e1\",\r\n    \"Name\": \"baove123\",\r\n    \"Login\": \"baove123\",\r\n    \"Password\": \"12345\",\r\n    \"IdNhomUser\":\"8e924015-5dad-4da7-be0e-7776482c14c9\",\r\n    \"Description\": \"\",\r\n    \"QuanLyNguoiDung\": false,\r\n    \"CauHinhHeThong\": false,\r\n    \"BaoCaoLog\": true,\r\n    \"BaoCaoThongKe\": false,\r\n    \"QuanLyDuLieu\": \"Xem=True;Them=False;Sua=False;Xoa=False\",\r\n    \"BaoCaoTongHop\": \"Xem=True;Them=False;Sua=False;Xoa=False\",\r\n    \"BaoCaoChoCanLan2\": \"Xem=True;Them=False;Sua=False;Xoa=False\",\r\n    \"XuatExcel\": false,\r\n    \"XuatPDF\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{SCM_SERVER}}/scm/AddUser",
+					"protocol": "http",
+					"host": [
+						"{{SCM_SERVER}}"
+					],
+					"path": [
+						"scm",
+						"AddUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteUser",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ID\": \"fa4c3f09-da80-425f-9956-f57129ddc62c\"\r\n}"
+				},
+				"url": {
+					"raw": "http://{{SCM_SERVER}}/scm/DeleteUser",
+					"protocol": "http",
+					"host": [
+						"{{SCM_SERVER}}"
+					],
+					"path": [
+						"scm",
+						"DeleteUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LayDanhSachKhachHang",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{SCM_SERVER}}/scm/LayDanhSachKhachHang",
+					"protocol": "http",
+					"host": [
+						"{{SCM_SERVER}}"
+					],
+					"path": [
+						"scm",
+						"LayDanhSachKhachHang"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ThemKhachHang",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Ma\": \"KH002\",\r\n    \"Ten\": \"Công ty ABCD\",\r\n    \"DienThoai\": \"\",\r\n    \"DiaChi\": \"\",\r\n    \"GhiChu\": \"\",\r\n    \"CMND\": \"\",\r\n    \"NgayCap\": \"\",\r\n    \"NoiCap\": \"\",\r\n    \"Mst\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{SCM_SERVER}}/scm/CapNhatKhachHang",
+					"protocol": "http",
+					"host": [
+						"{{SCM_SERVER}}"
+					],
+					"path": [
+						"scm",
+						"CapNhatKhachHang"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CapNhatKhachHang",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ID\": \"2d2016b9-806a-4fd5-a66d-46c43eda4a5d\",\r\n    \"Ma\": \"KH003\",\r\n    \"Ten\": \"Công ty TNHH ABCD\",\r\n    \"DienThoai\": \"1234\",\r\n    \"DiaChi\": \"5678\",\r\n    \"GhiChu\": \"a\",\r\n    \"CMND\": \"s\",\r\n    \"NgayCap\": \"d\",\r\n    \"NoiCap\": \"f\",\r\n    \"Mst\": \"g\"\r\n}"
+				},
+				"url": {
+					"raw": "http://{{SCM_SERVER}}/scm/CapNhatKhachHang",
+					"protocol": "http",
+					"host": [
+						"{{SCM_SERVER}}"
+					],
+					"path": [
+						"scm",
+						"CapNhatKhachHang"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "XoaKhachHang",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ID\": \"06ba22b4-e627-4233-acd1-75167a93d6f7\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{SCM_SERVER}}/scm/XoaKhachHang",
+					"protocol": "http",
+					"host": [
+						"{{SCM_SERVER}}"
+					],
+					"path": [
+						"scm",
+						"XoaKhachHang"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "SCM_SERVER",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "default"
+		}
+	]
+}
