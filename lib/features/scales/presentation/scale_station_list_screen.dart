@@ -7,8 +7,8 @@ import '../../../shared/widgets/empty_state_widget.dart';
 import '../../../shared/widgets/error_display_widget.dart';
 import '../../../shared/widgets/loading_widget.dart';
 import '../data/scale_station_provider.dart';
+import '../widgets/station_card.dart';
 import 'add_edit_station_screen.dart';
-import 'station_detail_screen.dart';
 
 class ScaleStationListScreen extends HookConsumerWidget {
   const ScaleStationListScreen({super.key});
@@ -127,173 +127,19 @@ class _StationList extends ConsumerWidget {
             itemCount: stations.length,
             itemBuilder: (context, index) {
               final station = stations[index];
-              return _StationCard(station: station, index: index);
+              return StationCard(
+                station: station,
+                index: index,
+                onTest: () => _testConnection(context, station),
+              );
             },
           );
         },
       ),
     );
   }
-}
 
-class _StationCard extends StatelessWidget {
-  const _StationCard({required this.station, required this.index});
-
-  final dynamic station;
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
-    // Gradient colors cho mỗi card
-    final gradients = [
-      [const Color(0xFF2196F3), const Color(0xFF64B5F6)],
-      [const Color(0xFF9C27B0), const Color(0xFFBA68C8)],
-      [const Color(0xFFFF5722), const Color(0xFFFF8A65)],
-      [const Color(0xFF4CAF50), const Color(0xFF81C784)],
-      [const Color(0xFFFF9800), const Color(0xFFFFB74D)],
-    ];
-
-    final gradient = gradients[index % gradients.length];
-
-    return Card(
-      elevation: 2,
-      shadowColor: Colors.black12,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: () => _testConnection(context),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            gradient: LinearGradient(
-              colors: [
-                gradient[0].withOpacity(0.05),
-                gradient[1].withOpacity(0.02),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-          padding: const EdgeInsets.all(20),
-          child: Row(
-            children: [
-              // Icon với gradient
-              Hero(
-                tag: 'station_${station.id}',
-                child: Material(
-                  color: Colors.transparent,
-                  child: Container(
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: gradient,
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(14),
-                      boxShadow: [
-                        BoxShadow(
-                          color: gradient[0].withOpacity(0.3),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: const Icon(
-                      Iconsax.weight_1,
-                      color: Colors.white,
-                      size: 26,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16),
-              // Thông tin
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      station.name,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 6),
-                    Row(
-                      children: [
-                        Icon(Iconsax.global, size: 14, color: Colors.grey[600]),
-                        const SizedBox(width: 6),
-                        Flexible(
-                          child: Text(
-                            '${station.ip}:${station.port}',
-                            style: Theme.of(context).textTheme.bodySmall
-                                ?.copyWith(
-                                  color: Colors.grey[600],
-                                  fontSize: 13,
-                                ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              // Detail button
-              IconButton(
-                onPressed: () => _navigateToDetail(context),
-                icon: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: gradient[0].withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(
-                    Iconsax.arrow_right_3,
-                    color: gradient[0],
-                    size: 18,
-                  ),
-                ),
-                tooltip: 'Xem chi tiết',
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Navigate to detail screen
-  void _navigateToDetail(BuildContext context) {
-    Navigator.push(
-      context,
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            StationDetailScreen(station: station),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = Offset(1.0, 0.0);
-          const end = Offset.zero;
-          const curve = Curves.easeInOutCubic;
-          var tween = Tween(
-            begin: begin,
-            end: end,
-          ).chain(CurveTween(curve: curve));
-          return SlideTransition(
-            position: animation.drive(tween),
-            child: child,
-          );
-        },
-      ),
-    );
-  }
-
-  // Test kết nối đến trạm cân
-  void _testConnection(BuildContext context) async {
+  Future<void> _testConnection(BuildContext context, dynamic station) async {
     // Hiển thị loading dialog và test connection
     final result = await ConnectionTestDialog.show(context, station);
 

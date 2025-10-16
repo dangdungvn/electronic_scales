@@ -5,6 +5,9 @@ import '../../../shared/widgets/connection_test_dialog.dart';
 import '../../../shared/widgets/connection_result_snackbar.dart';
 import '../data/scale_station_provider.dart';
 import '../domain/scale_station.dart';
+import '../widgets/station_header_card.dart';
+import '../widgets/detail_info_item.dart';
+import '../widgets/section_title.dart';
 import 'add_edit_station_screen.dart';
 
 class StationDetailScreen extends ConsumerWidget {
@@ -18,7 +21,7 @@ class StationDetailScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Chi Tiết Trạm Cân'),
         leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left_1_copy),
+          icon: const Icon(Iconsax.arrow_left_1),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
@@ -38,100 +41,22 @@ class StationDetailScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(20),
         children: [
           // Header card
-          Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF2196F3), Color(0xFF64B5F6)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF2196F3).withOpacity(0.4),
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Hero only wraps the icon
-                Hero(
-                  tag: 'station_${station.id}',
-                  child: Material(
-                    color: Colors.transparent,
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Iconsax.weight_1,
-                        size: 48,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  station.name,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Iconsax.status, color: Colors.white, size: 16),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Hoạt động',
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.95),
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+          StationHeaderCard(stationId: station.id, stationName: station.name),
           const SizedBox(height: 24),
           // Info section
-          _SectionTitle(icon: Iconsax.information, title: 'Thông Tin Kết Nối'),
+          SectionTitle(icon: Iconsax.information, title: 'Thông Tin Kết Nối'),
           const SizedBox(height: 12),
           Card(
             child: Column(
               children: [
-                _DetailItem(
+                DetailInfoItem(
                   icon: Iconsax.global,
                   label: 'Địa chỉ IP',
                   value: station.ip,
                   iconColor: const Color(0xFF2196F3),
                 ),
                 const Divider(height: 1),
-                _DetailItem(
+                DetailInfoItem(
                   icon: Iconsax.setting_2,
                   label: 'Cổng',
                   value: station.port.toString(),
@@ -142,19 +67,19 @@ class StationDetailScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 24),
           // Auth section
-          _SectionTitle(icon: Iconsax.shield_tick, title: 'Xác Thực'),
+          SectionTitle(icon: Iconsax.shield_tick, title: 'Xác Thực'),
           const SizedBox(height: 12),
           Card(
             child: Column(
               children: [
-                _DetailItem(
+                DetailInfoItem(
                   icon: Iconsax.user,
                   label: 'Tên đăng nhập',
                   value: station.username,
                   iconColor: const Color(0xFF4CAF50),
                 ),
                 const Divider(height: 1),
-                _DetailItem(
+                DetailInfoItem(
                   icon: Iconsax.lock,
                   label: 'Mật khẩu',
                   value: '•' * station.password.length,
@@ -165,10 +90,10 @@ class StationDetailScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 24),
           // Metadata section
-          _SectionTitle(icon: Iconsax.calendar, title: 'Thông Tin Khác'),
+          SectionTitle(icon: Iconsax.calendar, title: 'Thông Tin Khác'),
           const SizedBox(height: 12),
           Card(
-            child: _DetailItem(
+            child: DetailInfoItem(
               icon: Iconsax.clock,
               label: 'Ngày tạo',
               value: _formatDate(station.createdAt),
@@ -309,90 +234,5 @@ class StationDetailScreen extends ConsumerWidget {
 
   String _formatDate(DateTime date) {
     return '${date.day}/${date.month}/${date.year} ${date.hour}:${date.minute.toString().padLeft(2, '0')}';
-  }
-}
-
-class _DetailItem extends StatelessWidget {
-  const _DetailItem({
-    required this.icon,
-    required this.label,
-    required this.value,
-    this.iconColor,
-  });
-
-  final IconData icon;
-  final String label;
-  final String value;
-  final Color? iconColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: (iconColor ?? const Color(0xFF2196F3)).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(
-              icon,
-              color: iconColor ?? const Color(0xFF2196F3),
-              size: 22,
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.grey[600],
-                    fontSize: 12,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  value,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 15,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// Section title widget
-class _SectionTitle extends StatelessWidget {
-  const _SectionTitle({required this.icon, required this.title});
-
-  final IconData icon;
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, size: 20, color: Colors.grey[700]),
-        const SizedBox(width: 10),
-        Text(
-          title,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: Colors.grey[800],
-          ),
-        ),
-      ],
-    );
   }
 }

@@ -6,6 +6,10 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../../../shared/widgets/connection_result_snackbar.dart';
 import '../data/scale_station_provider.dart';
 import '../domain/scale_station.dart';
+import '../widgets/form_header_card.dart';
+import '../widgets/custom_text_field.dart';
+import '../widgets/password_text_field.dart';
+import '../widgets/form_section_title.dart';
 
 class AddEditStationScreen extends HookConsumerWidget {
   const AddEditStationScreen({super.key, this.station});
@@ -33,7 +37,7 @@ class AddEditStationScreen extends HookConsumerWidget {
       appBar: AppBar(
         title: Text(station == null ? 'Thêm Trạm Cân' : 'Sửa Trạm Cân'),
         leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left_1_copy),
+          icon: const Icon(Iconsax.arrow_left_1),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -43,79 +47,11 @@ class AddEditStationScreen extends HookConsumerWidget {
           padding: const EdgeInsets.all(20),
           children: [
             // Header card
-            Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF2196F3), Color(0xFF64B5F6)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF2196F3).withOpacity(0.3),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(
-                      Iconsax.weight_1,
-                      color: Colors.white,
-                      size: 32,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          station == null ? 'Trạm Cân Mới' : 'Cập Nhật',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          station == null
-                              ? 'Điền thông tin bên dưới'
-                              : 'Chỉnh sửa thông tin trạm cân',
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.9),
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            FormHeaderCard(isEditMode: station != null),
             const SizedBox(height: 32),
             // Form section title
-            Padding(
-              padding: const EdgeInsets.only(left: 4, bottom: 12),
-              child: Text(
-                'Thông Tin Kết Nối',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey[700],
-                ),
-              ),
-            ),
-            _buildTextField(
+            const FormSectionTitle(title: 'Thông Tin Kết Nối'),
+            CustomTextField(
               controller: nameController,
               label: 'Tên trạm cân',
               icon: Iconsax.edit,
@@ -128,7 +64,7 @@ class AddEditStationScreen extends HookConsumerWidget {
               },
             ),
             const SizedBox(height: 20),
-            _buildTextField(
+            CustomTextField(
               controller: ipController,
               label: 'Địa chỉ IP',
               icon: Iconsax.global,
@@ -142,7 +78,7 @@ class AddEditStationScreen extends HookConsumerWidget {
               },
             ),
             const SizedBox(height: 20),
-            _buildTextField(
+            CustomTextField(
               controller: portController,
               label: 'Cổng (Port)',
               icon: Iconsax.setting_2,
@@ -162,23 +98,11 @@ class AddEditStationScreen extends HookConsumerWidget {
             ),
             const SizedBox(height: 32),
             // Authentication section
-            Padding(
-              padding: const EdgeInsets.only(left: 4, bottom: 12),
-              child: Row(
-                children: [
-                  Icon(Iconsax.shield_tick, size: 18, color: Colors.grey[700]),
-                  const SizedBox(width: 8),
-                  Text(
-                    'Thông Tin Xác Thực',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey[700],
-                    ),
-                  ),
-                ],
-              ),
+            const FormSectionTitle(
+              title: 'Thông Tin Xác Thực',
+              icon: Iconsax.shield_tick,
             ),
-            _buildTextField(
+            CustomTextField(
               controller: usernameController,
               label: 'Tên đăng nhập',
               icon: Iconsax.user,
@@ -191,7 +115,7 @@ class AddEditStationScreen extends HookConsumerWidget {
               },
             ),
             const SizedBox(height: 20),
-            _buildPasswordField(
+            PasswordTextField(
               controller: passwordController,
               isPasswordVisible: isPasswordVisible,
               validator: (value) {
@@ -292,116 +216,6 @@ class AddEditStationScreen extends HookConsumerWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String label,
-    required IconData icon,
-    String? hint,
-    String? Function(String?)? validator,
-    TextInputType? keyboardType,
-    List<TextInputFormatter>? inputFormatters,
-  }) {
-    return TextFormField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hint,
-        hintStyle: TextStyle(color: Colors.grey[400]),
-        prefixIcon: Icon(icon, color: const Color(0xFF2196F3)),
-        filled: true,
-        fillColor: Colors.white,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey[300]!, width: .5),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey[300]!, width: .5),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF2196F3), width: .5),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.red, width: .5),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.red, width: .5),
-        ),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 16,
-        ),
-      ),
-      keyboardType: keyboardType,
-      inputFormatters: inputFormatters,
-      validator: validator,
-      textCapitalization: TextCapitalization.none,
-      style: const TextStyle(fontSize: 16),
-    );
-  }
-
-  Widget _buildPasswordField({
-    required TextEditingController controller,
-    required ValueNotifier<bool> isPasswordVisible,
-    String? Function(String?)? validator,
-  }) {
-    return ValueListenableBuilder<bool>(
-      valueListenable: isPasswordVisible,
-      builder: (context, visible, _) {
-        return TextFormField(
-          controller: controller,
-          decoration: InputDecoration(
-            labelText: 'Mật khẩu',
-            hintText: '••••••••',
-            hintStyle: TextStyle(color: Colors.grey[400]),
-            prefixIcon: const Icon(Iconsax.lock, color: Color(0xFF2196F3)),
-            suffixIcon: IconButton(
-              icon: Icon(
-                visible ? Iconsax.eye : Iconsax.eye_slash,
-                color: Colors.grey[600],
-              ),
-              onPressed: () {
-                isPasswordVisible.value = !isPasswordVisible.value;
-              },
-            ),
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[300]!, width: .5),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[300]!, width: .5),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF2196F3), width: .5),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.red, width: .5),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.red, width: .5),
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 16,
-            ),
-          ),
-          obscureText: !visible,
-          validator: validator,
-          style: const TextStyle(fontSize: 16),
-        );
-      },
     );
   }
 }
