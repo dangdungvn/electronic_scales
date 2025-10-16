@@ -147,7 +147,7 @@ class StationCard extends StatelessWidget {
       context,
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
-            StationDetailScreen(station: station),
+            StationDetailScreen(stationId: station.id!),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(1.0, 0.0);
           const end = Offset.zero;

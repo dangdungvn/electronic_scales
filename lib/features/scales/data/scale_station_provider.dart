@@ -33,3 +33,17 @@ class ScaleStationList extends _$ScaleStationList {
     await refresh();
   }
 }
+
+/// Provider để watch một station cụ thể theo ID
+@riverpod
+Future<ScaleStation?> scaleStation(Ref ref, int stationId) async {
+  // Watch list để tự động update khi list thay đổi
+  final stationList = await ref.watch(scaleStationListProvider.future);
+
+  // Tìm station theo ID
+  try {
+    return stationList.firstWhere((station) => station.id == stationId);
+  } catch (e) {
+    return null;
+  }
+}

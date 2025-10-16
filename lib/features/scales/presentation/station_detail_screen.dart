@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../../../shared/widgets/connection_test_dialog.dart';
 import '../../../shared/widgets/connection_result_snackbar.dart';
+import '../../../shared/widgets/widgets.dart';
 import '../data/scale_station_provider.dart';
 import '../domain/scale_station.dart';
 import '../widgets/station_header_card.dart';
@@ -11,7 +12,64 @@ import '../widgets/section_title.dart';
 import 'add_edit_station_screen.dart';
 
 class StationDetailScreen extends ConsumerWidget {
-  const StationDetailScreen({super.key, required this.station});
+  const StationDetailScreen({super.key, required this.stationId});
+
+  final int stationId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final stationAsync = ref.watch(scaleStationProvider(stationId));
+
+    return stationAsync.when(
+      loading: () => Scaffold(
+        appBar: AppBar(
+          title: const Text('Chi Tiết Trạm Cân'),
+          leading: IconButton(
+            icon: const Icon(Iconsax.arrow_left_1),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
+        body: const LoadingWidget(),
+      ),
+      error: (error, stack) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Chi Tiết Trạm Cân'),
+          leading: IconButton(
+            icon: const Icon(Iconsax.arrow_left_1),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
+        body: ErrorDisplayWidget(
+          error: error,
+          onRetry: () => ref.invalidate(scaleStationProvider(stationId)),
+        ),
+      ),
+      data: (station) {
+        if (station == null) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Chi Tiết Trạm Cân'),
+              leading: IconButton(
+                icon: const Icon(Iconsax.arrow_left_1),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+            body: const EmptyStateWidget(
+              icon: Iconsax.search_status_1,
+              title: 'Không tìm thấy trạm cân',
+              message: 'Trạm cân này có thể đã bị xóa',
+            ),
+          );
+        }
+
+        return _StationDetailContent(station: station);
+      },
+    );
+  }
+}
+
+class _StationDetailContent extends ConsumerWidget {
+  const _StationDetailContent({required this.station});
 
   final ScaleStation station;
 
