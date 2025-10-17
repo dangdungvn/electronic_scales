@@ -9,6 +9,9 @@ import '../../../shared/widgets/loading_widget.dart';
 import '../data/scale_station_provider.dart';
 import '../widgets/station_card.dart';
 import 'add_edit_station_screen.dart';
+import '../../../features/home/presentation/home_screen.dart';
+import '../../../shared/models/user_permissions.dart';
+import '../../home/data/permissions_provider.dart';
 
 class ScaleStationListScreen extends HookConsumerWidget {
   const ScaleStationListScreen({super.key});
@@ -130,7 +133,7 @@ class _StationList extends ConsumerWidget {
               return StationCard(
                 station: station,
                 index: index,
-                onTest: () => _testConnection(context, station),
+                onTest: () => _testConnection(context, station, ref),
               );
             },
           );
@@ -139,18 +142,43 @@ class _StationList extends ConsumerWidget {
     );
   }
 
-  Future<void> _testConnection(BuildContext context, dynamic station) async {
+  Future<void> _testConnection(
+    BuildContext context,
+    dynamic station,
+    WidgetRef ref,
+  ) async {
     // Hiển thị loading dialog và test connection
     final result = await ConnectionTestDialog.show(context, station);
 
     if (result != null && context.mounted) {
       // Hiển thị kết quả
       if (result['success'] == true) {
-        ConnectionResultSnackbar.showSuccess(
-          context,
-          title: 'Kết nối thành công!',
-          message: '${station.name} đang hoạt động',
-        );
+        // ConnectionResultSnackbar.showSuccess(
+        //   context,
+        //   title: 'Kết nối thành công!',
+        //   message: '${station.name} đang hoạt động',
+        // );
+
+        // Lưu quyền hạn từ response
+        if (result['permissions'] != null) {
+          try {
+            final permissions = UserPermissions.fromJson(result['permissions']);
+            ref
+                .read(userPermissionsProvider.notifier)
+                .setPermissions(permissions);
+            // Thêm delay nhỏ để đảm bảo state được update trước khi chuyển screen
+            await Future.delayed(const Duration(milliseconds: 300));
+          } catch (e) {
+            // Nếu không thể parse, bỏ qua
+          }
+        }
+
+        // Chuyển sang HomeScreen
+        if (context.mounted) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        }
       } else {
         ConnectionResultSnackbar.showError(
           context,

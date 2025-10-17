@@ -142,6 +142,7 @@ class WeighingTab extends ConsumerWidget {
         label: const Text('Cân mới'),
         backgroundColor: const Color(0xFF4CAF50),
         foregroundColor: Colors.white,
+        heroTag: null,
       ),
     );
   }

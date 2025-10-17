@@ -33,6 +33,7 @@ class ConnectionService {
           'success': true,
           'message': 'Kết nối thành công!',
           'data': response.data,
+          'permissions': response.data, // Thêm permissions để lưu vào provider
         };
       } else {
         return {

@@ -92,6 +92,21 @@ class SettingsTab extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 24),
+          // Permissions section
+          _SectionTitle(title: 'Quyền Hạn'),
+          const SizedBox(height: 12),
+          _SettingsTile(
+            icon: Iconsax.shield_tick,
+            title: 'Xem quyền hạn chi tiết',
+            subtitle: 'Xem danh sách quyền hạn của bạn',
+            color: const Color(0xFFFF6F00),
+            onTap: () {
+              // Chuyển sang tab Quyền hạn
+              // Có thể sử dụng GNav để chuyển tab
+              // Tạm thời để trống
+            },
+          ),
+          const SizedBox(height: 24),
           // General settings
           _SectionTitle(title: 'Chung'),
           const SizedBox(height: 12),
