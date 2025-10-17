@@ -62,3 +62,40 @@ abstract class UserListResponse with _$UserListResponse {
   factory UserListResponse.fromJson(Map<String, dynamic> json) =>
       _$UserListResponseFromJson(json);
 }
+
+/// Request để thêm/sửa người dùng
+@freezed
+abstract class AddUserRequest with _$AddUserRequest {
+  const factory AddUserRequest({
+    @JsonKey(name: 'ID') String? id, // null khi thêm mới
+    @JsonKey(name: 'Name') required String name,
+    @JsonKey(name: 'Login') required String login,
+    @JsonKey(name: 'Password') required String password,
+    @JsonKey(name: 'IdNhomUser') required String idNhomUser,
+    @JsonKey(name: 'Description') @Default('') String description,
+    @JsonKey(name: 'QuanLyNguoiDung') @Default(false) bool quanLyNguoiDung,
+    @JsonKey(name: 'CauHinhHeThong') @Default(false) bool cauHinhHeThong,
+    @JsonKey(name: 'BaoCaoLog') @Default(false) bool baoCaoLog,
+    @JsonKey(name: 'BaoCaoThongKe') @Default(false) bool baoCaoThongKe,
+    @JsonKey(name: 'QuanLyDuLieu') @Default('') String quanLyDuLieu,
+    @JsonKey(name: 'BaoCaoTongHop') @Default('') String baoCaoTongHop,
+    @JsonKey(name: 'BaoCaoChoCanLan2') @Default('') String baoCaoChoCanLan2,
+    @JsonKey(name: 'XuatExcel') @Default(false) bool xuatExcel,
+    @JsonKey(name: 'XuatPDF') @Default(false) bool xuatPDF,
+  }) = _AddUserRequest;
+
+  factory AddUserRequest.fromJson(Map<String, dynamic> json) =>
+      _$AddUserRequestFromJson(json);
+}
+
+/// Response từ API AddUser
+@freezed
+abstract class AddUserResponse with _$AddUserResponse {
+  const factory AddUserResponse({
+    @JsonKey(name: 'Error') required bool error,
+    @JsonKey(name: 'Message') required String message,
+  }) = _AddUserResponse;
+
+  factory AddUserResponse.fromJson(Map<String, dynamic> json) =>
+      _$AddUserResponseFromJson(json);
+}

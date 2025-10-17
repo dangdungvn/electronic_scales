@@ -7,6 +7,7 @@ import '../../../shared/widgets/error_display_widget.dart';
 import '../../../shared/widgets/loading_widget.dart';
 import '../data/user_provider.dart';
 import '../widgets/user_card.dart';
+import 'add_edit_user_screen.dart';
 
 /// Screen hiển thị danh sách người dùng
 class UserListScreen extends HookConsumerWidget {
@@ -59,11 +60,8 @@ class UserListScreen extends HookConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // TODO: Navigate to add user screen
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Chức năng thêm người dùng đang phát triển'),
-            ),
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const AddEditUserScreen()),
           );
         },
         icon: const Icon(Iconsax.add),
@@ -100,7 +98,11 @@ class _UserList extends ConsumerWidget {
                   user: user,
                   index: index,
                   onTap: () {
-                    // TODO: Navigate to edit user screen
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => AddEditUserScreen(user: user),
+                      ),
+                    );
                   },
                   onDelete: () => _showDeleteConfirmDialog(context, ref, user),
                 ),
