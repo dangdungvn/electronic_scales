@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import '../data/permissions_provider.dart';
+import '../../user_management/presentation/user_group_list_screen.dart';
 
 /// Tab Cài đặt - Cấu hình và thiết lập ứng dụng
 class SettingsTab extends ConsumerWidget {
@@ -8,6 +10,7 @@ class SettingsTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final permissions = ref.watch(userPermissionsProvider);
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -106,86 +109,117 @@ class SettingsTab extends ConsumerWidget {
               // Tạm thời để trống
             },
           ),
-          const SizedBox(height: 24),
-          // General settings
-          _SectionTitle(title: 'Chung'),
-          const SizedBox(height: 12),
-          _SettingsTile(
-            icon: Iconsax.weight,
-            title: 'Quản lý trạm cân',
-            subtitle: 'Cấu hình các trạm cân',
-            color: const Color(0xFF2196F3),
-            onTap: () {
-              Navigator.of(context).pop();
-              // Will return to scale station list
-            },
-          ),
-          const SizedBox(height: 8),
-          _SettingsTile(
-            icon: Iconsax.document_text,
-            title: 'Mẫu phiếu cân',
-            subtitle: 'Thiết lập mẫu in phiếu',
-            color: const Color(0xFF4CAF50),
-            onTap: () {
-              // TODO: Navigate to template settings
-            },
-          ),
-          const SizedBox(height: 8),
-          _SettingsTile(
-            icon: Iconsax.printer,
-            title: 'Cài đặt in ấn',
-            subtitle: 'Cấu hình máy in',
-            color: const Color(0xFFFF9800),
-            onTap: () {
-              // TODO: Navigate to printer settings
-            },
-          ),
-          const SizedBox(height: 24),
-          // Data settings
-          _SectionTitle(title: 'Dữ Liệu'),
-          const SizedBox(height: 12),
-          _SettingsTile(
-            icon: Iconsax.export,
-            title: 'Sao lưu dữ liệu',
-            subtitle: 'Xuất dữ liệu ra file',
-            color: const Color(0xFF00BCD4),
-            onTap: () {
-              // TODO: Implement backup
-            },
-          ),
-          const SizedBox(height: 8),
-          _SettingsTile(
-            icon: Iconsax.import,
-            title: 'Khôi phục dữ liệu',
-            subtitle: 'Nhập dữ liệu từ file',
-            color: const Color(0xFF009688),
-            onTap: () {
-              // TODO: Implement restore
-            },
-          ),
-          const SizedBox(height: 8),
-          _SettingsTile(
-            icon: Iconsax.trash,
-            title: 'Xóa dữ liệu',
-            subtitle: 'Xóa tất cả dữ liệu',
-            color: const Color(0xFFF44336),
-            onTap: () {
-              // TODO: Show delete confirmation dialog
-            },
-          ),
-          const SizedBox(height: 24),
-          // App info
-          _SectionTitle(title: 'Thông Tin'),
-          const SizedBox(height: 12),
-          _SettingsTile(
-            icon: Iconsax.info_circle,
-            title: 'Về ứng dụng',
-            subtitle: 'Phiên bản 1.0.0',
-            color: const Color(0xFF607D8B),
-            onTap: () {
-              // TODO: Show about dialog
-            },
-          ),
+
+          // User management section (only show if has permission)
+          if (permissions?.quanLyNguoiDung == true) ...[
+            const SizedBox(height: 24),
+            _SectionTitle(title: 'Quản Lý Người Dùng'),
+            const SizedBox(height: 12),
+            _SettingsTile(
+              icon: Iconsax.profile_2user,
+              title: 'Quản lý nhóm người dùng',
+              subtitle: 'Tạo và quản lý nhóm quyền',
+              color: const Color(0xFF673AB7),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const UserGroupListScreen(),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 8),
+            _SettingsTile(
+              icon: Iconsax.profile_add,
+              title: 'Quản lý người dùng',
+              subtitle: 'Thêm, sửa, xóa người dùng',
+              color: const Color(0xFF9C27B0),
+              onTap: () {
+                // TODO: Navigate to user management
+              },
+            ),
+          ],
+
+          // const SizedBox(height: 24),
+          // // General settings
+          // _SectionTitle(title: 'Chung'),
+          // const SizedBox(height: 12),
+          // _SettingsTile(
+          //   icon: Iconsax.weight,
+          //   title: 'Quản lý trạm cân',
+          //   subtitle: 'Cấu hình các trạm cân',
+          //   color: const Color(0xFF2196F3),
+          //   onTap: () {
+          //     Navigator.of(context).pop();
+          //     // Will return to scale station list
+          //   },
+          // ),
+          // const SizedBox(height: 8),
+          // _SettingsTile(
+          //   icon: Iconsax.document_text,
+          //   title: 'Mẫu phiếu cân',
+          //   subtitle: 'Thiết lập mẫu in phiếu',
+          //   color: const Color(0xFF4CAF50),
+          //   onTap: () {
+          //     // TODO: Navigate to template settings
+          //   },
+          // ),
+          // const SizedBox(height: 8),
+          // _SettingsTile(
+          //   icon: Iconsax.printer,
+          //   title: 'Cài đặt in ấn',
+          //   subtitle: 'Cấu hình máy in',
+          //   color: const Color(0xFFFF9800),
+          //   onTap: () {
+          //     // TODO: Navigate to printer settings
+          //   },
+          // ),
+          // const SizedBox(height: 24),
+          // // Data settings
+          // _SectionTitle(title: 'Dữ Liệu'),
+          // const SizedBox(height: 12),
+          // _SettingsTile(
+          //   icon: Iconsax.export,
+          //   title: 'Sao lưu dữ liệu',
+          //   subtitle: 'Xuất dữ liệu ra file',
+          //   color: const Color(0xFF00BCD4),
+          //   onTap: () {
+          //     // TODO: Implement backup
+          //   },
+          // ),
+          // const SizedBox(height: 8),
+          // _SettingsTile(
+          //   icon: Iconsax.import,
+          //   title: 'Khôi phục dữ liệu',
+          //   subtitle: 'Nhập dữ liệu từ file',
+          //   color: const Color(0xFF009688),
+          //   onTap: () {
+          //     // TODO: Implement restore
+          //   },
+          // ),
+          // const SizedBox(height: 8),
+          // _SettingsTile(
+          //   icon: Iconsax.trash,
+          //   title: 'Xóa dữ liệu',
+          //   subtitle: 'Xóa tất cả dữ liệu',
+          //   color: const Color(0xFFF44336),
+          //   onTap: () {
+          //     // TODO: Show delete confirmation dialog
+          //   },
+          // ),
+          // const SizedBox(height: 24),
+          // // App info
+          // _SectionTitle(title: 'Thông Tin'),
+          // const SizedBox(height: 12),
+          // _SettingsTile(
+          //   icon: Iconsax.info_circle,
+          //   title: 'Về ứng dụng',
+          //   subtitle: 'Phiên bản 1.0.0',
+          //   color: const Color(0xFF607D8B),
+          //   onTap: () {
+          //     // TODO: Show about dialog
+          //   },
+          // ),
         ],
       ),
     );
