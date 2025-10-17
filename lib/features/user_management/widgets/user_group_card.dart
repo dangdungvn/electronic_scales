@@ -1,13 +1,20 @@
+import 'package:electronic_scales/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../domain/user_group.dart';
 
 /// Card hiển thị thông tin nhóm người dùng
 class UserGroupCard extends StatelessWidget {
-  const UserGroupCard({super.key, required this.group, required this.onTap});
+  const UserGroupCard({
+    super.key,
+    required this.group,
+    required this.onTap,
+    required this.onDelete,
+  });
 
   final UserGroup group;
   final VoidCallback onTap;
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +32,14 @@ class UserGroupCard extends StatelessWidget {
               // Header với STT và tên nhóm
               Row(
                 children: [
+                  Text(
+                    '${group.stt}. ',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: AppTheme.secondaryBlue,
+                    ),
+                  ),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,16 +66,16 @@ class UserGroupCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Icon(
-                    Iconsax.arrow_right_3,
-                    color: Colors.grey[400],
-                    size: 20,
+                  IconButton(
+                    icon: Icon(Iconsax.trash, color: Colors.red[400], size: 24),
+                    onPressed: onDelete,
+                    tooltip: 'Xóa nhóm',
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
                   ),
                 ],
               ),
-              // const SizedBox(height: 16),
-              // const Divider(height: 1),
-              const SizedBox(height: 12),
+              // const SizedBox(height: 12),
               // Quyền hạn boolean
               Wrap(
                 spacing: 8,
@@ -119,20 +134,20 @@ class _PermissionChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: const Color(0xFF673AB7).withOpacity(0.1),
+        color: AppTheme.primaryBlue.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFF673AB7).withOpacity(0.3)),
+        border: Border.all(color: AppTheme.primaryBlue.withOpacity(0.3)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 14, color: const Color(0xFF673AB7)),
+          Icon(icon, size: 14, color: AppTheme.primaryBlue),
           const SizedBox(width: 4),
           Text(
             label,
             style: const TextStyle(
               fontSize: 12,
-              color: Color(0xFF673AB7),
+              color: AppTheme.secondaryBlue,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -247,7 +262,7 @@ class _DetailedPermissionItem extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(icon, size: 16, color: const Color(0xFF673AB7)),
+                Icon(icon, size: 16, color: AppTheme.primaryBlue),
                 const SizedBox(width: 8),
                 Text(
                   title,
@@ -289,12 +304,12 @@ class _PermissionBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: enabled
-            ? const Color(0xFF4CAF50).withOpacity(0.1)
+            ? AppTheme.primaryGreen.withOpacity(0.1)
             : Colors.grey[200],
         borderRadius: BorderRadius.circular(6),
         border: Border.all(
           color: enabled
-              ? const Color(0xFF4CAF50).withOpacity(0.5)
+              ? AppTheme.primaryGreen.withOpacity(0.5)
               : Colors.grey[300]!,
         ),
       ),
@@ -304,7 +319,7 @@ class _PermissionBadge extends StatelessWidget {
           Icon(
             enabled ? Iconsax.tick_circle : Iconsax.close_circle,
             size: 12,
-            color: enabled ? const Color(0xFF4CAF50) : Colors.grey[500],
+            color: enabled ? AppTheme.primaryGreen : Colors.grey[500],
           ),
           const SizedBox(width: 4),
           Text(
@@ -312,7 +327,7 @@ class _PermissionBadge extends StatelessWidget {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w500,
-              color: enabled ? const Color(0xFF4CAF50) : Colors.grey[600],
+              color: enabled ? AppTheme.primaryGreen : Colors.grey[600],
             ),
           ),
         ],

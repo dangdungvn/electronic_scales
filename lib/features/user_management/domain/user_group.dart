@@ -44,3 +44,43 @@ abstract class UserGroupListResponse with _$UserGroupListResponse {
   factory UserGroupListResponse.fromJson(Map<String, dynamic> json) =>
       _$UserGroupListResponseFromJson(json);
 }
+
+/// Request để thêm/sửa nhóm người dùng
+@freezed
+abstract class AddUserGroupRequest with _$AddUserGroupRequest {
+  const factory AddUserGroupRequest({
+    @JsonKey(name: 'ID')
+    String? id, // Optional: null khi thêm mới, có giá trị khi sửa
+    @JsonKey(name: 'TenNhom') required String tenNhom,
+    @JsonKey(name: 'MauQuanLyNguoiDung')
+    @Default(false)
+    bool mauQuanLyNguoiDung,
+    @JsonKey(name: 'MauCauHinhHeThong') @Default(false) bool mauCauHinhHeThong,
+    @JsonKey(name: 'MauBaoCaoLog') @Default(false) bool mauBaoCaoLog,
+    @JsonKey(name: 'MauBaoCaoThongKe') @Default(false) bool mauBaoCaoThongKe,
+    @JsonKey(name: 'MauQuanLyDuLieu')
+    @Default('Xem=False;Them=False;Sua=False;Xoa=False')
+    String mauQuanLyDuLieu,
+    @JsonKey(name: 'MauBaoCaoTongHop')
+    @Default('Xem=False;Them=False;Sua=False;Xoa=False')
+    String mauBaoCaoTongHop,
+    @JsonKey(name: 'MauBaoCaoChoCanLan2')
+    @Default('Xem=False;Them=False;Sua=False;Xoa=False')
+    String mauBaoCaoChoCanLan2,
+  }) = _AddUserGroupRequest;
+
+  factory AddUserGroupRequest.fromJson(Map<String, dynamic> json) =>
+      _$AddUserGroupRequestFromJson(json);
+}
+
+/// Response từ API AddUserGroup
+@freezed
+abstract class AddUserGroupResponse with _$AddUserGroupResponse {
+  const factory AddUserGroupResponse({
+    @JsonKey(name: 'Error') required bool error,
+    @JsonKey(name: 'Message') required String message,
+  }) = _AddUserGroupResponse;
+
+  factory AddUserGroupResponse.fromJson(Map<String, dynamic> json) =>
+      _$AddUserGroupResponseFromJson(json);
+}

@@ -37,4 +37,59 @@ class UserGroupRepository {
       throw Exception('Không thể kết nối đến server');
     }
   }
+
+  /// Thêm nhóm người dùng mới
+  /// [baseUrl]: URL của trạm cân (http://ip:port)
+  /// [token]: Token xác thực
+  /// [request]: Dữ liệu nhóm người dùng mới
+  Future<AddUserGroupResponse> addUserGroup({
+    required String baseUrl,
+    required String token,
+    required AddUserGroupRequest request,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '$baseUrl/scm/AddUserGroup',
+        data: request.toJson(),
+        options: Options(
+          headers: {
+            'Authorization': token,
+            'Content-Type': 'application/json; charset=utf-8',
+          },
+        ),
+      );
+
+      return AddUserGroupResponse.fromJson(response.data);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        throw Exception(e.response?.data['Message'] ?? 'Lỗi không xác định');
+      }
+      throw Exception('Không thể kết nối đến server');
+    }
+  }
+
+  /// Xóa nhóm người dùng
+  /// [baseUrl]: URL của trạm cân (http://ip:port)
+  /// [token]: Token xác thực
+  /// [groupId]: ID của nhóm cần xóa
+  Future<AddUserGroupResponse> deleteUserGroup({
+    required String baseUrl,
+    required String token,
+    required String groupId,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '$baseUrl/scm/DeleteUserGroup',
+        data: {'ID': groupId},
+        options: Options(headers: {'Authorization': token}),
+      );
+
+      return AddUserGroupResponse.fromJson(response.data);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        throw Exception(e.response?.data['Message'] ?? 'Lỗi không xác định');
+      }
+      throw Exception('Không thể kết nối đến server');
+    }
+  }
 }
