@@ -67,4 +67,29 @@ class UserRepository {
       throw Exception('Không thể kết nối đến server');
     }
   }
+
+  /// Xóa người dùng
+  /// [baseUrl]: URL của trạm cân (http://ip:port)
+  /// [token]: Token xác thực
+  /// [userId]: ID của người dùng cần xóa
+  Future<AddUserResponse> deleteUser({
+    required String baseUrl,
+    required String token,
+    required String userId,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '$baseUrl/scm/DeleteUser',
+        data: {'ID': userId},
+        options: Options(headers: {'Authorization': token}),
+      );
+
+      return AddUserResponse.fromJson(response.data);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        throw Exception(e.response?.data['Message'] ?? 'Lỗi không xác định');
+      }
+      throw Exception('Không thể kết nối đến server');
+    }
+  }
 }

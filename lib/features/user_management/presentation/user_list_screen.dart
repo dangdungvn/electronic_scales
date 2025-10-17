@@ -6,8 +6,11 @@ import '../../../shared/widgets/empty_state_widget.dart';
 import '../../../shared/widgets/error_display_widget.dart';
 import '../../../shared/widgets/loading_widget.dart';
 import '../data/user_provider.dart';
+import '../data/user_repository.dart';
 import '../widgets/user_card.dart';
 import 'add_edit_user_screen.dart';
+import '../../scales/data/scale_station_provider.dart';
+import '../../home/data/permissions_provider.dart';
 
 /// Screen hiển thị danh sách người dùng
 class UserListScreen extends HookConsumerWidget {
@@ -140,10 +143,76 @@ class _UserList extends ConsumerWidget {
     );
 
     if (confirmed == true && context.mounted) {
-      // TODO: Implement delete user API
+      await _deleteUser(context, ref, user);
+    }
+  }
+
+  Future<void> _deleteUser(
+    BuildContext context,
+    WidgetRef ref,
+    dynamic user,
+  ) async {
+    // Show loading
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      // Lấy thông tin trạm cân và token
+      final stations = await ref.read(scaleStationListProvider.future);
+      if (stations.isEmpty) {
+        throw Exception('Chưa có trạm cân nào');
+      }
+
+      final station = stations.first;
+      final permissions = ref.read(userPermissionsProvider);
+      if (permissions == null) {
+        throw Exception('Chưa đăng nhập');
+      }
+
+      final baseUrl = 'http://${station.ip}:${station.port}';
+
+      // Call API delete
+      final response = await ref
+          .read(userRepositoryProvider)
+          .deleteUser(
+            baseUrl: baseUrl,
+            token: permissions.token,
+            userId: user.id,
+          );
+
+      if (!context.mounted) return;
+
+      // Dismiss loading
+      Navigator.of(context).pop();
+
+      if (!response.error) {
+        // Refresh danh sách
+        ref.invalidate(userListProvider);
+
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Xóa người dùng '${user.name}' thành công!"),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else {
+        throw Exception(response.message);
+      }
+    } catch (e) {
+      if (!context.mounted) return;
+
+      // Dismiss loading
+      Navigator.of(context).pop();
+
+      // Show error
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Chức năng xóa người dùng đang được phát triển'),
+        SnackBar(
+          content: Text('Lỗi: ${e.toString()}'),
+          backgroundColor: Colors.red,
         ),
       );
     }

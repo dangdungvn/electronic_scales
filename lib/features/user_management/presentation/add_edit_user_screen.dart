@@ -7,6 +7,7 @@ import '../domain/user.dart';
 import '../data/user_repository.dart';
 import '../data/user_provider.dart';
 import '../data/user_group_provider.dart';
+import '../widgets/permission_widgets.dart';
 import '../../scales/data/scale_station_provider.dart';
 import '../../home/data/permissions_provider.dart';
 
@@ -208,7 +209,7 @@ class AddEditUserScreen extends HookConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Thông tin cơ bản
-            _SectionTitle(title: 'Thông Tin Cơ Bản'),
+            SectionTitle(title: 'Thông Tin Cơ Bản'),
             const SizedBox(height: 12),
             TextField(
               controller: nameController,
@@ -277,9 +278,9 @@ class AddEditUserScreen extends HookConsumerWidget {
             const SizedBox(height: 24),
 
             // Quyền hạn boolean
-            _SectionTitle(title: 'Quyền Hạn Cơ Bản'),
+            SectionTitle(title: 'Quyền Hạn Cơ Bản'),
             const SizedBox(height: 12),
-            _PermissionSwitch(
+            PermissionSwitch(
               title: 'Quản lý người dùng',
               value: quanLyNguoiDung.value,
               onChanged: isLoading.value
@@ -287,7 +288,7 @@ class AddEditUserScreen extends HookConsumerWidget {
                   : (val) => quanLyNguoiDung.value = val,
               icon: Iconsax.people,
             ),
-            _PermissionSwitch(
+            PermissionSwitch(
               title: 'Cấu hình hệ thống',
               value: cauHinhHeThong.value,
               onChanged: isLoading.value
@@ -295,7 +296,7 @@ class AddEditUserScreen extends HookConsumerWidget {
                   : (val) => cauHinhHeThong.value = val,
               icon: Iconsax.setting_2,
             ),
-            _PermissionSwitch(
+            PermissionSwitch(
               title: 'Báo cáo Log',
               value: baoCaoLog.value,
               onChanged: isLoading.value
@@ -303,7 +304,7 @@ class AddEditUserScreen extends HookConsumerWidget {
                   : (val) => baoCaoLog.value = val,
               icon: Iconsax.document_text,
             ),
-            _PermissionSwitch(
+            PermissionSwitch(
               title: 'Báo cáo thống kê',
               value: baoCaoThongKe.value,
               onChanged: isLoading.value
@@ -314,31 +315,31 @@ class AddEditUserScreen extends HookConsumerWidget {
             const SizedBox(height: 12),
 
             // Quản lý dữ liệu
-            _SectionTitle(title: 'Quản Lý Dữ Liệu'),
-            _DetailedPermissionGroup(
+            SectionTitle(title: 'Quản Lý Dữ Liệu'),
+            DetailedPermissionGroup(
               permissions: [
-                _PermissionCheckbox(
+                PermissionCheckbox(
                   label: 'Xem',
                   value: qlDuLieuXem.value,
                   onChanged: isLoading.value
                       ? null
                       : (val) => qlDuLieuXem.value = val ?? false,
                 ),
-                _PermissionCheckbox(
+                PermissionCheckbox(
                   label: 'Thêm',
                   value: qlDuLieuThem.value,
                   onChanged: isLoading.value
                       ? null
                       : (val) => qlDuLieuThem.value = val ?? false,
                 ),
-                _PermissionCheckbox(
+                PermissionCheckbox(
                   label: 'Sửa',
                   value: qlDuLieuSua.value,
                   onChanged: isLoading.value
                       ? null
                       : (val) => qlDuLieuSua.value = val ?? false,
                 ),
-                _PermissionCheckbox(
+                PermissionCheckbox(
                   label: 'Xóa',
                   value: qlDuLieuXoa.value,
                   onChanged: isLoading.value
@@ -350,24 +351,24 @@ class AddEditUserScreen extends HookConsumerWidget {
             const SizedBox(height: 12),
 
             // Báo cáo tổng hợp
-            _SectionTitle(title: 'Báo Cáo Tổng Hợp'),
-            _DetailedPermissionGroup(
+            SectionTitle(title: 'Báo Cáo Tổng Hợp'),
+            DetailedPermissionGroup(
               permissions: [
-                _PermissionCheckbox(
+                PermissionCheckbox(
                   label: 'Xem',
                   value: bcTongHopXem.value,
                   onChanged: isLoading.value
                       ? null
                       : (val) => bcTongHopXem.value = val ?? false,
                 ),
-                _PermissionCheckbox(
+                PermissionCheckbox(
                   label: 'Sửa',
                   value: bcTongHopSua.value,
                   onChanged: isLoading.value
                       ? null
                       : (val) => bcTongHopSua.value = val ?? false,
                 ),
-                _PermissionCheckbox(
+                PermissionCheckbox(
                   label: 'Xóa',
                   value: bcTongHopXoa.value,
                   onChanged: isLoading.value
@@ -379,24 +380,24 @@ class AddEditUserScreen extends HookConsumerWidget {
             const SizedBox(height: 12),
 
             // Báo cáo cân lần 2
-            _SectionTitle(title: 'Báo Cáo Cân Lần 2'),
-            _DetailedPermissionGroup(
+            SectionTitle(title: 'Báo Cáo Cân Lần 2'),
+            DetailedPermissionGroup(
               permissions: [
-                _PermissionCheckbox(
+                PermissionCheckbox(
                   label: 'Xem',
                   value: bcCanLan2Xem.value,
                   onChanged: isLoading.value
                       ? null
                       : (val) => bcCanLan2Xem.value = val ?? false,
                 ),
-                _PermissionCheckbox(
+                PermissionCheckbox(
                   label: 'Sửa',
                   value: bcCanLan2Sua.value,
                   onChanged: isLoading.value
                       ? null
                       : (val) => bcCanLan2Sua.value = val ?? false,
                 ),
-                _PermissionCheckbox(
+                PermissionCheckbox(
                   label: 'Xóa',
                   value: bcCanLan2Xoa.value,
                   onChanged: isLoading.value
@@ -408,9 +409,9 @@ class AddEditUserScreen extends HookConsumerWidget {
             const SizedBox(height: 24),
 
             // Quyền xuất file
-            _SectionTitle(title: 'Quyền Xuất File'),
+            SectionTitle(title: 'Quyền Xuất File'),
             const SizedBox(height: 12),
-            _PermissionSwitch(
+            PermissionSwitch(
               title: 'Xuất Excel',
               value: xuatExcel.value,
               onChanged: isLoading.value
@@ -418,7 +419,7 @@ class AddEditUserScreen extends HookConsumerWidget {
                   : (val) => xuatExcel.value = val,
               icon: Iconsax.document_download,
             ),
-            _PermissionSwitch(
+            PermissionSwitch(
               title: 'Xuất PDF',
               value: xuatPDF.value,
               onChanged: isLoading.value ? null : (val) => xuatPDF.value = val,
@@ -435,124 +436,6 @@ class AddEditUserScreen extends HookConsumerWidget {
         backgroundColor: AppTheme.primaryBlue,
         foregroundColor: Colors.white,
         heroTag: null,
-      ),
-    );
-  }
-}
-
-// Widget hiển thị tiêu đề section
-class _SectionTitle extends StatelessWidget {
-  const _SectionTitle({required this.title});
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Text(
-        title,
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-          fontWeight: FontWeight.bold,
-          color: AppTheme.primaryBlue,
-        ),
-      ),
-    );
-  }
-}
-
-// Widget switch cho permission
-class _PermissionSwitch extends StatelessWidget {
-  const _PermissionSwitch({
-    required this.title,
-    required this.value,
-    required this.onChanged,
-    required this.icon,
-  });
-
-  final String title;
-  final bool value;
-  final ValueChanged<bool>? onChanged;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 8),
-      child: SwitchListTile(
-        title: Text(title),
-        value: value,
-        onChanged: onChanged,
-        secondary: Icon(icon, color: AppTheme.primaryBlue),
-      ),
-    );
-  }
-}
-
-// Widget nhóm checkbox cho detailed permissions
-class _DetailedPermissionGroup extends StatelessWidget {
-  const _DetailedPermissionGroup({required this.permissions});
-
-  final List<Widget> permissions;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Wrap(spacing: 16, runSpacing: 8, children: permissions),
-      ),
-    );
-  }
-}
-
-// Widget checkbox cho permission
-class _PermissionCheckbox extends StatelessWidget {
-  const _PermissionCheckbox({
-    required this.label,
-    required this.value,
-    required this.onChanged,
-  });
-
-  final String label;
-  final bool value;
-  final ValueChanged<bool?>? onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onChanged == null ? null : () => onChanged?.call(!value),
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
-        decoration: BoxDecoration(
-          color: value
-              ? AppTheme.primaryGreen.withOpacity(0.1)
-              : Colors.grey[100],
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: value ? AppTheme.primaryGreen : Colors.grey[300]!,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              value ? Iconsax.tick_circle : Iconsax.close_circle,
-              size: 16,
-              color: value ? AppTheme.primaryGreen : Colors.grey[500],
-            ),
-            const SizedBox(width: 6),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: value ? AppTheme.primaryGreen : Colors.grey[700],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
