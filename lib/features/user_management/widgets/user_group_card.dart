@@ -75,7 +75,7 @@ class UserGroupCard extends StatelessWidget {
                   ),
                 ],
               ),
-              // const SizedBox(height: 12),
+              const SizedBox(height: 12),
               // Quyền hạn boolean
               Wrap(
                 spacing: 8,

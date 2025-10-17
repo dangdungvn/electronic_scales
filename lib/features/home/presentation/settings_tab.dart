@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../data/permissions_provider.dart';
 import '../../user_management/presentation/user_group_list_screen.dart';
+import '../../user_management/presentation/user_list_screen.dart';
 
 /// Tab Cài đặt - Cấu hình và thiết lập ứng dụng
 class SettingsTab extends ConsumerWidget {
@@ -135,7 +136,11 @@ class SettingsTab extends ConsumerWidget {
               subtitle: 'Thêm, sửa, xóa người dùng',
               color: const Color(0xFF9C27B0),
               onTap: () {
-                // TODO: Navigate to user management
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const UserListScreen(),
+                  ),
+                );
               },
             ),
           ],
