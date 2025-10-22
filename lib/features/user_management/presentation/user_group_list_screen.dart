@@ -45,9 +45,8 @@ class UserGroupListScreen extends HookConsumerWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Iconsax.refresh),
-            onPressed: () => ref.invalidate(userGroupListProvider),
-            tooltip: 'Làm mới',
+            icon: const Icon(Iconsax.add),
+            onPressed: () => showAddEditUserGroupSheet(context: context),
           ),
         ],
       ),
@@ -64,20 +63,6 @@ class UserGroupListScreen extends HookConsumerWidget {
           error: error,
           onRetry: () => ref.invalidate(userGroupListProvider),
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const AddEditUserGroupScreen(),
-            ),
-          );
-        },
-        icon: const Icon(Iconsax.add),
-        label: const Text('Nhóm'),
-        backgroundColor: AppTheme.primaryBlue,
-        foregroundColor: Colors.white,
-        heroTag: null,
       ),
     );
   }
@@ -105,14 +90,10 @@ class _UserGroupList extends ConsumerWidget {
               children: [
                 UserGroupCard(
                   group: group,
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            AddEditUserGroupScreen(userGroup: group),
-                      ),
-                    );
-                  },
+                  onTap: () => showAddEditUserGroupSheet(
+                    context: context,
+                    userGroup: group,
+                  ),
                   onDelete: () => _showDeleteConfirmDialog(context, ref, group),
                 ),
                 if (index == groups.length - 1) const SizedBox(height: 100),

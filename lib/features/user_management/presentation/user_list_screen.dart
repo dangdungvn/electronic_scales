@@ -41,9 +41,8 @@ class UserListScreen extends HookConsumerWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Iconsax.refresh),
-            onPressed: () => ref.invalidate(userListProvider),
-            tooltip: 'Làm mới',
+            icon: const Icon(Iconsax.add),
+            onPressed: () => showAddEditUserSheet(context: context),
           ),
         ],
       ),
@@ -60,18 +59,6 @@ class UserListScreen extends HookConsumerWidget {
           error: error,
           onRetry: () => ref.invalidate(userListProvider),
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const AddEditUserScreen()),
-          );
-        },
-        icon: const Icon(Iconsax.add),
-        label: const Text('Người dùng'),
-        backgroundColor: AppTheme.primaryBlue,
-        foregroundColor: Colors.white,
-        heroTag: null,
       ),
     );
   }
@@ -100,13 +87,8 @@ class _UserList extends ConsumerWidget {
                 UserCard(
                   user: user,
                   index: index,
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => AddEditUserScreen(user: user),
-                      ),
-                    );
-                  },
+                  onTap: () =>
+                      showAddEditUserSheet(context: context, user: user),
                   onDelete: () => _showDeleteConfirmDialog(context, ref, user),
                 ),
                 if (index == users.length - 1) const SizedBox(height: 100),

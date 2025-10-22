@@ -121,31 +121,31 @@ class UserGroupCard extends HookWidget {
                     spacing: 8,
                     runSpacing: 8,
                     children: [
-                      if (group.mauQuanLyNguoiDung)
-                        const PermissionChip(
-                          label: 'Quản lý người dùng',
-                          icon: Iconsax.people,
-                        ),
-                      if (group.mauCauHinhHeThong)
-                        const PermissionChip(
-                          label: 'Cấu hình hệ thống',
-                          icon: Iconsax.setting_2,
-                        ),
-                      if (group.mauBaoCaoLog)
-                        const PermissionChip(
-                          label: 'Báo cáo Log',
-                          icon: Iconsax.document_text,
-                        ),
-                      if (group.mauBaoCaoThongKe)
-                        const PermissionChip(
-                          label: 'Báo cáo thống kê',
-                          icon: Iconsax.chart,
-                        ),
-                      if (group.mauBaoCaoWeb)
-                        const PermissionChip(
-                          label: 'Báo cáo Web',
-                          icon: Iconsax.global,
-                        ),
+                      PermissionChip(
+                        label: 'Quản lý người dùng',
+                        icon: Iconsax.people,
+                        enabled: group.mauQuanLyNguoiDung,
+                      ),
+                      PermissionChip(
+                        label: 'Cấu hình hệ thống',
+                        icon: Iconsax.setting_2,
+                        enabled: group.mauCauHinhHeThong,
+                      ),
+                      PermissionChip(
+                        label: 'Báo cáo Log',
+                        icon: Iconsax.document_text,
+                        enabled: group.mauBaoCaoLog,
+                      ),
+                      PermissionChip(
+                        label: 'Báo cáo thống kê',
+                        icon: Iconsax.chart,
+                        enabled: group.mauBaoCaoThongKe,
+                      ),
+                      PermissionChip(
+                        label: 'Báo cáo Web',
+                        icon: Iconsax.global,
+                        enabled: group.mauBaoCaoWeb,
+                      ),
                     ],
                   ),
 
@@ -166,12 +166,8 @@ class UserGroupCard extends HookWidget {
 
 /// Helper để kiểm tra có nội dung có thể expand không
 bool _hasExpandableContent(UserGroup group) {
-  return group.mauQuanLyNguoiDung ||
-      group.mauCauHinhHeThong ||
-      group.mauBaoCaoLog ||
-      group.mauBaoCaoThongKe ||
-      group.mauBaoCaoWeb ||
-      _hasDetailedPermissions(group);
+  // Luôn có thể expand vì luôn hiển thị các quyền hạn
+  return true;
 }
 
 /// Helper để kiểm tra có quyền hạn chi tiết không

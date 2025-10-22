@@ -2,32 +2,41 @@ import 'package:electronic_scales/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
-/// Chip hiển thị quyền hệ thống (màu xanh dương)
+/// Chip hiển thị quyền hệ thống (màu xanh lục nếu enabled, đỏ nếu disabled)
 class PermissionChip extends StatelessWidget {
-  const PermissionChip({super.key, required this.label, required this.icon});
+  const PermissionChip({
+    super.key,
+    required this.label,
+    required this.icon,
+    required this.enabled,
+  });
 
   final String label;
   final IconData icon;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
+    final chipColor = enabled ? AppTheme.primaryGreen : Colors.red;
+    final statusIcon = enabled ? Iconsax.tick_circle : Iconsax.close_circle;
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       decoration: BoxDecoration(
-        color: AppTheme.primaryBlue.withOpacity(0.1),
+        color: chipColor.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppTheme.primaryBlue.withOpacity(0.3)),
+        border: Border.all(color: chipColor.withOpacity(0.3)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 14, color: AppTheme.primaryBlue),
+          Icon(statusIcon, size: 14, color: chipColor),
           const SizedBox(width: 4),
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
-              color: AppTheme.secondaryBlue,
+              color: chipColor,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -37,59 +46,80 @@ class PermissionChip extends StatelessWidget {
   }
 }
 
-/// Chip hiển thị quyền chỉnh sửa (màu cam)
+/// Chip hiển thị quyền chỉnh sửa: xanh lục (✓) nếu bật, đỏ (✗) nếu tắt
 class EditChip extends StatelessWidget {
-  const EditChip({super.key, required this.label});
+  const EditChip({super.key, required this.label, required this.enabled});
 
   final String label;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
+    final chipColor = enabled ? AppTheme.primaryGreen : AppTheme.errorRed;
+    final statusIcon = enabled ? Iconsax.tick_circle : Iconsax.close_circle;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.orange.withOpacity(0.1),
+        color: chipColor.withOpacity(0.1),
         borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: Colors.orange.withOpacity(0.3)),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 11,
-          color: Colors.orange[700],
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
-  }
-}
-
-/// Chip hiển thị quyền khác (màu tím)
-class OtherChip extends StatelessWidget {
-  const OtherChip({super.key, required this.label, required this.icon});
-
-  final String label;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: Colors.purple.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: Colors.purple.withOpacity(0.3)),
+        border: Border.all(color: chipColor.withOpacity(0.5)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 12, color: Colors.purple[700]),
+          Icon(statusIcon, size: 12, color: chipColor),
           const SizedBox(width: 4),
           Text(
             label,
             style: TextStyle(
               fontSize: 11,
-              color: Colors.purple[700],
+              color: chipColor,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Chip hiển thị quyền khác: xanh lục (✓) nếu bật, đỏ (✗) nếu tắt
+class OtherChip extends StatelessWidget {
+  const OtherChip({
+    super.key,
+    required this.label,
+    required this.icon,
+    required this.enabled,
+  });
+
+  final String label;
+  // icon giữ lại để tương thích API cũ, hiện không dùng để hiển thị
+  final IconData icon;
+  final bool enabled;
+
+  @override
+  Widget build(BuildContext context) {
+    final chipColor = enabled ? AppTheme.primaryGreen : AppTheme.errorRed;
+    final statusIcon = enabled ? Iconsax.tick_circle : Iconsax.close_circle;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: chipColor.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: chipColor.withOpacity(0.5)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(statusIcon, size: 12, color: chipColor),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              color: chipColor,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -145,7 +175,7 @@ class DetailedPermissionItem extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             Wrap(
               spacing: 6,
               runSpacing: 6,
@@ -181,12 +211,12 @@ class PermissionBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: enabled
             ? AppTheme.primaryGreen.withOpacity(0.1)
-            : Colors.grey[200],
+            : AppTheme.errorRed.withOpacity(0.1),
         borderRadius: BorderRadius.circular(6),
         border: Border.all(
           color: enabled
               ? AppTheme.primaryGreen.withOpacity(0.5)
-              : Colors.grey[300]!,
+              : AppTheme.errorRed.withOpacity(0.5),
         ),
       ),
       child: Row(
@@ -195,7 +225,7 @@ class PermissionBadge extends StatelessWidget {
           Icon(
             enabled ? Iconsax.tick_circle : Iconsax.close_circle,
             size: 12,
-            color: enabled ? AppTheme.primaryGreen : Colors.grey[500],
+            color: enabled ? AppTheme.primaryGreen : AppTheme.errorRed,
           ),
           const SizedBox(width: 4),
           Text(
@@ -203,7 +233,7 @@ class PermissionBadge extends StatelessWidget {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w500,
-              color: enabled ? AppTheme.primaryGreen : Colors.grey[600],
+              color: enabled ? AppTheme.primaryGreen : AppTheme.errorRed,
             ),
           ),
         ],

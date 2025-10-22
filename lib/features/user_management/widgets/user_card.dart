@@ -130,31 +130,31 @@ class UserCard extends HookWidget {
                     spacing: 8,
                     runSpacing: 8,
                     children: [
-                      if (user.quanLyNguoiDung)
-                        const PermissionChip(
-                          label: 'Quản lý người dùng',
-                          icon: Iconsax.people,
-                        ),
-                      if (user.cauHinhHeThong)
-                        const PermissionChip(
-                          label: 'Cấu hình hệ thống',
-                          icon: Iconsax.setting_2,
-                        ),
-                      if (user.baoCaoLog)
-                        const PermissionChip(
-                          label: 'Báo cáo Log',
-                          icon: Iconsax.document_text,
-                        ),
-                      if (user.baoCaoThongKe)
-                        const PermissionChip(
-                          label: 'Báo cáo thống kê',
-                          icon: Iconsax.chart,
-                        ),
-                      if (user.baoCaoWeb)
-                        const PermissionChip(
-                          label: 'Báo cáo Web',
-                          icon: Iconsax.global,
-                        ),
+                      PermissionChip(
+                        label: 'Quản lý người dùng',
+                        icon: Iconsax.people,
+                        enabled: user.quanLyNguoiDung,
+                      ),
+                      PermissionChip(
+                        label: 'Cấu hình hệ thống',
+                        icon: Iconsax.setting_2,
+                        enabled: user.cauHinhHeThong,
+                      ),
+                      PermissionChip(
+                        label: 'Báo cáo Log',
+                        icon: Iconsax.document_text,
+                        enabled: user.baoCaoLog,
+                      ),
+                      PermissionChip(
+                        label: 'Báo cáo thống kê',
+                        icon: Iconsax.chart,
+                        enabled: user.baoCaoThongKe,
+                      ),
+                      PermissionChip(
+                        label: 'Báo cáo Web',
+                        icon: Iconsax.global,
+                        enabled: user.baoCaoWeb,
+                      ),
                     ],
                   ),
 
@@ -164,80 +164,71 @@ class UserCard extends HookWidget {
                     _DetailedPermissionsSection(user: user),
                   ],
 
-                  // Quyền chỉnh sửa
-                  if (_hasEditPermissions(user)) ...[
-                    const SizedBox(height: 12),
-                    Text(
-                      'Quyền chỉnh sửa:',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.grey[700],
-                      ),
+                  // Quyền chỉnh sửa (luôn hiển thị tất cả, đổi màu theo enabled)
+                  const SizedBox(height: 12),
+                  Text(
+                    'Quyền chỉnh sửa:',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[700],
                     ),
-                    const SizedBox(height: 8),
-                    Wrap(
-                      spacing: 6,
-                      runSpacing: 6,
-                      children: [
-                        if (user.suaMaPhieu) const EditChip(label: 'Mã phiếu'),
-                        if (user.suaBienSo) const EditChip(label: 'Biển số'),
-                        if (user.suaKhachHang)
-                          const EditChip(label: 'Khách hàng'),
-                        if (user.suaLoaiHang)
-                          const EditChip(label: 'Loại hàng'),
-                        if (user.suaKhoHang) const EditChip(label: 'Kho hàng'),
-                        if (user.suaKieuCan) const EditChip(label: 'Kiểu cân'),
-                        if (user.suaNguoiCan)
-                          const EditChip(label: 'Người cân'),
-                        if (user.suaThoiGian)
-                          const EditChip(label: 'Thời gian'),
-                        if (user.suaKhoiLuong)
-                          const EditChip(label: 'Khối lượng'),
-                        if (user.suaDonGia) const EditChip(label: 'Đơn giá'),
-                      ],
-                    ),
-                  ],
+                  ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    children: [
+                      EditChip(label: 'Mã phiếu', enabled: user.suaMaPhieu),
+                      EditChip(label: 'Biển số', enabled: user.suaBienSo),
+                      EditChip(label: 'Khách hàng', enabled: user.suaKhachHang),
+                      EditChip(label: 'Loại hàng', enabled: user.suaLoaiHang),
+                      EditChip(label: 'Kho hàng', enabled: user.suaKhoHang),
+                      EditChip(label: 'Kiểu cân', enabled: user.suaKieuCan),
+                      EditChip(label: 'Người cân', enabled: user.suaNguoiCan),
+                      EditChip(label: 'Thời gian', enabled: user.suaThoiGian),
+                      EditChip(label: 'Khối lượng', enabled: user.suaKhoiLuong),
+                      EditChip(label: 'Đơn giá', enabled: user.suaDonGia),
+                    ],
+                  ),
 
-                  // Quyền khác
-                  if (_hasOtherPermissions(user)) ...[
-                    const SizedBox(height: 12),
-                    Text(
-                      'Quyền khác:',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.grey[700],
+                  // Quyền khác (luôn hiển thị tất cả, đổi màu theo enabled)
+                  const SizedBox(height: 12),
+                  Text(
+                    'Quyền khác:',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    children: [
+                      OtherChip(
+                        label: 'Giảm trừ KL',
+                        icon: Iconsax.minus_cirlce,
+                        enabled: user.choPhepGiamTruKL,
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Wrap(
-                      spacing: 6,
-                      runSpacing: 6,
-                      children: [
-                        if (user.choPhepGiamTruKL)
-                          const OtherChip(
-                            label: 'Giảm trừ KL',
-                            icon: Iconsax.minus_cirlce,
-                          ),
-                        if (user.xuatExcel)
-                          const OtherChip(
-                            label: 'Xuất Excel',
-                            icon: Iconsax.document_download,
-                          ),
-                        if (user.xuatPDF)
-                          const OtherChip(
-                            label: 'Xuất PDF',
-                            icon: Iconsax.document_download,
-                          ),
-                        if (user.choPhepDeMo)
-                          const OtherChip(
-                            label: 'Cho phép demo',
-                            icon: Iconsax.play,
-                          ),
-                      ],
-                    ),
-                  ],
+                      OtherChip(
+                        label: 'Xuất Excel',
+                        icon: Iconsax.document_download,
+                        enabled: user.xuatExcel,
+                      ),
+                      OtherChip(
+                        label: 'Xuất PDF',
+                        icon: Iconsax.document_download,
+                        enabled: user.xuatPDF,
+                      ),
+                      OtherChip(
+                        label: 'Cho phép demo',
+                        icon: Iconsax.play,
+                        enabled: user.choPhepDeMo,
+                      ),
+                    ],
+                  ),
 
                   // Thông tin bổ sung
                   if (_hasAdditionalInfo(user)) ...[
@@ -290,15 +281,8 @@ class UserCard extends HookWidget {
 
 /// Helper để kiểm tra có nội dung có thể expand không
 bool _hasExpandableContent(User user) {
-  return user.quanLyNguoiDung ||
-      user.cauHinhHeThong ||
-      user.baoCaoLog ||
-      user.baoCaoThongKe ||
-      user.baoCaoWeb ||
-      _hasDetailedPermissions(user) ||
-      _hasEditPermissions(user) ||
-      _hasOtherPermissions(user) ||
-      _hasAdditionalInfo(user);
+  // Luôn có thể expand vì luôn hiển thị các quyền hạn
+  return true;
 }
 
 /// Helper để kiểm tra có quyền hạn chi tiết không
@@ -306,28 +290,6 @@ bool _hasDetailedPermissions(User user) {
   return hasAnyPermission(user.quanLyDuLieu) ||
       hasAnyPermission(user.baoCaoTongHop) ||
       hasAnyPermission(user.baoCaoChoCanLan2);
-}
-
-/// Helper để kiểm tra có quyền chỉnh sửa không
-bool _hasEditPermissions(User user) {
-  return user.suaMaPhieu ||
-      user.suaBienSo ||
-      user.suaKhachHang ||
-      user.suaLoaiHang ||
-      user.suaKhoHang ||
-      user.suaKieuCan ||
-      user.suaNguoiCan ||
-      user.suaThoiGian ||
-      user.suaKhoiLuong ||
-      user.suaDonGia;
-}
-
-/// Helper để kiểm tra có quyền khác không
-bool _hasOtherPermissions(User user) {
-  return user.choPhepGiamTruKL ||
-      user.xuatExcel ||
-      user.xuatPDF ||
-      user.choPhepDeMo;
 }
 
 /// Helper để kiểm tra có thông tin bổ sung không

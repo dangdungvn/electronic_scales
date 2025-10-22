@@ -11,9 +11,18 @@ import '../widgets/permission_widgets.dart';
 import '../../scales/data/scale_station_provider.dart';
 import '../../home/data/permissions_provider.dart';
 
-/// Screen để thêm/sửa người dùng
-class AddEditUserScreen extends HookConsumerWidget {
-  const AddEditUserScreen({super.key, this.user});
+Future<void> showAddEditUserSheet({required BuildContext context, User? user}) {
+  return showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (sheetContext) => AddEditUserSheet(user: user),
+  );
+}
+
+/// Bottom sheet thêm/sửa người dùng
+class AddEditUserSheet extends HookConsumerWidget {
+  const AddEditUserSheet({super.key, this.user});
 
   /// Người dùng cần sửa (null = thêm mới)
   final User? user;
@@ -80,7 +89,27 @@ class AddEditUserScreen extends HookConsumerWidget {
     final xuatExcel = useState(user?.xuatExcel ?? false);
     final xuatPDF = useState(user?.xuatPDF ?? false);
 
+    final userGroupsAsync = ref.watch(userGroupListProvider);
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final sheetTitle = isEditMode ? 'Sửa Người Dùng' : 'Thêm Người Dùng';
+    // final sheetSubtitle = isEditMode
+    //     ? 'Cập nhật thông tin và phân quyền'
+    //     : 'Điền đầy đủ thông tin để tạo người dùng mới';
+    final actionIcon = isEditMode ? Iconsax.save_2 : Iconsax.add_circle;
+    final actionLabel = isEditMode ? 'Lưu thay đổi' : 'Tạo người dùng';
+    final hasDataPermissions =
+        qlDuLieuXem.value ||
+        qlDuLieuThem.value ||
+        qlDuLieuSua.value ||
+        qlDuLieuXoa.value;
+    final hasSummaryPermissions =
+        bcTongHopXem.value || bcTongHopSua.value || bcTongHopXoa.value;
+    final hasSecondWeighPermissions =
+        bcCanLan2Xem.value || bcCanLan2Sua.value || bcCanLan2Xoa.value;
+
     Future<void> handleSubmit() async {
+      FocusScope.of(context).unfocus();
       // Validate
       if (nameController.text.trim().isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -199,296 +228,631 @@ class AddEditUserScreen extends HookConsumerWidget {
       }
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(isEditMode ? 'Sửa Người Dùng' : 'Thêm Người Dùng'),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Thông tin cơ bản
-            SectionTitle(title: 'Thông Tin Cơ Bản'),
-            const SizedBox(height: 12),
-            TextField(
-              controller: nameController,
-              decoration: InputDecoration(
-                labelText: 'Tên người dùng *',
-                hintText: 'Nhập tên người dùng',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                prefixIcon: const Icon(Iconsax.user),
-              ),
-              textCapitalization: TextCapitalization.words,
-              enabled: !isLoading.value,
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: loginController,
-              decoration: InputDecoration(
-                labelText: 'Tên đăng nhập *',
-                hintText: 'Nhập tên đăng nhập',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                prefixIcon: const Icon(Iconsax.login),
-              ),
-              enabled: !isLoading.value,
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: passwordController,
-              decoration: InputDecoration(
-                labelText: 'Mật khẩu *',
-                hintText: 'Nhập mật khẩu',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                prefixIcon: const Icon(Iconsax.lock),
-              ),
-              obscureText: true,
-              enabled: !isLoading.value,
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: descriptionController,
-              decoration: InputDecoration(
-                labelText: 'Mô tả',
-                hintText: 'Nhập mô tả (tùy chọn)',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                prefixIcon: const Icon(Iconsax.note_text),
-              ),
-              maxLines: 3,
-              textCapitalization: TextCapitalization.sentences,
-              enabled: !isLoading.value,
-            ),
-            const SizedBox(height: 12),
-
-            // Nhóm người dùng dropdown
-            _UserGroupDropdown(
-              selectedId: selectedUserGroupId.value,
-              onChanged: isLoading.value
-                  ? null
-                  : (value) => selectedUserGroupId.value = value,
-            ),
-            const SizedBox(height: 24),
-
-            // Quyền hạn boolean
-            SectionTitle(title: 'Quyền Hạn Cơ Bản'),
-            const SizedBox(height: 12),
-            PermissionSwitch(
-              title: 'Quản lý người dùng',
-              value: quanLyNguoiDung.value,
-              onChanged: isLoading.value
-                  ? null
-                  : (val) => quanLyNguoiDung.value = val,
-              icon: Iconsax.people,
-            ),
-            PermissionSwitch(
-              title: 'Cấu hình hệ thống',
-              value: cauHinhHeThong.value,
-              onChanged: isLoading.value
-                  ? null
-                  : (val) => cauHinhHeThong.value = val,
-              icon: Iconsax.setting_2,
-            ),
-            PermissionSwitch(
-              title: 'Báo cáo Log',
-              value: baoCaoLog.value,
-              onChanged: isLoading.value
-                  ? null
-                  : (val) => baoCaoLog.value = val,
-              icon: Iconsax.document_text,
-            ),
-            PermissionSwitch(
-              title: 'Báo cáo thống kê',
-              value: baoCaoThongKe.value,
-              onChanged: isLoading.value
-                  ? null
-                  : (val) => baoCaoThongKe.value = val,
-              icon: Iconsax.chart,
-            ),
-            const SizedBox(height: 12),
-
-            // Quản lý dữ liệu
-            SectionTitle(title: 'Quản Lý Dữ Liệu'),
-            DetailedPermissionGroup(
-              permissions: [
-                PermissionCheckbox(
-                  label: 'Xem',
-                  value: qlDuLieuXem.value,
-                  onChanged: isLoading.value
-                      ? null
-                      : (val) => qlDuLieuXem.value = val ?? false,
-                ),
-                PermissionCheckbox(
-                  label: 'Thêm',
-                  value: qlDuLieuThem.value,
-                  onChanged: isLoading.value
-                      ? null
-                      : (val) => qlDuLieuThem.value = val ?? false,
-                ),
-                PermissionCheckbox(
-                  label: 'Sửa',
-                  value: qlDuLieuSua.value,
-                  onChanged: isLoading.value
-                      ? null
-                      : (val) => qlDuLieuSua.value = val ?? false,
-                ),
-                PermissionCheckbox(
-                  label: 'Xóa',
-                  value: qlDuLieuXoa.value,
-                  onChanged: isLoading.value
-                      ? null
-                      : (val) => qlDuLieuXoa.value = val ?? false,
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-
-            // Báo cáo tổng hợp
-            SectionTitle(title: 'Báo Cáo Tổng Hợp'),
-            DetailedPermissionGroup(
-              permissions: [
-                PermissionCheckbox(
-                  label: 'Xem',
-                  value: bcTongHopXem.value,
-                  onChanged: isLoading.value
-                      ? null
-                      : (val) => bcTongHopXem.value = val ?? false,
-                ),
-                PermissionCheckbox(
-                  label: 'Sửa',
-                  value: bcTongHopSua.value,
-                  onChanged: isLoading.value
-                      ? null
-                      : (val) => bcTongHopSua.value = val ?? false,
-                ),
-                PermissionCheckbox(
-                  label: 'Xóa',
-                  value: bcTongHopXoa.value,
-                  onChanged: isLoading.value
-                      ? null
-                      : (val) => bcTongHopXoa.value = val ?? false,
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-
-            // Báo cáo cân lần 2
-            SectionTitle(title: 'Báo Cáo Cân Lần 2'),
-            DetailedPermissionGroup(
-              permissions: [
-                PermissionCheckbox(
-                  label: 'Xem',
-                  value: bcCanLan2Xem.value,
-                  onChanged: isLoading.value
-                      ? null
-                      : (val) => bcCanLan2Xem.value = val ?? false,
-                ),
-                PermissionCheckbox(
-                  label: 'Sửa',
-                  value: bcCanLan2Sua.value,
-                  onChanged: isLoading.value
-                      ? null
-                      : (val) => bcCanLan2Sua.value = val ?? false,
-                ),
-                PermissionCheckbox(
-                  label: 'Xóa',
-                  value: bcCanLan2Xoa.value,
-                  onChanged: isLoading.value
-                      ? null
-                      : (val) => bcCanLan2Xoa.value = val ?? false,
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-
-            // Quyền xuất file
-            SectionTitle(title: 'Quyền Xuất File'),
-            const SizedBox(height: 12),
-            PermissionSwitch(
-              title: 'Xuất Excel',
-              value: xuatExcel.value,
-              onChanged: isLoading.value
-                  ? null
-                  : (val) => xuatExcel.value = val,
-              icon: Iconsax.document_download,
-            ),
-            PermissionSwitch(
-              title: 'Xuất PDF',
-              value: xuatPDF.value,
-              onChanged: isLoading.value ? null : (val) => xuatPDF.value = val,
-              icon: Iconsax.document_download,
-            ),
-            const SizedBox(height: 100),
-          ],
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: AnimatedPadding(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOutCubic,
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: isLoading.value ? null : handleSubmit,
-        icon: const Icon(Iconsax.add_circle),
-        label: const Text('Lưu'),
-        backgroundColor: AppTheme.primaryBlue,
-        foregroundColor: Colors.white,
-        heroTag: null,
+        child: FractionallySizedBox(
+          heightFactor: 0.95,
+          child: Container(
+            decoration: BoxDecoration(
+              color: colorScheme.surface,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(24),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 24,
+                  offset: const Offset(0, -4),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                const SizedBox(height: 12),
+                const _SheetHandle(),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 16, 12, 12),
+                  child: Row(
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          // crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              sheetTitle,
+                              style: theme.textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        tooltip: 'Đóng',
+                        onPressed: () => Navigator.of(context).maybePop(),
+                        icon: Icon(
+                          Iconsax.close_circle,
+                          color: colorScheme.outline,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SectionTitle(title: 'Thông Tin Cơ Bản'),
+                        const SizedBox(height: 4),
+                        _SectionCard(
+                          children: [
+                            TextField(
+                              controller: nameController,
+                              decoration: InputDecoration(
+                                labelText: 'Tên người dùng *',
+                                hintText: 'Nhập tên người dùng',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                prefixIcon: const Icon(Iconsax.user),
+                              ),
+                              textCapitalization: TextCapitalization.words,
+                              enabled: !isLoading.value,
+                            ),
+                            TextField(
+                              controller: loginController,
+                              decoration: InputDecoration(
+                                labelText: 'Tên đăng nhập *',
+                                hintText: 'Nhập tên đăng nhập',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                prefixIcon: const Icon(Iconsax.login),
+                              ),
+                              enabled: !isLoading.value,
+                            ),
+                            TextField(
+                              controller: passwordController,
+                              decoration: InputDecoration(
+                                labelText: 'Mật khẩu *',
+                                hintText: 'Nhập mật khẩu',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                prefixIcon: const Icon(Iconsax.lock),
+                              ),
+                              obscureText: true,
+                              enabled: !isLoading.value,
+                            ),
+                            TextField(
+                              controller: descriptionController,
+                              decoration: InputDecoration(
+                                labelText: 'Mô tả',
+                                hintText: 'Nhập mô tả (tùy chọn)',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                prefixIcon: const Icon(Iconsax.note_text),
+                              ),
+                              maxLines: 3,
+                              textCapitalization: TextCapitalization.sentences,
+                              enabled: !isLoading.value,
+                            ),
+                            userGroupsAsync.when(
+                              data: (userGroups) {
+                                if (userGroups.isEmpty) {
+                                  return _InlineNotice(
+                                    icon: Iconsax.people,
+                                    title: 'Chưa có nhóm người dùng',
+                                    message:
+                                        'Vui lòng tạo nhóm người dùng trước khi thêm thành viên mới.',
+                                    color: AppTheme.primaryBlue,
+                                  );
+                                }
+
+                                return DropdownButtonFormField<String>(
+                                  value: selectedUserGroupId.value,
+                                  decoration: InputDecoration(
+                                    labelText: 'Nhóm người dùng *',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    prefixIcon: const Icon(Iconsax.people),
+                                  ),
+                                  items: userGroups.map((group) {
+                                    return DropdownMenuItem<String>(
+                                      value: group.id,
+                                      child: Text(group.tenNhom),
+                                    );
+                                  }).toList(),
+                                  onChanged: isLoading.value
+                                      ? null
+                                      : (value) =>
+                                            selectedUserGroupId.value = value,
+                                );
+                              },
+                              loading: () => const Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 8),
+                                  child: SizedBox(
+                                    width: 24,
+                                    height: 24,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              error: (error, stack) => _InlineNotice(
+                                icon: Iconsax.warning_2,
+                                title: 'Lỗi tải danh sách nhóm',
+                                message: error.toString(),
+                                color: Colors.red,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        SectionTitle(title: 'Quyền Hạn Cơ Bản'),
+                        // const SizedBox(height: 12),
+                        _SectionCard(
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: _PermissionChip(
+                                    label: 'Quản lý người dùng',
+                                    icon: Iconsax.people,
+                                    value: quanLyNguoiDung.value,
+                                    enabled: !isLoading.value,
+                                    onChanged: (val) =>
+                                        quanLyNguoiDung.value = val,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: _PermissionChip(
+                                    label: 'Cấu hình hệ thống',
+                                    icon: Iconsax.setting_2,
+                                    value: cauHinhHeThong.value,
+                                    enabled: !isLoading.value,
+                                    onChanged: (val) =>
+                                        cauHinhHeThong.value = val,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            // const SizedBox(height: 12),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: _PermissionChip(
+                                    label: 'Báo cáo Log',
+                                    icon: Iconsax.document_text,
+                                    value: baoCaoLog.value,
+                                    enabled: !isLoading.value,
+                                    onChanged: (val) => baoCaoLog.value = val,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: _PermissionChip(
+                                    label: 'Báo cáo thống kê',
+                                    icon: Iconsax.chart,
+                                    value: baoCaoThongKe.value,
+                                    enabled: !isLoading.value,
+                                    onChanged: (val) =>
+                                        baoCaoThongKe.value = val,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        SectionTitle(title: 'Quyền Chi Tiết'),
+                        // const SizedBox(height: 12),
+                        _CollapsibleSection(
+                          title: 'Quản Lý Dữ Liệu',
+                          description:
+                              'Quyền truy cập và chỉnh sửa dữ liệu cân.',
+                          icon: Icons.storage_rounded,
+                          initiallyExpanded: isEditMode
+                              ? hasDataPermissions
+                              : false,
+                          child: Wrap(
+                            spacing: 12,
+                            runSpacing: 12,
+                            children: [
+                              PermissionCheckbox(
+                                label: 'Xem',
+                                value: qlDuLieuXem.value,
+                                onChanged: isLoading.value
+                                    ? null
+                                    : (val) => qlDuLieuXem.value = val ?? false,
+                              ),
+                              PermissionCheckbox(
+                                label: 'Thêm',
+                                value: qlDuLieuThem.value,
+                                onChanged: isLoading.value
+                                    ? null
+                                    : (val) =>
+                                          qlDuLieuThem.value = val ?? false,
+                              ),
+                              PermissionCheckbox(
+                                label: 'Sửa',
+                                value: qlDuLieuSua.value,
+                                onChanged: isLoading.value
+                                    ? null
+                                    : (val) => qlDuLieuSua.value = val ?? false,
+                              ),
+                              PermissionCheckbox(
+                                label: 'Xóa',
+                                value: qlDuLieuXoa.value,
+                                onChanged: isLoading.value
+                                    ? null
+                                    : (val) => qlDuLieuXoa.value = val ?? false,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        _CollapsibleSection(
+                          title: 'Báo Cáo Tổng Hợp',
+                          description: 'Quyền truy cập báo cáo tổng hợp.',
+                          icon: Icons.bar_chart_rounded,
+                          initiallyExpanded: isEditMode
+                              ? hasSummaryPermissions
+                              : false,
+                          child: Wrap(
+                            spacing: 12,
+                            runSpacing: 12,
+                            children: [
+                              PermissionCheckbox(
+                                label: 'Xem',
+                                value: bcTongHopXem.value,
+                                onChanged: isLoading.value
+                                    ? null
+                                    : (val) =>
+                                          bcTongHopXem.value = val ?? false,
+                              ),
+                              PermissionCheckbox(
+                                label: 'Sửa',
+                                value: bcTongHopSua.value,
+                                onChanged: isLoading.value
+                                    ? null
+                                    : (val) =>
+                                          bcTongHopSua.value = val ?? false,
+                              ),
+                              PermissionCheckbox(
+                                label: 'Xóa',
+                                value: bcTongHopXoa.value,
+                                onChanged: isLoading.value
+                                    ? null
+                                    : (val) =>
+                                          bcTongHopXoa.value = val ?? false,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        _CollapsibleSection(
+                          title: 'Báo Cáo Cân Lần 2',
+                          description:
+                              'Quyền thao tác với báo cáo cân kiểm tra.',
+                          icon: Icons.monitor_weight,
+                          initiallyExpanded: isEditMode
+                              ? hasSecondWeighPermissions
+                              : false,
+                          child: Wrap(
+                            spacing: 12,
+                            runSpacing: 12,
+                            children: [
+                              PermissionCheckbox(
+                                label: 'Xem',
+                                value: bcCanLan2Xem.value,
+                                onChanged: isLoading.value
+                                    ? null
+                                    : (val) =>
+                                          bcCanLan2Xem.value = val ?? false,
+                              ),
+                              PermissionCheckbox(
+                                label: 'Sửa',
+                                value: bcCanLan2Sua.value,
+                                onChanged: isLoading.value
+                                    ? null
+                                    : (val) =>
+                                          bcCanLan2Sua.value = val ?? false,
+                              ),
+                              PermissionCheckbox(
+                                label: 'Xóa',
+                                value: bcCanLan2Xoa.value,
+                                onChanged: isLoading.value
+                                    ? null
+                                    : (val) =>
+                                          bcCanLan2Xoa.value = val ?? false,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        SectionTitle(title: 'Quyền Xuất File'),
+                        // const SizedBox(height: 12),
+                        _SectionCard(
+                          children: [
+                            Wrap(
+                              spacing: 12,
+                              runSpacing: 12,
+                              children: [
+                                _PermissionChip(
+                                  label: 'Xuất Excel',
+                                  icon: Icons.table_chart_outlined,
+                                  value: xuatExcel.value,
+                                  enabled: !isLoading.value,
+                                  onChanged: (val) => xuatExcel.value = val,
+                                ),
+                                _PermissionChip(
+                                  label: 'Xuất PDF',
+                                  icon: Icons.picture_as_pdf_outlined,
+                                  value: xuatPDF.value,
+                                  enabled: !isLoading.value,
+                                  onChanged: (val) => xuatPDF.value = val,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: FilledButton.icon(
+                      onPressed: isLoading.value ? null : handleSubmit,
+                      icon: isLoading.value
+                          ? const SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color?>(
+                                  Colors.white,
+                                ),
+                              ),
+                            )
+                          : Icon(actionIcon),
+                      label: Text(
+                        isLoading.value ? 'Đang lưu...' : actionLabel,
+                      ),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: AppTheme.primaryBlue,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        textStyle: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
 }
 
-// Widget dropdown cho nhóm người dùng
-class _UserGroupDropdown extends ConsumerWidget {
-  const _UserGroupDropdown({required this.selectedId, required this.onChanged});
-
-  final String? selectedId;
-  final ValueChanged<String?>? onChanged;
+// Bottom sheet helper widgets
+class _SheetHandle extends StatelessWidget {
+  const _SheetHandle();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final userGroupsAsync = ref.watch(userGroupListProvider);
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
 
-    return userGroupsAsync.when(
-      data: (userGroups) {
-        if (userGroups.isEmpty) {
-          return Card(
-            child: ListTile(
-              leading: Icon(Iconsax.people, color: Colors.orange),
-              title: const Text('Chưa có nhóm người dùng'),
-              subtitle: const Text('Vui lòng tạo nhóm người dùng trước'),
-            ),
-          );
-        }
+    return Container(
+      width: 48,
+      height: 5,
+      decoration: BoxDecoration(
+        color: colorScheme.outlineVariant,
+        borderRadius: BorderRadius.circular(100),
+      ),
+    );
+  }
+}
 
-        return DropdownButtonFormField<String>(
-          value: selectedId,
-          decoration: InputDecoration(
-            labelText: 'Nhóm người dùng *',
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            prefixIcon: const Icon(Iconsax.people),
-          ),
-          items: userGroups.map((group) {
-            return DropdownMenuItem(
-              value: group.id,
-              child: Text(group.tenNhom),
-            );
-          }).toList(),
-          onChanged: onChanged,
-        );
-      },
-      loading: () => const LinearProgressIndicator(),
-      error: (error, stack) => Card(
-        color: Colors.red.shade50,
-        child: ListTile(
-          leading: Icon(Iconsax.warning_2, color: Colors.red),
-          title: const Text('Lỗi tải danh sách nhóm'),
-          subtitle: Text(error.toString()),
+class _SectionCard extends StatelessWidget {
+  const _SectionCard({required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(4),
+        child: Column(
+          children: [
+            for (var i = 0; i < children.length; i++) ...[
+              if (i != 0) const SizedBox(height: 12),
+              children[i],
+            ],
+          ],
         ),
       ),
+    );
+  }
+}
+
+class _InlineNotice extends StatelessWidget {
+  const _InlineNotice({
+    required this.icon,
+    required this.title,
+    required this.message,
+    required this.color,
+  });
+
+  final IconData icon;
+  final String title;
+  final String message;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: color.withOpacity(0.25)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: color),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: color,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  message,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CollapsibleSection extends StatelessWidget {
+  const _CollapsibleSection({
+    required this.title,
+    required this.icon,
+    required this.child,
+    this.description,
+    this.initiallyExpanded = false,
+  });
+
+  final String title;
+  final String? description;
+  final IconData icon;
+  final Widget child;
+  final bool initiallyExpanded;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Card(
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Theme(
+        data: theme.copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
+          initiallyExpanded: initiallyExpanded,
+          tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+          leading: Icon(icon, color: AppTheme.primaryBlue),
+          title: Text(
+            title,
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          subtitle: description == null
+              ? null
+              : Text(
+                  description!,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+          children: [child],
+        ),
+      ),
+    );
+  }
+}
+
+class _PermissionChip extends StatelessWidget {
+  const _PermissionChip({
+    required this.label,
+    required this.icon,
+    required this.value,
+    required this.onChanged,
+    required this.enabled,
+  });
+
+  final String label;
+  final IconData icon;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+  final bool enabled;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final selectedColor = AppTheme.primaryBlue;
+    final unselectedColor = theme.colorScheme.surfaceVariant;
+
+    return FilterChip(
+      avatar: Icon(
+        icon,
+        size: 18,
+        color: value ? Colors.white : theme.colorScheme.onSurfaceVariant,
+      ),
+      label: Text(label),
+      labelStyle: theme.textTheme.bodyMedium?.copyWith(
+        color: value ? Colors.white : theme.colorScheme.onSurfaceVariant,
+        fontWeight: FontWeight.w600,
+      ),
+      selected: value,
+      onSelected: enabled ? onChanged : null,
+      showCheckmark: false,
+      backgroundColor: unselectedColor,
+      disabledColor: unselectedColor.withOpacity(0.5),
+      selectedColor: selectedColor,
+      side: BorderSide(color: value ? selectedColor : unselectedColor),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
     );
   }
 }
