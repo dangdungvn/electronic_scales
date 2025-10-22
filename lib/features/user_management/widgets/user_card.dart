@@ -1,11 +1,13 @@
 import 'package:electronic_scales/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../domain/user.dart';
 import 'card_widgets.dart';
 
 /// Card hiển thị thông tin người dùng
-class UserCard extends StatelessWidget {
+class UserCard extends HookWidget {
   const UserCard({
     super.key,
     required this.user,
@@ -21,224 +23,282 @@ class UserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header với STT, tên và nút xóa
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          user.name,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        if (user.description?.isNotEmpty == true) ...[
-                          const SizedBox(height: 4),
-                          Text(
-                            user.description!,
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Colors.grey[600],
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                  if (onDelete != null)
-                    IconButton(
-                      icon: Icon(
-                        Iconsax.trash,
-                        color: Colors.red[400],
-                        size: 24,
-                      ),
-                      onPressed: onDelete,
-                      tooltip: 'Xóa người dùng',
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                    ),
-                ],
-              ),
+    final isExpanded = useState(false);
 
-              // Thông tin đăng nhập
-              const SizedBox(height: 12),
-              _InfoRow(
-                icon: Iconsax.user,
-                label: 'Tên đăng nhập',
-                value: user.login,
-              ),
-
-              // Quyền hạn boolean
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  if (user.quanLyNguoiDung)
-                    const PermissionChip(
-                      label: 'Quản lý người dùng',
-                      icon: Iconsax.people,
-                    ),
-                  if (user.cauHinhHeThong)
-                    const PermissionChip(
-                      label: 'Cấu hình hệ thống',
-                      icon: Iconsax.setting_2,
-                    ),
-                  if (user.baoCaoLog)
-                    const PermissionChip(
-                      label: 'Báo cáo Log',
-                      icon: Iconsax.document_text,
-                    ),
-                  if (user.baoCaoThongKe)
-                    const PermissionChip(
-                      label: 'Báo cáo thống kê',
-                      icon: Iconsax.chart,
-                    ),
-                  if (user.baoCaoWeb)
-                    const PermissionChip(
-                      label: 'Báo cáo Web',
-                      icon: Iconsax.global,
-                    ),
-                ],
-              ),
-
-              // Quyền hạn chi tiết
-              if (_hasDetailedPermissions(user)) ...[
-                const SizedBox(height: 12),
-                _DetailedPermissionsSection(user: user),
-              ],
-
-              // Quyền chỉnh sửa
-              if (_hasEditPermissions(user)) ...[
-                const SizedBox(height: 12),
-                Text(
-                  'Quyền chỉnh sửa:',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.grey[700],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 6,
-                  runSpacing: 6,
-                  children: [
-                    if (user.suaMaPhieu) const EditChip(label: 'Mã phiếu'),
-                    if (user.suaBienSo) const EditChip(label: 'Biển số'),
-                    if (user.suaKhachHang) const EditChip(label: 'Khách hàng'),
-                    if (user.suaLoaiHang) const EditChip(label: 'Loại hàng'),
-                    if (user.suaKhoHang) const EditChip(label: 'Kho hàng'),
-                    if (user.suaKieuCan) const EditChip(label: 'Kiểu cân'),
-                    if (user.suaNguoiCan) const EditChip(label: 'Người cân'),
-                    if (user.suaThoiGian) const EditChip(label: 'Thời gian'),
-                    if (user.suaKhoiLuong) const EditChip(label: 'Khối lượng'),
-                    if (user.suaDonGia) const EditChip(label: 'Đơn giá'),
-                  ],
-                ),
-              ],
-
-              // Quyền khác
-              if (_hasOtherPermissions(user)) ...[
-                const SizedBox(height: 12),
-                Text(
-                  'Quyền khác:',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.grey[700],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 6,
-                  runSpacing: 6,
-                  children: [
-                    if (user.choPhepGiamTruKL)
-                      const OtherChip(
-                        label: 'Giảm trừ KL',
-                        icon: Iconsax.minus_cirlce,
-                      ),
-                    if (user.xuatExcel)
-                      const OtherChip(
-                        label: 'Xuất Excel',
-                        icon: Iconsax.document_download,
-                      ),
-                    if (user.xuatPDF)
-                      const OtherChip(
-                        label: 'Xuất PDF',
-                        icon: Iconsax.document_download,
-                      ),
-                    if (user.choPhepDeMo)
-                      const OtherChip(
-                        label: 'Cho phép demo',
-                        icon: Iconsax.play,
-                      ),
-                  ],
-                ),
-              ],
-
-              // Thông tin bổ sung
-              if (_hasAdditionalInfo(user)) ...[
-                const SizedBox(height: 12),
-                Text(
-                  'Thông tin bổ sung:',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.grey[700],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Container(
+    return Slidable(
+      key: ValueKey('user-${user.id}-$index'),
+      endActionPane: onDelete == null
+          ? null
+          : ActionPane(
+              motion: const DrawerMotion(),
+              extentRatio: 0.22,
+              children: [
+                CustomSlidableAction(
+                  onPressed: (_) => onDelete?.call(),
                   padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[50],
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey[200]!),
+                  backgroundColor: Colors.red,
+                  borderRadius: BorderRadius.circular(16),
+                  child: const Icon(
+                    Iconsax.trash,
+                    color: Colors.white,
+                    size: 22,
                   ),
-                  child: Column(
+                ),
+              ],
+            ),
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header với STT, tên và nút xóa
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            user.name,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          if (user.description?.isNotEmpty == true) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              user.description!,
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.grey[600],
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                    // Modern expand/collapse button
+                    if (_hasExpandableContent(user))
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8),
+                        child: Material(
+                          color: AppTheme.primaryBlue.withOpacity(0.08),
+                          borderRadius: BorderRadius.circular(8),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(8),
+                            onTap: () => isExpanded.value = !isExpanded.value,
+                            child: SizedBox(
+                              width: 32,
+                              height: 32,
+                              child: Icon(
+                                isExpanded.value
+                                    ? Iconsax.arrow_up_2
+                                    : Iconsax.arrow_down_1,
+                                color: AppTheme.primaryBlue,
+                                size: 18,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    // Nút xóa đã chuyển sang Slidable action
+                  ],
+                ),
+
+                // Thông tin đăng nhập
+
+                // Nội dung có thể expand/collapse
+                if (isExpanded.value) ...[
+                  // Quyền hạn boolean
+                  const SizedBox(height: 12),
+                  _InfoRow(
+                    icon: Iconsax.user,
+                    label: 'Tên đăng nhập',
+                    value: user.login,
+                  ),
+                  const SizedBox(height: 12),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
                     children: [
-                      if (user.soLanIn > 0)
-                        _InfoRow(
-                          icon: Iconsax.printer,
-                          label: 'Số lần in',
-                          value: '${user.soLanIn}',
+                      if (user.quanLyNguoiDung)
+                        const PermissionChip(
+                          label: 'Quản lý người dùng',
+                          icon: Iconsax.people,
                         ),
-                      if (user.gioiHanThoiGian?.isNotEmpty == true) ...[
-                        if (user.soLanIn > 0) const SizedBox(height: 8),
-                        _InfoRow(
-                          icon: Iconsax.calendar,
-                          label: 'Giới hạn thời gian',
-                          value: user.gioiHanThoiGian!,
+                      if (user.cauHinhHeThong)
+                        const PermissionChip(
+                          label: 'Cấu hình hệ thống',
+                          icon: Iconsax.setting_2,
                         ),
-                      ],
+                      if (user.baoCaoLog)
+                        const PermissionChip(
+                          label: 'Báo cáo Log',
+                          icon: Iconsax.document_text,
+                        ),
+                      if (user.baoCaoThongKe)
+                        const PermissionChip(
+                          label: 'Báo cáo thống kê',
+                          icon: Iconsax.chart,
+                        ),
+                      if (user.baoCaoWeb)
+                        const PermissionChip(
+                          label: 'Báo cáo Web',
+                          icon: Iconsax.global,
+                        ),
                     ],
                   ),
-                ),
+
+                  // Quyền hạn chi tiết
+                  if (_hasDetailedPermissions(user)) ...[
+                    const SizedBox(height: 12),
+                    _DetailedPermissionsSection(user: user),
+                  ],
+
+                  // Quyền chỉnh sửa
+                  if (_hasEditPermissions(user)) ...[
+                    const SizedBox(height: 12),
+                    Text(
+                      'Quyền chỉnh sửa:',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 6,
+                      children: [
+                        if (user.suaMaPhieu) const EditChip(label: 'Mã phiếu'),
+                        if (user.suaBienSo) const EditChip(label: 'Biển số'),
+                        if (user.suaKhachHang)
+                          const EditChip(label: 'Khách hàng'),
+                        if (user.suaLoaiHang)
+                          const EditChip(label: 'Loại hàng'),
+                        if (user.suaKhoHang) const EditChip(label: 'Kho hàng'),
+                        if (user.suaKieuCan) const EditChip(label: 'Kiểu cân'),
+                        if (user.suaNguoiCan)
+                          const EditChip(label: 'Người cân'),
+                        if (user.suaThoiGian)
+                          const EditChip(label: 'Thời gian'),
+                        if (user.suaKhoiLuong)
+                          const EditChip(label: 'Khối lượng'),
+                        if (user.suaDonGia) const EditChip(label: 'Đơn giá'),
+                      ],
+                    ),
+                  ],
+
+                  // Quyền khác
+                  if (_hasOtherPermissions(user)) ...[
+                    const SizedBox(height: 12),
+                    Text(
+                      'Quyền khác:',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 6,
+                      children: [
+                        if (user.choPhepGiamTruKL)
+                          const OtherChip(
+                            label: 'Giảm trừ KL',
+                            icon: Iconsax.minus_cirlce,
+                          ),
+                        if (user.xuatExcel)
+                          const OtherChip(
+                            label: 'Xuất Excel',
+                            icon: Iconsax.document_download,
+                          ),
+                        if (user.xuatPDF)
+                          const OtherChip(
+                            label: 'Xuất PDF',
+                            icon: Iconsax.document_download,
+                          ),
+                        if (user.choPhepDeMo)
+                          const OtherChip(
+                            label: 'Cho phép demo',
+                            icon: Iconsax.play,
+                          ),
+                      ],
+                    ),
+                  ],
+
+                  // Thông tin bổ sung
+                  if (_hasAdditionalInfo(user)) ...[
+                    const SizedBox(height: 12),
+                    Text(
+                      'Thông tin bổ sung:',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[50],
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey[200]!),
+                      ),
+                      child: Column(
+                        children: [
+                          if (user.soLanIn > 0)
+                            _InfoRow(
+                              icon: Iconsax.printer,
+                              label: 'Số lần in',
+                              value: '${user.soLanIn}',
+                            ),
+                          if (user.gioiHanThoiGian?.isNotEmpty == true) ...[
+                            if (user.soLanIn > 0) const SizedBox(height: 8),
+                            _InfoRow(
+                              icon: Iconsax.calendar,
+                              label: 'Giới hạn thời gian',
+                              value: user.gioiHanThoiGian!,
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ],
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),
     );
   }
+}
+
+/// Helper để kiểm tra có nội dung có thể expand không
+bool _hasExpandableContent(User user) {
+  return user.quanLyNguoiDung ||
+      user.cauHinhHeThong ||
+      user.baoCaoLog ||
+      user.baoCaoThongKe ||
+      user.baoCaoWeb ||
+      _hasDetailedPermissions(user) ||
+      _hasEditPermissions(user) ||
+      _hasOtherPermissions(user) ||
+      _hasAdditionalInfo(user);
 }
 
 /// Helper để kiểm tra có quyền hạn chi tiết không

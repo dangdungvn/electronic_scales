@@ -18,8 +18,8 @@ class HomeScreen extends HookWidget {
     // Danh sách các tabs
     final tabs = [
       const HomeTab(),
-      const WeighingTab(),
-      const PermissionsTab(),
+      // const WeighingTab(),
+      // const PermissionsTab(),
       const SettingsTab(),
     ];
 
@@ -32,35 +32,34 @@ class HomeScreen extends HookWidget {
             BoxShadow(blurRadius: 20, color: Colors.black.withOpacity(0.1)),
           ],
         ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(
-              top: 8,
-              bottom: 0,
-              left: 16,
-              right: 16,
-            ),
-            child: GNav(
-              rippleColor: const Color(0xFF2196F3).withOpacity(0.1),
-              hoverColor: const Color(0xFF2196F3).withOpacity(0.05),
-              gap: 8,
-              activeColor: Colors.white,
-              iconSize: 24,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              duration: const Duration(milliseconds: 400),
-              tabBackgroundColor: const Color(0xFF2196F3),
-              color: Colors.grey[600],
-              tabs: const [
-                GButton(icon: Iconsax.home, text: 'Trang chủ'),
-                GButton(icon: Iconsax.weight_1, text: 'Cân hàng'),
-                GButton(icon: Iconsax.shield_tick, text: 'Quyền'),
-                GButton(icon: Iconsax.setting_2, text: 'Cài đặt'),
-              ],
-              selectedIndex: selectedIndex.value,
-              onTabChange: (index) {
-                selectedIndex.value = index;
-              },
-            ),
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: 8,
+            bottom: 16,
+            left: 16,
+            right: 16,
+          ),
+          child: GNav(
+            rippleColor: const Color(0xFF2196F3).withOpacity(0.1),
+            hoverColor: const Color(0xFF2196F3).withOpacity(0.05),
+            gap: 8,
+            haptic: true,
+            activeColor: Colors.white,
+            iconSize: 24,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            duration: const Duration(milliseconds: 400),
+            tabBackgroundColor: const Color(0xFF2196F3),
+            color: Colors.grey[600],
+            tabs: const [
+              GButton(icon: Iconsax.home, text: 'Trang chủ'),
+              // GButton(icon: Iconsax.weight_1, text: 'Cân hàng'),
+              // GButton(icon: Iconsax.shield_tick, text: 'Quyền'),
+              GButton(icon: Iconsax.setting_2, text: 'Cài đặt'),
+            ],
+            selectedIndex: selectedIndex.value,
+            onTabChange: (index) {
+              selectedIndex.value = index;
+            },
           ),
         ),
       ),
