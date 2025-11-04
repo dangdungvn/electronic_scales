@@ -45,9 +45,9 @@ class ScaleStationListScreen extends HookConsumerWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Iconsax.refresh),
-            onPressed: () => ref.invalidate(scaleStationListProvider),
-            tooltip: 'Làm mới',
+            icon: const Icon(Iconsax.add_circle_copy),
+            onPressed: () => _navigateToAddStation(context),
+            tooltip: 'Thêm Trạm',
           ),
         ],
       ),
@@ -65,12 +65,6 @@ class ScaleStationListScreen extends HookConsumerWidget {
           error: error,
           onRetry: () => ref.invalidate(scaleStationListProvider),
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _navigateToAddStation(context),
-        icon: const Icon(Iconsax.add),
-        label: const Text('Thêm Trạm'),
-        elevation: 4,
       ),
     );
   }

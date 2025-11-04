@@ -1,3 +1,4 @@
+import 'package:electronic_scales/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
@@ -95,104 +96,135 @@ class _StationDetailContent extends ConsumerWidget {
           ),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
+      body: Stack(
         children: [
-          // Header card
-          StationHeaderCard(stationId: station.id, stationName: station.name),
-          const SizedBox(height: 24),
-          // Info section
-          SectionTitle(icon: Iconsax.information, title: 'Thông Tin Kết Nối'),
-          const SizedBox(height: 12),
-          Card(
-            child: Column(
-              children: [
-                DetailInfoItem(
-                  icon: Iconsax.global,
-                  label: 'Địa chỉ IP',
-                  value: station.ip,
-                  iconColor: const Color(0xFF2196F3),
-                ),
-                const Divider(height: 1),
-                DetailInfoItem(
-                  icon: Iconsax.setting_2,
-                  label: 'Cổng',
-                  value: station.port.toString(),
-                  iconColor: const Color(0xFF9C27B0),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 24),
-          // Auth section
-          SectionTitle(icon: Iconsax.shield_tick, title: 'Xác Thực'),
-          const SizedBox(height: 12),
-          Card(
-            child: Column(
-              children: [
-                DetailInfoItem(
-                  icon: Iconsax.user,
-                  label: 'Tên đăng nhập',
-                  value: station.username,
-                  iconColor: const Color(0xFF4CAF50),
-                ),
-                const Divider(height: 1),
-                DetailInfoItem(
-                  icon: Iconsax.lock,
-                  label: 'Mật khẩu',
-                  value: '•' * station.password.length,
-                  iconColor: const Color(0xFFFF9800),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 24),
-          // Metadata section
-          SectionTitle(icon: Iconsax.calendar, title: 'Thông Tin Khác'),
-          const SizedBox(height: 12),
-          Card(
-            child: DetailInfoItem(
-              icon: Iconsax.clock,
-              label: 'Ngày tạo',
-              value: _formatDate(station.createdAt),
-              iconColor: const Color(0xFFFF5722),
-            ),
-          ),
-          const SizedBox(height: 32),
-          // Action buttons
-          Row(
+          ListView(
+            padding: const EdgeInsets.all(20),
             children: [
-              Expanded(
-                child: SizedBox(
-                  height: 52,
-                  child: OutlinedButton.icon(
-                    onPressed: () => _testConnection(context),
-                    icon: const Icon(Iconsax.link),
-                    label: const Text('Kiểm Tra'),
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(
-                        color: Color(0xFF2196F3),
-                        width: 2,
-                      ),
-                      foregroundColor: const Color(0xFF2196F3),
+              // Header card
+              StationHeaderCard(
+                stationId: station.id,
+                stationName: station.name,
+              ),
+              const SizedBox(height: 24),
+              // Info section
+              SectionTitle(
+                icon: Iconsax.information,
+                title: 'Thông Tin Kết Nối',
+              ),
+              const SizedBox(height: 12),
+              Card(
+                child: Column(
+                  children: [
+                    DetailInfoItem(
+                      icon: Iconsax.global,
+                      label: 'Địa chỉ IP',
+                      value: station.ip,
+                      iconColor: const Color(0xFF2196F3),
                     ),
-                  ),
+                    const Divider(height: 1),
+                    DetailInfoItem(
+                      icon: Iconsax.setting_2,
+                      label: 'Cổng',
+                      value: station.port.toString(),
+                      iconColor: const Color(0xFF9C27B0),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: SizedBox(
-                  height: 52,
-                  child: ElevatedButton.icon(
-                    onPressed: () => _navigateToEdit(context),
-                    icon: const Icon(Iconsax.edit),
-                    label: const Text('Chỉnh Sửa'),
-                  ),
+              const SizedBox(height: 24),
+              // Auth section
+              SectionTitle(icon: Iconsax.shield_tick, title: 'Xác Thực'),
+              const SizedBox(height: 12),
+              Card(
+                child: Column(
+                  children: [
+                    DetailInfoItem(
+                      icon: Iconsax.user,
+                      label: 'Tên đăng nhập',
+                      value: station.username,
+                      iconColor: const Color(0xFF4CAF50),
+                    ),
+                    const Divider(height: 1),
+                    DetailInfoItem(
+                      icon: Iconsax.lock,
+                      label: 'Mật khẩu',
+                      value: '•' * station.password.length,
+                      iconColor: const Color(0xFFFF9800),
+                    ),
+                  ],
                 ),
               ),
+              const SizedBox(height: 24),
+              // Metadata section
+              SectionTitle(icon: Iconsax.calendar, title: 'Thông Tin Khác'),
+              const SizedBox(height: 12),
+              Card(
+                child: DetailInfoItem(
+                  icon: Iconsax.clock,
+                  label: 'Ngày tạo',
+                  value: _formatDate(station.createdAt),
+                  iconColor: const Color(0xFFFF5722),
+                ),
+              ),
+              const SizedBox(height: 32),
+
+              // Action buttons
+              const SizedBox(height: 20),
             ],
           ),
-          const SizedBox(height: 20),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppTheme.backgroundLight,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20.0, 0, 20, 12.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 52,
+                        child: OutlinedButton.icon(
+                          onPressed: () => _testConnection(context),
+                          icon: const Icon(Iconsax.link),
+                          label: const Text('Kiểm Tra'),
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(
+                              color: Color(0xFF2196F3),
+                              width: 2,
+                            ),
+                            foregroundColor: const Color(0xFF2196F3),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: SizedBox(
+                        height: 52,
+                        child: ElevatedButton.icon(
+                          onPressed: () => _navigateToEdit(context),
+                          icon: const Icon(Iconsax.edit),
+                          label: const Text('Chỉnh Sửa'),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

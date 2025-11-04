@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import '../../../shared/widgets/app_drawer.dart';
 import 'home_tab.dart';
-import 'weighing_tab.dart';
 import 'settings_tab.dart';
-import 'permissions_tab.dart';
 
-/// HomeScreen với 4 tabs: Home, Cân hàng, Quyền hạn, Cài đặt
+/// HomeScreen với Bottom Navigation: Trang chủ, Chờ cân, Cài đặt
 class HomeScreen extends HookWidget {
   const HomeScreen({super.key});
+
+  // GlobalKey để truy cập Scaffold từ các tab
+  static final GlobalKey<ScaffoldState> scaffoldKey =
+      GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +21,13 @@ class HomeScreen extends HookWidget {
     // Danh sách các tabs
     final tabs = [
       const HomeTab(),
-      // const WeighingTab(),
-      // const PermissionsTab(),
+      const _PendingWeighingTab(), // Tạm thời placeholder
       const SettingsTab(),
     ];
 
     return Scaffold(
+      key: scaffoldKey, // Thêm key
+      drawer: const AppDrawer(), // Thêm drawer
       body: IndexedStack(index: selectedIndex.value, children: tabs),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -44,6 +48,7 @@ class HomeScreen extends HookWidget {
             hoverColor: const Color(0xFF2196F3).withOpacity(0.05),
             gap: 8,
             haptic: true,
+            curve: Curves.easeInOutCubic,
             activeColor: Colors.white,
             iconSize: 24,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -51,16 +56,68 @@ class HomeScreen extends HookWidget {
             tabBackgroundColor: const Color(0xFF2196F3),
             color: Colors.grey[600],
             tabs: const [
-              GButton(icon: Iconsax.home, text: 'Trang chủ'),
-              // GButton(icon: Iconsax.weight_1, text: 'Cân hàng'),
-              // GButton(icon: Iconsax.shield_tick, text: 'Quyền'),
-              GButton(icon: Iconsax.setting_2, text: 'Cài đặt'),
+              GButton(
+                icon: Iconsax.home_1,
+                text: 'Trang chủ',
+                iconActiveColor: Colors.white,
+                textColor: Colors.white,
+              ),
+              GButton(
+                icon: Iconsax.clock,
+                text: 'Chờ cân',
+                iconActiveColor: Colors.white,
+                textColor: Colors.white,
+              ),
+              GButton(
+                icon: Iconsax.setting_2,
+                text: 'Cài đặt',
+                iconActiveColor: Colors.white,
+                textColor: Colors.white,
+              ),
             ],
             selectedIndex: selectedIndex.value,
             onTabChange: (index) {
               selectedIndex.value = index;
             },
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Placeholder cho tab Chờ cân lần 2
+class _PendingWeighingTab extends StatelessWidget {
+  const _PendingWeighingTab();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Xe chờ cân lần 2'),
+        leading: IconButton(
+          icon: const Icon(Iconsax.menu_1),
+          onPressed: () {
+            HomeScreen.scaffoldKey.currentState?.openDrawer();
+          },
+        ),
+      ),
+      body: const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Iconsax.clock, size: 64, color: Colors.grey),
+            SizedBox(height: 16),
+            Text(
+              'Xe chờ cân lần 2',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Tính năng đang phát triển',
+              style: TextStyle(color: Colors.grey),
+            ),
+          ],
         ),
       ),
     );

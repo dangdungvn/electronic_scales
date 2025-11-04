@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'home_screen.dart';
 
 /// Tab Trang chủ - Hiển thị dashboard và thống kê
 class HomeTab extends ConsumerWidget {
@@ -10,6 +11,12 @@ class HomeTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Iconsax.menu_1),
+          onPressed: () {
+            HomeScreen.scaffoldKey.currentState?.openDrawer();
+          },
+        ),
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

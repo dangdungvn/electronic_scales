@@ -4,6 +4,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../data/permissions_provider.dart';
 import '../../user_management/presentation/user_group_list_screen.dart';
 import '../../user_management/presentation/user_list_screen.dart';
+import 'home_screen.dart';
 
 /// Tab Cài đặt - Cấu hình và thiết lập ứng dụng
 class SettingsTab extends ConsumerWidget {
@@ -14,6 +15,12 @@ class SettingsTab extends ConsumerWidget {
     final permissions = ref.watch(userPermissionsProvider);
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Iconsax.menu_1),
+          onPressed: () {
+            HomeScreen.scaffoldKey.currentState?.openDrawer();
+          },
+        ),
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

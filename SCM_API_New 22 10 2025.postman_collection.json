@@ -1,0 +1,1375 @@
+{
+	"info": {
+		"_postman_id": "52fb6166-01b6-4946-990a-5d8e44c0a6c3",
+		"name": "SCM_API_New 22 10 2025",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23726651"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "GetUserGroupList",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/GetUserGroupList",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"GetUserGroupList"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddUserGroup",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=utf-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TenNhom\": \"eee\",\r\n    \"MauQuanLyNguoiDung\": false,\r\n    \"MauCauHinhHeThong\": false,\r\n    \"MauBaoCaoLog\": false,\r\n    \"MauBaoCaoThongKe\": false,\r\n    \"MauQuanLyDuLieu\": \"Xem=True;Them=False;Sua=False;Xoa=False\",\r\n    \"MauBaoCaoTongHop\": \"Xem=True;Them=False;Sua=False;Xoa=False\",\r\n    \"MauBaoCaoChoCanLan2\": \"Xem=True;Them=False;Sua=False;Xoa=False\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/AddUserGroup",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"AddUserGroup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateUserGroup",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=utf-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\": \"16b2496e-50e4-44c5-b292-d54e64c9fa30\",\r\n    \"TenNhom\": \"eee\",\r\n    \"MauQuanLyNguoiDung\": false,\r\n    \"MauCauHinhHeThong\": false,\r\n    \"MauBaoCaoLog\": false,\r\n    \"MauBaoCaoThongKe\": false,\r\n    \"MauQuanLyDuLieu\": \"Xem=True;Them=False;Sua=False;Xoa=False\",\r\n    \"MauBaoCaoTongHop\": \"Xem=True;Them=False;Sua=False;Xoa=False\",\r\n    \"MauBaoCaoChoCanLan2\": \"Xem=True;Them=False;Sua=False;Xoa=False\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/AddUserGroup",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"AddUserGroup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteUserGroup",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\": \"16b2496e-50e4-44c5-b292-d54e64c9fa30\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/DeleteUserGroup",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"DeleteUserGroup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddUser",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=utf-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\": \"baove\",\r\n    \"Login\": \"baove123\",\r\n    \"Password\": \"12345\",\r\n    \"IdNhomUser\":\"8e924015-5dad-4da7-be0e-7776482c14c9\",\r\n    \"Description\": \"\",\r\n    \"QuanLyNguoiDung\": false,\r\n    \"CauHinhHeThong\": false,\r\n    \"BaoCaoLog\": false,\r\n    \"BaoCaoThongKe\": false,\r\n    \"QuanLyDuLieu\": \"Xem=True;Them=False;Sua=False;Xoa=False\",\r\n    \"BaoCaoTongHop\": \"Xem=True;Them=False;Sua=False;Xoa=False\",\r\n    \"BaoCaoChoCanLan2\": \"Xem=True;Them=False;Sua=False;Xoa=False\",\r\n    \"XuatExcel\": false,\r\n    \"XuatPDF\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/AddUser",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"AddUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetUserList",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/GetUserList",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"GetUserList"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateUser",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=utf-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\": \"a1d06240-6b4f-4c4b-8235-8a33475687e1\",\r\n    \"Name\": \"baove123\",\r\n    \"Login\": \"baove123\",\r\n    \"Password\": \"12345\",\r\n    \"IdNhomUser\":\"8e924015-5dad-4da7-be0e-7776482c14c9\",\r\n    \"Description\": \"\",\r\n    \"QuanLyNguoiDung\": false,\r\n    \"CauHinhHeThong\": false,\r\n    \"BaoCaoLog\": true,\r\n    \"BaoCaoThongKe\": false,\r\n    \"QuanLyDuLieu\": \"Xem=True;Them=False;Sua=False;Xoa=False\",\r\n    \"BaoCaoTongHop\": \"Xem=True;Them=False;Sua=False;Xoa=False\",\r\n    \"BaoCaoChoCanLan2\": \"Xem=True;Them=False;Sua=False;Xoa=False\",\r\n    \"XuatExcel\": false,\r\n    \"XuatPDF\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/AddUser",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"AddUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteUser",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\": \"fa4c3f09-da80-425f-9956-f57129ddc62c\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/DeleteUser",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"DeleteUser"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Khách hàng",
+			"item": [
+				{
+					"name": "Lấy danh sách khách hàng",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/LayDanhSachKhachHang",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"LayDanhSachKhachHang"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Thêm khách hàng",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=utf-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Ma\": \"KH002\",\r\n    \"Ten\": \"Công ty ABCD\",\r\n    \"DienThoai\": \"\",\r\n    \"DiaChi\": \"\",\r\n    \"GhiChu\": \"\",\r\n    \"CMND\": \"\",\r\n    \"NgayCap\": \"\",\r\n    \"NoiCap\": \"\",\r\n    \"Mst\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/CapNhatKhachHang",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"CapNhatKhachHang"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cập nhật khách hàng",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=utf-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\": \"2d2016b9-806a-4fd5-a66d-46c43eda4a5d\",\r\n    \"Ma\": \"KH003\",\r\n    \"Ten\": \"Công ty TNHH ABCD\",\r\n    \"DienThoai\": \"1234\",\r\n    \"DiaChi\": \"5678\",\r\n    \"GhiChu\": \"a\",\r\n    \"CMND\": \"s\",\r\n    \"NgayCap\": \"d\",\r\n    \"NoiCap\": \"f\",\r\n    \"Mst\": \"g\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/CapNhatKhachHang",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"CapNhatKhachHang"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Xóa khách hàng",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\": \"06ba22b4-e627-4233-acd1-75167a93d6f7\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/XoaKhachHang",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"XoaKhachHang"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Loại hàng",
+			"item": [
+				{
+					"name": "Lấy danh sách hàng hóa",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/LayDanhSachHangHoa",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"LayDanhSachHangHoa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy danh sách hàng hóa 2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"authorization\":\"7bdb0325-fd79-4903-a52a-b5e715a980ae\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/danhmuchanghoa",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"danhmuchanghoa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cập nhật hàng hóa",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=utf-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\": \"\", /* Để trống là thêm mới, truyền vào ID để sửa*/\r\n    \"Ma\": \"001\", /* Mã hàng hóa */\r\n    \"Ten\" : \"Đá 1x2\", /* Tên hàng hóa*/\r\n    \"GhiChu\": \"\",\r\n    \"DonGia\" : 0.0, /*Đơn giá  */\r\n    \"TyLeQuyDoi\" : 1.2, /*Tỷ lệ quy đổi ra m3*/\r\n    \"TyLeQuyDoi2\" : 1.2 /*Tỷ lệ quy đổi ra m3*/\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/CapNhatHangHoa",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"CapNhatHangHoa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Xóa loại hàng",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\": \"06ba22b4-e627-4233-acd1-75167a93d6f7\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/XoaHangHoa",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"XoaHangHoa"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Kho hàng",
+			"item": [
+				{
+					"name": "Lấy danh sách kho hàng",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/LayDanhSachKhoHang",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"LayDanhSachKhoHang"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cập nhật kho hàng",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=utf-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\" : \"\", /* Để trống là thêm mới, truyền vào ID để sửa*/\r\n    \"Ten\": \"Kho Hà nội\",\r\n    \"DiaChi\" : \"\",\r\n    \"GhiChu\" : \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/CapNhatKhoHang",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"CapNhatKhoHang"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Xóa kho hàng",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\": \"06ba22b4-e627-4233-acd1-75167a93d6f7\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/XoaHangHoa",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"XoaHangHoa"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Kiểu cân",
+			"item": [
+				{
+					"name": "Lấy danh sách kiểu cân",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/LayDanhSachKieuCan",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"LayDanhSachKieuCan"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cập nhật kiểu cân",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=utf-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\" : 0, /*  = 0 là thêm mới, truyền vào ID để sửa, Kiểu dữ liệu là int*/\r\n    \"Ten\": \"\", /*Tên kiểu cân*/\r\n    \"SoLanCan\" : 2, /* số lần cân */\r\n    \"GhiChu\" : \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/CapNhatKieuCan",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"CapNhatKieuCan"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Xóa kiểu cân",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/XoaKieuCan",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"XoaKieuCan"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Nguồn gốc hàng hóa",
+			"item": [
+				{
+					"name": "Lấy danh sách nguồn gốc hàng hóa",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/LayDanhSachNguonGocHangHoa",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"LayDanhSachNguonGocHangHoa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cập nhật nguồn gốc hàng hóa",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=utf-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\" : \"\", /* Để trống là thêm mới, truyền vào ID để sửa*/\r\n     \"Ma\": \"0012\", /*Mã nguồn gốc*/\r\n    \"Ten\": \"Việt Nam\", /*Tên nguồn gốc*/\r\n    \"GhiChu\" : \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/CapNhatNguonGocHangHoa",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"CapNhatNguonGocHangHoa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Xóa nguồn gốc",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\": \"f010852f-c9ad-4c47-a173-75a31776f32d\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/XoaNguonGocHangHoa",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"XoaNguonGocHangHoa"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chất lượng hàng hóa",
+			"item": [
+				{
+					"name": "Lấy danh sách nguồn gốc hàng hóa",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/LayDanhSachChatLuongHangHoa",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"LayDanhSachChatLuongHangHoa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cập nhật chất lượng hàng hóa",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=utf-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\" : \"\", /* Để trống là thêm mới, truyền vào ID để sửa*/\r\n     \"Ma\": \"0012\", /*Mã chất lượng*/\r\n    \"Ten\": \"Loại B\", /*Tên chất lượng hàng hóa*/\r\n    \"GhiChu\" : \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/CapNhatChatLuongHangHoa",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"CapNhatChatLuongHangHoa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Xóa chất lượng",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\": \"f010852f-c9ad-4c47-a173-75a31776f32d\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/XoaChatLuongHangHoa",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"XoaChatLuongHangHoa"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tài xế",
+			"item": [
+				{
+					"name": "Lấy danh sách tài xế",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/LayDanhSachTaiXe",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"LayDanhSachTaiXe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cập nhật tài xế",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=utf-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\": \"\", /* Để trống là thêm mới, truyền vào ID để sửa*/\r\n    \"Ma\": \"002212\", /*mã tài xế*/\r\n    \"LaiXe\": \"Nguyễn Văn Cao\", /*Tên tài xế*/\r\n    \"DienThoai\": \"\",\r\n    \"CMND\": \"\",\r\n    \"Banglai\": \"\",\r\n    \"DiaChi\": \"\",\r\n    \"NgayCap\": \"\",\r\n    \"NoiCap\": \"\",\r\n    \"GiayPhepAnToan\": \"\",\r\n    \"NgayHetHan\": \"\",\r\n    \"GhiChu\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/CapNhatTaiXe",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"CapNhatTaiXe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Xóa tài xế",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"ID\": \"f010852f-c9ad-4c47-a173-75a31776f32d\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/XoaTaiXe",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"XoaTaiXe"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Xe đăng ký",
+			"item": [
+				{
+					"name": "Lấy danh sách xe đăng ký",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/LayDanhSachXeDangKy",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"LayDanhSachXeDangKy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cập nhật xe đăng ký",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=utf-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"SyncID\": \"\", /* Để trống là thêm mới, truyền vào ID để sửa*/\r\n    \"TenKhachHang\": \"Nguyễn Văn AC\",/*Tên khách hàng không được bỏ trống */\r\n    \"CMNDKhachHang\": \"\",\r\n    \"DienThoaiKH\": \"\",\r\n    \"DiachiKH\": \"\",\r\n    \"MstKH\": \"\",\r\n    \"GhiChuKH\": \"\",\r\n    \"BienSoDauXe\": \"30A-123456\", /*Biển số đầu xe không được để trống*/\r\n    \"BienSoDuoiXe\": \"\",/*Biển số đuôi xe */\r\n    \"LaiXe\": \"Nguyễn Văn Nam\",/*Tên lái xe không được bỏ trống */\r\n    \"TrongTai\": 1000,\r\n    \"KLTongChoPhep\": 0,\r\n    \"DienThoai\": \"\",\r\n    \"CMND\": \"\",\r\n    \"CardNumber\": \"\",\r\n    \"IDLoaiHang\": \"\",\r\n    \"TenLoaiHang\": \"Xăng\", /*Tên loại hàng không được bỏ trống */\r\n    \"IsBlackList\": false,\r\n    \"IsSpecialList\": false,\r\n    \"XeCan1Lan\": false,\r\n    \"GhiChu\": \"\",\r\n    \"TenKhoHang\": \"\",\r\n    \"TenNguonGoc\": \"\",\r\n    \"NgayCanBi\": \"2025-10-07T15:32:56\",\r\n    \"NgayDangKy\": \"2025-10-07T15:32:56\",\r\n    \"AnhDauXe\": \"\",\r\n    \"AnhDuoiXe\": \"\",\r\n    \"AnhToanCanh\": \"\",\r\n    \"AnhCMND\": \"\",\r\n    \"GiayPhepAnToan\": \"\",\r\n    \"NgayHetHan\": \"\",\r\n    \"DonGia\": 0.0,\r\n    \"TyLeQuyDoi\": 1.0,\r\n    \"TyLeQuyDoi2\": 1.0,\r\n    \"MaDonHangAPI\": \"\",\r\n    \"HeThongDangKy\": \"SCM:DESKTOP-ENB3F86:172.16.10.100:172.19.192.1\",\r\n    \"MaKho\": \"\",\r\n    \"MaChuyen\": \"\",\r\n    \"NhaXe\": \"\",\r\n    \"ExtraAttribute\": \"\",\r\n    \"TenChatLuong\": \"Chất lượng A45\",\r\n    \"TenKieuCan\": \"rrrrrr\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/CapNhatXeDangKy",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"CapNhatXeDangKy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Xóa xe đăng ký",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"ID\": \"f010852f-c9ad-4c47-a173-75a31776f32d\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/XoaXeDangKy",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"XoaXeDangKy"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Báo cáo xe chờ cân lần 2",
+			"item": [
+				{
+					"name": "Lấy danh sách xe chờ cân lần 2",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=utf-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"keyword\": \"\", /*Tìm kiếm like theo biển số hoặc tên khách hàng */\r\n    \"plateNumber\": \"\", /*lọc theo biển số khi keyword = \"\" */\r\n    \"soPhieu\": -1, /*lọc theo biển số khi soPhieu > -1 và keyword = \"\" */\r\n    \"khachHang\": \"\", /*lọc theo tên khách hàng khi keyword = \"\" */\r\n    \"loaiHang\": \"\", /*lọc theo tên loại hàng khi keyword = \"\"*/\r\n    \"khoHang\": \"\", /*lọc theo tên kho hàng khi keyword = \"\"*/\r\n    \"kieuCan\": \"\" /*lọc theo tên kiểu cân*/\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/BaoCaoDanhSachXeChoCanLan2",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"BaoCaoDanhSachXeChoCanLan2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Xóa xe chờ cân lần 2",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"syncID\": \"76e265ae-44c9-4a1a-9e1f-afaa150a9290\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/XoaThongTinXeChoCanLan2",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"XoaThongTinXeChoCanLan2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Báo cáo xe đã cân xong",
+			"item": [
+				{
+					"name": "Báo cáo xe đã cân xong",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=utf-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"dateFrom\":\"2025-10-20 00:00:00.000\",/*yyyy-MM-dd HH.mm.ss.fff Lọc thời gian ra bắt đầu từ.*/\r\n    \"dateTo\":\"2025-10-20 23:59:59.999\",/*yyyy-MM-dd HH.mm.ss.fff Lọc thời gian ra kết thúc đến.*/\r\n    \"keyword\": \"\", /*Tìm kiếm like theo biển số hoặc tên khách hàng */\r\n    \"plateNumber\": \"\", /*lọc theo biển số khi keyword = \"\" */\r\n    \"soPhieu\": -1, /*lọc theo biển số khi soPhieu > -1 và keyword = \"\" */\r\n    \"khachHang\": \"\", /*lọc theo tên khách hàng khi keyword = \"\" */\r\n    \"loaiHang\": \"\", /*lọc theo tên loại hàng khi keyword = \"\"*/\r\n    \"khoHang\": \"\", /*lọc theo tên kho hàng khi keyword = \"\"*/\r\n    \"kieuCan\": \"\", /*lọc theo tên kiểu cân*/\r\n    \"maxRecord\" : 10000 /*cho phép Số lượng bản ghi tối đa trả về khi maxRecord > 0 */\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SCM_SERVER}}/scm/BaoCaoDanhSachXeDaCanXong",
+							"protocol": "http",
+							"host": [
+								"{{SCM_SERVER}}"
+							],
+							"path": [
+								"scm",
+								"BaoCaoDanhSachXeDaCanXong"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "0.get_token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{SCM_SERVER}}/scm/token_auth",
+					"protocol": "http",
+					"host": [
+						"{{SCM_SERVER}}"
+					],
+					"path": [
+						"scm",
+						"token_auth"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "SCM_SERVER",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "default"
+		}
+	]
+}

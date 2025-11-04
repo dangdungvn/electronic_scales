@@ -9,6 +9,8 @@ class AppTheme {
   static const successGreen = Color(0xFF4CAF50);
   static const warningOrange = Color(0xFFFF9800);
   static const errorRed = Color(0xFFF44336);
+  static const backgroundLight = Color(0xFFF5F7FA);
+  static const backgroundDark = Color(0xFF121212);
 
   static ThemeData get lightTheme {
     return ThemeData(
