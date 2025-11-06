@@ -10,7 +10,12 @@ import '../../../shared/widgets/widgets.dart';
 
 /// Screen hiển thị danh sách xe chờ cân lần 2
 class PendingWeighingListScreen extends HookConsumerWidget {
-  const PendingWeighingListScreen({super.key});
+  const PendingWeighingListScreen({
+    super.key,
+    this.onOpenDrawer,
+  });
+
+  final VoidCallback? onOpenDrawer;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,6 +23,12 @@ class PendingWeighingListScreen extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: onOpenDrawer == null
+            ? null
+            : IconButton(
+                icon: const Icon(Iconsax.menu_1),
+                onPressed: onOpenDrawer,
+              ),
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

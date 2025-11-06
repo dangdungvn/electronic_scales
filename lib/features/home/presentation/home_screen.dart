@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../../../shared/widgets/app_drawer.dart';
+import '../../pending_weighing/presentation/pending_weighing_list_screen.dart';
 import 'home_tab.dart';
 import 'settings_tab.dart';
 
@@ -21,7 +22,7 @@ class HomeScreen extends HookWidget {
     // Danh sách các tabs
     final tabs = [
       const HomeTab(),
-      const _PendingWeighingTab(), // Tạm thời placeholder
+      const _PendingWeighingTab(),
       const SettingsTab(),
     ];
 
@@ -86,40 +87,16 @@ class HomeScreen extends HookWidget {
   }
 }
 
-/// Placeholder cho tab Chờ cân lần 2
+/// Tab chờ cân lần 2 - sử dụng màn hình danh sách xe chờ cân
 class _PendingWeighingTab extends StatelessWidget {
   const _PendingWeighingTab();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Xe chờ cân lần 2'),
-        leading: IconButton(
-          icon: const Icon(Iconsax.menu_1),
-          onPressed: () {
-            HomeScreen.scaffoldKey.currentState?.openDrawer();
-          },
-        ),
-      ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Iconsax.clock, size: 64, color: Colors.grey),
-            SizedBox(height: 16),
-            Text(
-              'Xe chờ cân lần 2',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Tính năng đang phát triển',
-              style: TextStyle(color: Colors.grey),
-            ),
-          ],
-        ),
-      ),
+    return PendingWeighingListScreen(
+      onOpenDrawer: () {
+        HomeScreen.scaffoldKey.currentState?.openDrawer();
+      },
     );
   }
 }
