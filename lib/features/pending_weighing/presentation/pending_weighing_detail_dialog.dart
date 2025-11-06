@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import '../domain/pending_weighing.dart';
 
 /// Dialog hiển thị chi tiết xe chờ cân lần 2
@@ -304,7 +305,7 @@ class PendingWeighingDetailDialog extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => context.pop(),
             icon: const Icon(Icons.close, color: Colors.white, size: 24),
             tooltip: 'Đóng',
           ),

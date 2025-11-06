@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../../../shared/widgets/widgets.dart';
+import 'package:go_router/go_router.dart';
 import '../data/pending_weighing_provider.dart';
 import '../domain/pending_weighing.dart';
 import 'pending_weighing_detail_dialog.dart';
+import '../../../shared/widgets/widgets.dart';
 
 /// Screen hiển thị danh sách xe chờ cân lần 2
 class PendingWeighingListScreen extends HookConsumerWidget {
@@ -38,15 +39,10 @@ class PendingWeighingListScreen extends HookConsumerWidget {
             const Text('Xe Chờ Cân Lần 2'),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Iconsax.filter),
-            onPressed: () {
-              // TODO: Show filter dialog
-            },
-            tooltip: 'Lọc',
-          ),
-        ],
+        // leading: IconButton(
+        //   icon: const Icon(Iconsax.arrow_left_1),
+        //   onPressed: () => context.pop(),
+        // ),
       ),
       body: pendingListAsync.when(
         data: (vehicles) => vehicles.isEmpty
@@ -262,14 +258,11 @@ class _PendingVehicleCard extends ConsumerWidget {
           'Bạn có chắc chắn muốn xóa xe ${vehicle.plateNumber} khỏi danh sách chờ cân?',
         ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Hủy'),
-          ),
+          TextButton(onPressed: () => context.pop(), child: const Text('Hủy')),
           FilledButton(
             style: FilledButton.styleFrom(backgroundColor: Colors.red[400]),
             onPressed: () async {
-              Navigator.pop(dialogContext);
+              context.pop();
 
               final success = await ref
                   .read(pendingWeighingListProvider.notifier)

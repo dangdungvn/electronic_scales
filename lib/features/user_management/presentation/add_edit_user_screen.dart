@@ -1,6 +1,7 @@
 import 'package:electronic_scales/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../domain/user.dart';
@@ -214,7 +215,7 @@ class AddEditUserSheet extends HookConsumerWidget {
         );
 
         // Quay lại
-        Navigator.of(context).pop();
+        context.pop();
       } catch (e) {
         if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
@@ -277,7 +278,7 @@ class AddEditUserSheet extends HookConsumerWidget {
                       ),
                       IconButton(
                         tooltip: 'Đóng',
-                        onPressed: () => Navigator.of(context).maybePop(),
+                        onPressed: () => context.pop(),
                         icon: Icon(
                           Iconsax.close_circle,
                           color: colorScheme.outline,

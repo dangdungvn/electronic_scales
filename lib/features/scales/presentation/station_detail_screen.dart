@@ -2,8 +2,7 @@ import 'package:electronic_scales/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import '../../../shared/widgets/connection_test_dialog.dart';
-import '../../../shared/widgets/connection_result_snackbar.dart';
+import 'package:go_router/go_router.dart';
 import '../../../shared/widgets/widgets.dart';
 import '../data/scale_station_provider.dart';
 import '../domain/scale_station.dart';
@@ -27,7 +26,7 @@ class StationDetailScreen extends ConsumerWidget {
           title: const Text('Chi Tiết Trạm Cân'),
           leading: IconButton(
             icon: const Icon(Iconsax.arrow_left_1),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => context.pop(),
           ),
         ),
         body: const LoadingWidget(),
@@ -37,7 +36,7 @@ class StationDetailScreen extends ConsumerWidget {
           title: const Text('Chi Tiết Trạm Cân'),
           leading: IconButton(
             icon: const Icon(Iconsax.arrow_left_1),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => context.pop(),
           ),
         ),
         body: ErrorDisplayWidget(
@@ -52,7 +51,7 @@ class StationDetailScreen extends ConsumerWidget {
               title: const Text('Chi Tiết Trạm Cân'),
               leading: IconButton(
                 icon: const Icon(Iconsax.arrow_left_1),
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => context.pop(),
               ),
             ),
             body: const EmptyStateWidget(
@@ -81,7 +80,7 @@ class _StationDetailContent extends ConsumerWidget {
         title: const Text('Chi Tiết Trạm Cân'),
         leading: IconButton(
           icon: const Icon(Iconsax.arrow_left_1),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.pop(),
         ),
         actions: [
           IconButton(
@@ -260,10 +259,7 @@ class _StationDetailContent extends ConsumerWidget {
         ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Hủy'),
-          ),
+          TextButton(onPressed: () => context.pop(), child: const Text('Hủy')),
           ElevatedButton(
             onPressed: () async {
               try {
@@ -271,8 +267,8 @@ class _StationDetailContent extends ConsumerWidget {
                     .read(scaleStationListProvider.notifier)
                     .deleteStation(station.id!);
                 if (context.mounted) {
-                  Navigator.pop(context); // Close dialog
-                  Navigator.pop(context); // Close detail screen
+                  context.pop(); // Close dialog
+                  context.pop(); // Close detail screen
                   ConnectionResultSnackbar.showSimple(
                     context,
                     message: 'Xóa trạm cân thành công',
@@ -282,7 +278,7 @@ class _StationDetailContent extends ConsumerWidget {
                 }
               } catch (e) {
                 if (context.mounted) {
-                  Navigator.pop(context);
+                  context.pop();
                   ConnectionResultSnackbar.showSimple(
                     context,
                     message: 'Lỗi: ${e.toString()}',

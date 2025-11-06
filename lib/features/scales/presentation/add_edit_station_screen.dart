@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:go_router/go_router.dart';
 import '../../../shared/widgets/connection_result_snackbar.dart';
 import '../data/scale_station_provider.dart';
 import '../domain/scale_station.dart';
@@ -38,7 +39,7 @@ class AddEditStationScreen extends HookConsumerWidget {
         title: Text(station == null ? 'Thêm Trạm Cân' : 'Sửa Trạm Cân'),
         leading: IconButton(
           icon: const Icon(Iconsax.arrow_left_1),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.pop(),
         ),
       ),
       body: Form(
@@ -157,7 +158,7 @@ class AddEditStationScreen extends HookConsumerWidget {
                             }
 
                             if (context.mounted) {
-                              Navigator.pop(context);
+                              context.pop();
                               ConnectionResultSnackbar.showSimple(
                                 context,
                                 message: station == null

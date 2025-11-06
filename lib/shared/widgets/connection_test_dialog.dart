@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../features/scales/domain/scale_station.dart';
 import '../../features/scales/data/connection_service.dart';
 
@@ -25,11 +26,11 @@ class ConnectionTestDialog {
 
       if (context.mounted) {
         // Đóng loading dialog
-        Navigator.pop(context);
+        context.pop();
       }
     } catch (e) {
       if (context.mounted) {
-        Navigator.pop(context); // Đóng loading
+        context.pop(); // Đóng loading
         result = {'success': false, 'message': 'Lỗi: ${e.toString()}'};
       }
     }

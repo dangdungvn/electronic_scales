@@ -1,5 +1,6 @@
 import 'package:electronic_scales/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../../../shared/widgets/empty_state_widget.dart';
@@ -112,11 +113,11 @@ class _UserList extends ConsumerWidget {
         content: Text('Bạn có chắc chắn muốn xóa người dùng "${user.name}"?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
+            onPressed: () => context.pop(false),
             child: const Text('Hủy'),
           ),
           TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
+            onPressed: () => context.pop(true),
             style: TextButton.styleFrom(foregroundColor: Colors.red),
             child: const Text('Xóa'),
           ),
@@ -168,7 +169,7 @@ class _UserList extends ConsumerWidget {
       if (!context.mounted) return;
 
       // Dismiss loading
-      Navigator.of(context).pop();
+      context.pop();
 
       if (!response.error) {
         // Refresh danh sách
@@ -188,7 +189,7 @@ class _UserList extends ConsumerWidget {
       if (!context.mounted) return;
 
       // Dismiss loading
-      Navigator.of(context).pop();
+      context.pop();
 
       // Show error
       ScaffoldMessenger.of(context).showSnackBar(

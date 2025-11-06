@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../../../shared/widgets/connection_test_dialog.dart';
@@ -9,7 +10,6 @@ import '../../../shared/widgets/loading_widget.dart';
 import '../data/scale_station_provider.dart';
 import '../widgets/station_card.dart';
 import 'add_edit_station_screen.dart';
-import '../../../features/home/presentation/home_screen.dart';
 import '../../../shared/models/user_permissions.dart';
 import '../../home/data/permissions_provider.dart';
 
@@ -169,9 +169,7 @@ class _StationList extends ConsumerWidget {
 
         // Chuyển sang HomeScreen
         if (context.mounted) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-          );
+          context.go("/");
         }
       } else {
         ConnectionResultSnackbar.showError(
