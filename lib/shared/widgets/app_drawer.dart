@@ -26,23 +26,22 @@ class AppDrawer extends HookConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
               children: [
                 // Dashboard
-                _DrawerItem(
-                  icon: FontAwesomeIcons.house,
-                  title: 'Trang chủ',
-                  route: '/',
-                  currentRoute: ModalRoute.of(context)?.settings.name,
-                  color: const Color(0xFF2196F3),
-                ),
+                // _DrawerItem(
+                //   icon: FontAwesomeIcons.house,
+                //   title: 'Trang chủ',
+                //   route: '/',
+                //   currentRoute: ModalRoute.of(context)?.settings.name,
+                //   color: const Color(0xFF2196F3),
+                // ),
 
-                const SizedBox(height: 8),
-                Divider(
-                  height: 1,
-                  color: Colors.grey[300],
-                  indent: 16,
-                  endIndent: 16,
-                ),
-                const SizedBox(height: 8),
-
+                // const SizedBox(height: 8),
+                // Divider(
+                //   height: 1,
+                //   color: Colors.grey[300],
+                //   indent: 16,
+                //   endIndent: 16,
+                // ),
+                // const SizedBox(height: 8),
                 _SectionHeader('BÁO CÁO & GIÁM SÁT'),
 
                 _DrawerItemWithBadge(

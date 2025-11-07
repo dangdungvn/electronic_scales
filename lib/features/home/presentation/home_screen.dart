@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../../../shared/widgets/app_drawer.dart';
+import '../../pending_weighing/data/pending_weighing_provider.dart';
 import '../../pending_weighing/presentation/pending_weighing_list_screen.dart';
 import 'home_tab.dart';
 import 'settings_tab.dart';
 
 /// HomeScreen với Bottom Navigation: Trang chủ, Chờ cân, Cài đặt
-class HomeScreen extends HookWidget {
+class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
 
   // GlobalKey để truy cập Scaffold từ các tab
@@ -16,8 +18,11 @@ class HomeScreen extends HookWidget {
       GlobalKey<ScaffoldState>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final selectedIndex = useState(0);
+
+    // Watch số lượng xe chờ cân để hiển thị badge
+    final pendingCountAsync = ref.watch(pendingWeighingCountProvider);
 
     // Danh sách các tabs
     final tabs = [
@@ -56,8 +61,8 @@ class HomeScreen extends HookWidget {
             duration: const Duration(milliseconds: 400),
             tabBackgroundColor: const Color(0xFF2196F3),
             color: Colors.grey[600],
-            tabs: const [
-              GButton(
+            tabs: [
+              const GButton(
                 icon: Iconsax.home_1,
                 text: 'Trang chủ',
                 iconActiveColor: Colors.white,
@@ -68,8 +73,51 @@ class HomeScreen extends HookWidget {
                 text: 'Chờ cân',
                 iconActiveColor: Colors.white,
                 textColor: Colors.white,
+                // Hiển thị badge nếu có xe chờ cân
+                leading: pendingCountAsync.when(
+                  data: (count) => count > 0
+                      ? Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Icon(
+                              Iconsax.clock,
+                              size: 24,
+                              color: selectedIndex.value == 1
+                                  ? Colors.white
+                                  : Colors.grey[600],
+                            ),
+                            Positioned(
+                              right: -6,
+                              top: -6,
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: const BoxDecoration(
+                                  color: Colors.red,
+                                  shape: BoxShape.circle,
+                                ),
+                                constraints: const BoxConstraints(
+                                  minWidth: 18,
+                                  minHeight: 18,
+                                ),
+                                child: Text(
+                                  count > 99 ? '99+' : '$count',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : null,
+                  loading: () => null,
+                  error: (_, __) => null,
+                ),
               ),
-              GButton(
+              const GButton(
                 icon: Iconsax.setting_2,
                 text: 'Cài đặt',
                 iconActiveColor: Colors.white,

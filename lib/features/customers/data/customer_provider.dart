@@ -1,20 +1,22 @@
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../shared/models/api_response.dart';
-import '../domain/registered_vehicle.dart';
+import '../domain/customer.dart';
 import '../../home/data/permissions_provider.dart';
 import '../../scales/data/scale_station_provider.dart';
 
-part 'registered_vehicle_provider.g.dart';
+part 'customer_provider.g.dart';
 
+/// Provider quản lý danh sách khách hàng theo chuẩn Agents.md
 @riverpod
-class RegisteredVehicleList extends _$RegisteredVehicleList {
+class CustomerList extends _$CustomerList {
   @override
-  Future<List<RegisteredVehicle>> build() async {
-    return await _fetchVehicles();
+  Future<List<Customer>> build() async {
+    return await _fetchCustomers();
   }
 
-  Future<List<RegisteredVehicle>> _fetchVehicles() async {
+  /// Lấy danh sách khách hàng từ API
+  Future<List<Customer>> _fetchCustomers() async {
     try {
       // Lấy trạm cân
       final stations = await ref.read(scaleStationListProvider.future);
@@ -33,7 +35,7 @@ class RegisteredVehicleList extends _$RegisteredVehicleList {
       final baseUrl = 'http://${station.ip}:${station.port}';
 
       final response = await dio.post(
-        '$baseUrl/scm/LayDanhSachXeDangKy',
+        '$baseUrl/scm/LayDanhSachKhachHang',
         options: Options(
           headers: {
             'Authorization': permissions.token,
@@ -49,10 +51,7 @@ class RegisteredVehicleList extends _$RegisteredVehicleList {
         // Handle both direct list and ApiResponse wrapped list
         if (data is List) {
           return data
-              .map(
-                (json) =>
-                    RegisteredVehicle.fromJson(json as Map<String, dynamic>),
-              )
+              .map((json) => Customer.fromJson(json as Map<String, dynamic>))
               .toList();
         } else if (data is Map<String, dynamic>) {
           final apiResponse = ApiResponse<List<dynamic>>.fromJson(
@@ -66,28 +65,27 @@ class RegisteredVehicleList extends _$RegisteredVehicleList {
 
           final listData = apiResponse.data ?? [];
           return listData
-              .map(
-                (json) =>
-                    RegisteredVehicle.fromJson(json as Map<String, dynamic>),
-              )
+              .map((json) => Customer.fromJson(json as Map<String, dynamic>))
               .toList();
         }
 
         return [];
       }
 
-      throw Exception('Failed to load vehicles');
+      throw Exception('Failed to load customers');
     } catch (e) {
-      throw Exception('Lỗi khi tải danh sách xe: ${e.toString()}');
+      throw Exception('Lỗi khi tải danh sách khách hàng: ${e.toString()}');
     }
   }
 
+  /// Refresh danh sách
   Future<void> refresh() async {
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() => _fetchVehicles());
+    state = await AsyncValue.guard(() => _fetchCustomers());
   }
 
-  Future<void> addVehicle(RegisteredVehicleRequest request) async {
+  /// Thêm khách hàng mới
+  Future<void> addCustomer(CustomerRequest request) async {
     try {
       // Lấy trạm cân
       final stations = await ref.read(scaleStationListProvider.future);
@@ -106,10 +104,9 @@ class RegisteredVehicleList extends _$RegisteredVehicleList {
       final baseUrl = 'http://${station.ip}:${station.port}';
 
       final jsonData = request.toJson();
-      print('🚀 Request Data: $jsonData');
 
       final response = await dio.post(
-        '$baseUrl/scm/CapNhatXeDangKy',
+        '$baseUrl/scm/CapNhatKhachHang',
         options: Options(
           headers: {
             'Authorization': permissions.token,
@@ -118,10 +115,6 @@ class RegisteredVehicleList extends _$RegisteredVehicleList {
         ),
         data: jsonData,
       );
-
-      print('✅ Response Status: ${response.statusCode}');
-      print('✅ Response Data Type: ${response.data.runtimeType}');
-      print('✅ Response Data: ${response.data}');
 
       if (response.statusCode == 200) {
         final responseData = response.data;
@@ -145,13 +138,9 @@ class RegisteredVehicleList extends _$RegisteredVehicleList {
         // Refresh list after successful add
         await refresh();
       } else {
-        throw Exception('Failed to add vehicle');
+        throw Exception('Failed to add customer');
       }
     } on DioException catch (e) {
-      print('❌ DioException: ${e.message}');
-      print('❌ Response Data Type: ${e.response?.data.runtimeType}');
-      print('❌ Response Data: ${e.response?.data}');
-
       if (e.response?.data != null) {
         final responseData = e.response!.data;
 
@@ -171,10 +160,11 @@ class RegisteredVehicleList extends _$RegisteredVehicleList {
     }
   }
 
-  Future<void> updateVehicle(RegisteredVehicleRequest request) async {
+  /// Cập nhật khách hàng
+  Future<void> updateCustomer(CustomerRequest request) async {
     try {
-      if (request.syncId.isEmpty) {
-        throw Exception('Không tìm thấy ID xe để cập nhật');
+      if (request.id.isEmpty) {
+        throw Exception('Không tìm thấy ID khách hàng để cập nhật');
       }
 
       // Lấy trạm cân
@@ -194,7 +184,7 @@ class RegisteredVehicleList extends _$RegisteredVehicleList {
       final baseUrl = 'http://${station.ip}:${station.port}';
 
       final response = await dio.post(
-        '$baseUrl/scm/CapNhatXeDangKy',
+        '$baseUrl/scm/CapNhatKhachHang',
         options: Options(
           headers: {
             'Authorization': permissions.token,
@@ -204,7 +194,7 @@ class RegisteredVehicleList extends _$RegisteredVehicleList {
         data: request.toJson(),
       );
       print(request.toJson());
-      print(response.data);
+
       if (response.statusCode == 200) {
         final responseData = response.data;
 
@@ -227,7 +217,7 @@ class RegisteredVehicleList extends _$RegisteredVehicleList {
         // Refresh list after successful update
         await refresh();
       } else {
-        throw Exception('Failed to update vehicle');
+        throw Exception('Failed to update customer');
       }
     } on DioException catch (e) {
       if (e.response?.data != null) {
@@ -249,7 +239,8 @@ class RegisteredVehicleList extends _$RegisteredVehicleList {
     }
   }
 
-  Future<void> deleteVehicle(String syncId) async {
+  /// Xóa khách hàng
+  Future<void> deleteCustomer(String id) async {
     try {
       // Lấy trạm cân
       final stations = await ref.read(scaleStationListProvider.future);
@@ -268,14 +259,14 @@ class RegisteredVehicleList extends _$RegisteredVehicleList {
       final baseUrl = 'http://${station.ip}:${station.port}';
 
       final response = await dio.post(
-        '$baseUrl/scm/XoaXeDangKy',
+        '$baseUrl/scm/XoaKhachHang',
         options: Options(
           headers: {
             'Authorization': permissions.token,
             'Content-Type': 'application/json; charset=utf-8',
           },
         ),
-        data: {'SyncID': syncId},
+        data: {'ID': id},
       );
 
       if (response.statusCode == 200) {
@@ -300,7 +291,7 @@ class RegisteredVehicleList extends _$RegisteredVehicleList {
         // Refresh list after successful delete
         await refresh();
       } else {
-        throw Exception('Failed to delete vehicle');
+        throw Exception('Failed to delete customer');
       }
     } on DioException catch (e) {
       if (e.response?.data != null) {

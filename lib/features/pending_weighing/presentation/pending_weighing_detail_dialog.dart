@@ -455,72 +455,72 @@ class _DetailItem extends StatelessWidget {
 }
 
 /// Widget hiển thị hình ảnh
-class _ImageItem extends StatelessWidget {
-  const _ImageItem({required this.label, required this.imagePath});
+// class _ImageItem extends StatelessWidget {
+//   const _ImageItem({required this.label, required this.imagePath});
 
-  final String label;
-  final String imagePath;
+//   final String label;
+//   final String imagePath;
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Icon(Iconsax.image, size: 20, color: Colors.grey[600]),
-            const SizedBox(width: 12),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 13,
-                color: Colors.grey[600],
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Container(
-          width: double.infinity,
-          height: 200,
-          decoration: BoxDecoration(
-            color: Colors.grey[100],
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.grey[300]!),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                // Placeholder
-                Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Iconsax.image, size: 48, color: Colors.grey[400]),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Ảnh từ máy cân',
-                        style: TextStyle(fontSize: 12, color: Colors.grey[500]),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        imagePath.split('\\').last,
-                        style: TextStyle(fontSize: 10, color: Colors.grey[400]),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-                // TODO: Load image from network or local path
-                // Image.network hoặc Image.file khi có API endpoint
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         Row(
+//           children: [
+//             Icon(Iconsax.image, size: 20, color: Colors.grey[600]),
+//             const SizedBox(width: 12),
+//             Text(
+//               label,
+//               style: TextStyle(
+//                 fontSize: 13,
+//                 color: Colors.grey[600],
+//                 fontWeight: FontWeight.w500,
+//               ),
+//             ),
+//           ],
+//         ),
+//         const SizedBox(height: 8),
+//         Container(
+//           width: double.infinity,
+//           height: 200,
+//           decoration: BoxDecoration(
+//             color: Colors.grey[100],
+//             borderRadius: BorderRadius.circular(8),
+//             border: Border.all(color: Colors.grey[300]!),
+//           ),
+//           child: ClipRRect(
+//             borderRadius: BorderRadius.circular(8),
+//             child: Stack(
+//               fit: StackFit.expand,
+//               children: [
+//                 // Placeholder
+//                 Center(
+//                   child: Column(
+//                     mainAxisAlignment: MainAxisAlignment.center,
+//                     children: [
+//                       Icon(Iconsax.image, size: 48, color: Colors.grey[400]),
+//                       const SizedBox(height: 8),
+//                       Text(
+//                         'Ảnh từ máy cân',
+//                         style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+//                       ),
+//                       const SizedBox(height: 4),
+//                       Text(
+//                         imagePath.split('\\').last,
+//                         style: TextStyle(fontSize: 10, color: Colors.grey[400]),
+//                         textAlign: TextAlign.center,
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//                 // TODO: Load image from network or local path
+//                 // Image.network hoặc Image.file khi có API endpoint
+//               ],
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
