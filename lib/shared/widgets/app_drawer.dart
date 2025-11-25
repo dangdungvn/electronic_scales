@@ -126,7 +126,7 @@ class AppDrawer extends HookConsumerWidget {
                 _DrawerItem(
                   icon: FontAwesomeIcons.solidStar,
                   title: 'Chất lượng',
-                  route: '/product-quality',
+                  route: '/goods-quality',
                   currentRoute: ModalRoute.of(context)?.settings.name,
                   color: const Color(0xFFFFC107),
                 ),

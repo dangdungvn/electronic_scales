@@ -6,6 +6,8 @@ import '../../features/pending_weighing/presentation/pending_weighing_list_scree
 import '../../features/registered_vehicles/presentation/registered_vehicle_list_screen.dart';
 import '../../features/customers/presentation/customer_list_screen.dart';
 import '../../features/drivers/presentation/driver_list_screen.dart';
+import '../../features/goods_quality/presentation/goods_quality_list_screen.dart';
+import '../../features/goods_origin/presentation/goods_origin_list_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 
 part 'app_router.g.dart';
@@ -46,6 +48,16 @@ GoRouter goRouter(Ref ref) {
         path: '/drivers',
         name: 'drivers',
         builder: (context, state) => const DriverListScreen(),
+      ),
+      GoRoute(
+        path: '/goods-quality',
+        name: 'goods-quality',
+        builder: (context, state) => const GoodsQualityListScreen(),
+      ),
+      GoRoute(
+        path: '/product-origins',
+        name: 'product-origins',
+        builder: (context, state) => const GoodsOriginListScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(
