@@ -9,6 +9,7 @@ import '../../features/drivers/presentation/driver_list_screen.dart';
 import '../../features/goods_quality/presentation/goods_quality_list_screen.dart';
 import '../../features/goods_origin/presentation/goods_origin_list_screen.dart';
 import '../../features/warehouses/presentation/warehouse_list_screen.dart';
+import '../../features/products/presentation/product_list_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 
 part 'app_router.g.dart';
@@ -64,6 +65,11 @@ GoRouter goRouter(Ref ref) {
         path: '/warehouses',
         name: 'warehouses',
         builder: (context, state) => const WarehouseListScreen(),
+      ),
+      GoRoute(
+        path: '/products',
+        name: 'products',
+        builder: (context, state) => const ProductListScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

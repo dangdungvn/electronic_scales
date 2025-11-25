@@ -462,34 +462,6 @@
 					"response": []
 				},
 				{
-					"name": "Lấy danh sách hàng hóa 2",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"authorization\":\"7bdb0325-fd79-4903-a52a-b5e715a980ae\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://{{SCM_SERVER}}/scm/danhmuchanghoa",
-							"protocol": "http",
-							"host": [
-								"{{SCM_SERVER}}"
-							],
-							"path": [
-								"scm",
-								"danhmuchanghoa"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Cập nhật hàng hóa",
 					"request": {
 						"method": "POST",
