@@ -5,54 +5,58 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../../../shared/models/api_response.dart';
 import '../../../shared/widgets/connection_result_snackbar.dart';
 import '../../../shared/widgets/custom_text_field.dart';
-import '../data/customer_provider.dart';
-import '../domain/customer.dart';
+import '../data/driver_provider.dart';
+import '../domain/driver.dart';
 
-/// Hiển thị bottom sheet để thêm/sửa khách hàng
-Future<void> showAddEditCustomerSheet({
+/// Hiển thị bottom sheet để thêm/sửa tài xế
+Future<void> showAddEditDriverSheet({
   required BuildContext context,
-  Customer? customer,
+  Driver? driver,
 }) {
   return showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
-    builder: (sheetContext) => AddEditCustomerSheet(customer: customer),
+    builder: (sheetContext) => AddEditDriverSheet(driver: driver),
   );
 }
 
-/// Bottom sheet thêm/sửa khách hàng
-class AddEditCustomerSheet extends HookConsumerWidget {
-  const AddEditCustomerSheet({super.key, this.customer});
+/// Bottom sheet thêm/sửa tài xế
+class AddEditDriverSheet extends HookConsumerWidget {
+  const AddEditDriverSheet({super.key, this.driver});
 
-  final Customer? customer;
+  final Driver? driver;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isEditing = customer != null;
+    final isEditing = driver != null;
 
     // Text controllers
-    final codeController = useTextEditingController(text: customer?.code ?? '');
-    final nameController = useTextEditingController(text: customer?.name ?? '');
-    final phoneController = useTextEditingController(
-      text: customer?.phone ?? '',
+    final codeController = useTextEditingController(text: driver?.code ?? '');
+    final nameController = useTextEditingController(text: driver?.name ?? '');
+    final phoneController = useTextEditingController(text: driver?.phone ?? '');
+    final idCardController = useTextEditingController(
+      text: driver?.idCard ?? '',
+    );
+    final licenseNumberController = useTextEditingController(
+      text: driver?.licenseNumber ?? '',
     );
     final addressController = useTextEditingController(
-      text: customer?.address ?? '',
-    );
-    final idCardController = useTextEditingController(
-      text: customer?.idCard ?? '',
+      text: driver?.address ?? '',
     );
     final issueDateController = useTextEditingController(
-      text: customer?.issueDate ?? '',
+      text: driver?.issueDate ?? '',
     );
     final issuePlaceController = useTextEditingController(
-      text: customer?.issuePlace ?? '',
+      text: driver?.issuePlace ?? '',
     );
-    final taxCodeController = useTextEditingController(
-      text: customer?.taxCode ?? '',
+    final safetyPermitController = useTextEditingController(
+      text: driver?.safetyPermit ?? '',
     );
-    final noteController = useTextEditingController(text: customer?.note ?? '');
+    final expiryDateController = useTextEditingController(
+      text: driver?.expiryDate ?? '',
+    );
+    final noteController = useTextEditingController(text: driver?.note ?? '');
 
     final isLoading = useState(false);
     final formKey = useMemoized(() => GlobalKey<FormState>());
@@ -100,13 +104,13 @@ class AddEditCustomerSheet extends HookConsumerWidget {
                       Row(
                         children: [
                           Icon(
-                            Iconsax.user,
+                            Iconsax.driver,
                             color: Theme.of(context).primaryColor,
                           ),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Text(
-                              isEditing ? 'Sửa Khách Hàng' : 'Thêm Khách Hàng',
+                              isEditing ? 'Sửa Tài Xế' : 'Thêm Tài Xế',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -133,31 +137,31 @@ class AddEditCustomerSheet extends HookConsumerWidget {
                       children: [
                         // Basic Information Section
                         _SectionHeader(
-                          icon: Iconsax.profile_circle,
+                          icon: Iconsax.user,
                           title: 'Thông Tin Cơ Bản',
                         ),
                         const SizedBox(height: 8),
                         CustomTextField(
-                          title: 'MÃ KHÁCH HÀNG *',
-                          placeholder: 'Nhập mã khách hàng',
+                          title: 'MÃ TÀI XẾ *',
+                          placeholder: 'Nhập mã tài xế',
                           controller: codeController,
                           textCapitalization: TextCapitalization.characters,
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
-                              return 'Vui lòng nhập mã khách hàng';
+                              return 'Vui lòng nhập mã tài xế';
                             }
                             return null;
                           },
                         ),
                         const SizedBox(height: 8),
                         CustomTextField(
-                          title: 'TÊN KHÁCH HÀNG *',
-                          placeholder: 'Nhập tên khách hàng',
+                          title: 'TÊN TÀI XẾ *',
+                          placeholder: 'Nhập tên tài xế',
                           controller: nameController,
                           textCapitalization: TextCapitalization.words,
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
-                              return 'Vui lòng nhập tên khách hàng';
+                              return 'Vui lòng nhập tên tài xế';
                             }
                             return null;
                           },
@@ -179,16 +183,10 @@ class AddEditCustomerSheet extends HookConsumerWidget {
                         ),
                         const SizedBox(height: 12),
 
-                        // Tax Information Section
+                        // License Information Section
                         _SectionHeader(
-                          icon: Iconsax.document_text,
-                          title: 'Thông Tin Thuế & Giấy Tờ',
-                        ),
-                        const SizedBox(height: 8),
-                        CustomTextField(
-                          title: 'MÃ SỐ THUẾ',
-                          placeholder: 'Nhập mã số thuế',
-                          controller: taxCodeController,
+                          icon: Iconsax.card,
+                          title: 'Thông Tin Giấy Tờ',
                         ),
                         const SizedBox(height: 8),
                         CustomTextField(
@@ -199,8 +197,15 @@ class AddEditCustomerSheet extends HookConsumerWidget {
                         ),
                         const SizedBox(height: 8),
                         CustomTextField(
+                          title: 'BẰNG LÁI',
+                          placeholder: 'Nhập số bằng lái',
+                          controller: licenseNumberController,
+                          textCapitalization: TextCapitalization.characters,
+                        ),
+                        const SizedBox(height: 8),
+                        CustomTextField(
                           title: 'NGÀY CẤP',
-                          placeholder: 'dd/mm/yyyy',
+                          placeholder: 'Nhập ngày cấp',
                           controller: issueDateController,
                         ),
                         const SizedBox(height: 8),
@@ -210,10 +215,25 @@ class AddEditCustomerSheet extends HookConsumerWidget {
                           controller: issuePlaceController,
                           textCapitalization: TextCapitalization.words,
                         ),
+                        const SizedBox(height: 8),
+                        CustomTextField(
+                          title: 'GIẤY PHÉP AN TOÀN',
+                          placeholder: 'Nhập giấy phép an toàn',
+                          controller: safetyPermitController,
+                        ),
+                        const SizedBox(height: 8),
+                        CustomTextField(
+                          title: 'NGÀY HẾT HẠN',
+                          placeholder: 'Nhập ngày hết hạn',
+                          controller: expiryDateController,
+                        ),
                         const SizedBox(height: 12),
 
-                        // Note Section
-                        _SectionHeader(icon: Iconsax.note_1, title: 'Ghi Chú'),
+                        // Additional Information Section
+                        _SectionHeader(
+                          icon: Iconsax.note,
+                          title: 'Thông Tin Khác',
+                        ),
                         const SizedBox(height: 8),
                         CustomTextField(
                           title: 'GHI CHÚ',
@@ -231,7 +251,7 @@ class AddEditCustomerSheet extends HookConsumerWidget {
                 // Fixed bottom button
                 Container(
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                  decoration: const BoxDecoration(color: Colors.transparent),
+                  decoration: BoxDecoration(color: Colors.transparent),
                   child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -246,11 +266,13 @@ class AddEditCustomerSheet extends HookConsumerWidget {
                               codeController,
                               nameController,
                               phoneController,
-                              addressController,
                               idCardController,
+                              licenseNumberController,
+                              addressController,
                               issueDateController,
                               issuePlaceController,
-                              taxCodeController,
+                              safetyPermitController,
+                              expiryDateController,
                               noteController,
                             ),
                       style: ElevatedButton.styleFrom(
@@ -269,7 +291,7 @@ class AddEditCustomerSheet extends HookConsumerWidget {
                               ),
                             )
                           : Text(
-                              isEditing ? 'Cập nhật' : 'Thêm khách hàng',
+                              isEditing ? 'Cập nhật' : 'Thêm tài xế',
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -295,11 +317,13 @@ class AddEditCustomerSheet extends HookConsumerWidget {
     TextEditingController codeController,
     TextEditingController nameController,
     TextEditingController phoneController,
-    TextEditingController addressController,
     TextEditingController idCardController,
+    TextEditingController licenseNumberController,
+    TextEditingController addressController,
     TextEditingController issueDateController,
     TextEditingController issuePlaceController,
-    TextEditingController taxCodeController,
+    TextEditingController safetyPermitController,
+    TextEditingController expiryDateController,
     TextEditingController noteController,
   ) async {
     if (!formKey.currentState!.validate()) {
@@ -309,23 +333,25 @@ class AddEditCustomerSheet extends HookConsumerWidget {
     isLoading.value = true;
 
     try {
-      final request = CustomerRequest(
-        id: isEditing ? (customer?.id ?? '') : '',
+      final request = Driver(
+        id: isEditing ? (driver!.id ?? '') : '',
         code: codeController.text.trim(),
         name: nameController.text.trim(),
         phone: phoneController.text.trim(),
-        address: addressController.text.trim(),
         idCard: idCardController.text.trim(),
+        licenseNumber: licenseNumberController.text.trim(),
+        address: addressController.text.trim(),
         issueDate: issueDateController.text.trim(),
         issuePlace: issuePlaceController.text.trim(),
-        taxCode: taxCodeController.text.trim(),
+        safetyPermit: safetyPermitController.text.trim(),
+        expiryDate: expiryDateController.text.trim(),
         note: noteController.text.trim(),
       );
 
       if (isEditing) {
-        await ref.read(customerListProvider.notifier).updateCustomer(request);
+        await ref.read(driverListProvider.notifier).updateDriver(request);
       } else {
-        await ref.read(customerListProvider.notifier).addCustomer(request);
+        await ref.read(driverListProvider.notifier).addDriver(request);
       }
 
       if (context.mounted) {
@@ -333,8 +359,8 @@ class AddEditCustomerSheet extends HookConsumerWidget {
         ConnectionResultSnackbar.showSimple(
           context,
           message: isEditing
-              ? 'Cập nhật khách hàng thành công'
-              : 'Thêm khách hàng thành công',
+              ? 'Cập nhật tài xế thành công'
+              : 'Thêm tài xế thành công',
           backgroundColor: const Color(0xFF4CAF50),
           icon: Iconsax.tick_circle,
         );

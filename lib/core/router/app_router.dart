@@ -5,6 +5,7 @@ import '../../features/scales/presentation/scale_station_list_screen.dart';
 import '../../features/pending_weighing/presentation/pending_weighing_list_screen.dart';
 import '../../features/registered_vehicles/presentation/registered_vehicle_list_screen.dart';
 import '../../features/customers/presentation/customer_list_screen.dart';
+import '../../features/drivers/presentation/driver_list_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 
 part 'app_router.g.dart';
@@ -40,6 +41,11 @@ GoRouter goRouter(Ref ref) {
         path: '/customers',
         name: 'customers',
         builder: (context, state) => const CustomerListScreen(),
+      ),
+      GoRoute(
+        path: '/drivers',
+        name: 'drivers',
+        builder: (context, state) => const DriverListScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

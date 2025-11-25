@@ -82,9 +82,9 @@ class AddEditVehicleSheet extends HookConsumerWidget {
     final formKey = useMemoized(() => GlobalKey<FormState>());
 
     return DraggableScrollableSheet(
-      initialChildSize: 0.95,
-      minChildSize: 0.95,
-      maxChildSize: 0.95,
+      initialChildSize: 0.93,
+      minChildSize: 0.93,
+      maxChildSize: 0.93,
       builder: (context, scrollController) {
         return GestureDetector(
           onTap: () {
