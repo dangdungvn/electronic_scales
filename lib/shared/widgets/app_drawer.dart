@@ -148,45 +148,45 @@ class AppDrawer extends HookConsumerWidget {
                 ),
 
                 // Chỉ hiển thị nếu có quyền
-                if (permissions?.quanLyNguoiDung == true ||
-                    permissions?.cauHinhHeThong == true) ...[
-                  const SizedBox(height: 8),
-                  Divider(
-                    height: 1,
-                    color: Colors.grey[300],
-                    indent: 16,
-                    endIndent: 16,
-                  ),
-                  const SizedBox(height: 8),
+                // if (permissions?.quanLyNguoiDung == true ||
+                //     permissions?.cauHinhHeThong == true) ...[
+                //   const SizedBox(height: 8),
+                //   Divider(
+                //     height: 1,
+                //     color: Colors.grey[300],
+                //     indent: 16,
+                //     endIndent: 16,
+                //   ),
+                // const SizedBox(height: 8),
 
-                  _SectionHeader('HỆ THỐNG'),
+                // _SectionHeader('HỆ THỐNG'),
 
-                  _DrawerItem(
-                    icon: FontAwesomeIcons.industry,
-                    title: 'Quản lý trạm cân',
-                    route: '/stations',
-                    currentRoute: ModalRoute.of(context)?.settings.name,
-                    color: const Color(0xFF3F51B5),
-                  ),
+                // _DrawerItem(
+                //   icon: FontAwesomeIcons.industry,
+                //   title: 'Quản lý trạm cân',
+                //   route: '/stations',
+                //   currentRoute: ModalRoute.of(context)?.settings.name,
+                //   color: const Color(0xFF3F51B5),
+                // ),
 
-                  if (permissions?.quanLyNguoiDung == true) ...[
-                    _DrawerItem(
-                      icon: FontAwesomeIcons.userGear,
-                      title: 'Người dùng',
-                      route: '/users',
-                      currentRoute: ModalRoute.of(context)?.settings.name,
-                      color: const Color(0xFF2196F3),
-                    ),
+                // if (permissions?.quanLyNguoiDung == true) ...[
+                //   _DrawerItem(
+                //     icon: FontAwesomeIcons.userGear,
+                //     title: 'Người dùng',
+                //     route: '/users',
+                //     currentRoute: ModalRoute.of(context)?.settings.name,
+                //     color: const Color(0xFF2196F3),
+                //   ),
 
-                    _DrawerItem(
-                      icon: FontAwesomeIcons.userGroup,
-                      title: 'Nhóm người dùng',
-                      route: '/user-groups',
-                      currentRoute: ModalRoute.of(context)?.settings.name,
-                      color: const Color(0xFF9C27B0),
-                    ),
-                  ],
-                ],
+                //   _DrawerItem(
+                //     icon: FontAwesomeIcons.userGroup,
+                //     title: 'Nhóm người dùng',
+                //     route: '/user-groups',
+                //     currentRoute: ModalRoute.of(context)?.settings.name,
+                //     color: const Color(0xFF9C27B0),
+                //   ),
+                // ],
+                // ],
               ],
             ),
           ),
