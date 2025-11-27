@@ -5,54 +5,43 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../../../shared/models/api_response.dart';
 import '../../../shared/widgets/connection_result_snackbar.dart';
 import '../../../shared/widgets/custom_text_field.dart';
-import '../data/customer_provider.dart';
-import '../domain/customer.dart';
+import '../data/weighing_type_provider.dart';
+import '../domain/weighing_type.dart';
 
-/// Hiển thị bottom sheet để thêm/sửa khách hàng
-Future<void> showAddEditCustomerSheet({
+/// Hiển thị bottom sheet để thêm/sửa kiểu cân
+Future<void> showAddEditWeighingTypeSheet({
   required BuildContext context,
-  Customer? customer,
+  WeighingType? weighingType,
 }) {
   return showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
-    builder: (sheetContext) => AddEditCustomerSheet(customer: customer),
+    builder: (sheetContext) =>
+        AddEditWeighingTypeSheet(weighingType: weighingType),
   );
 }
 
-/// Bottom sheet thêm/sửa khách hàng
-class AddEditCustomerSheet extends HookConsumerWidget {
-  const AddEditCustomerSheet({super.key, this.customer});
+/// Bottom sheet thêm/sửa kiểu cân
+class AddEditWeighingTypeSheet extends HookConsumerWidget {
+  const AddEditWeighingTypeSheet({super.key, this.weighingType});
 
-  final Customer? customer;
+  final WeighingType? weighingType;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isEditing = customer != null;
+    final isEditing = weighingType != null;
 
     // Text controllers
-    final codeController = useTextEditingController(text: customer?.code ?? '');
-    final nameController = useTextEditingController(text: customer?.name ?? '');
-    final phoneController = useTextEditingController(
-      text: customer?.phone ?? '',
+    final nameController = useTextEditingController(
+      text: weighingType?.name ?? '',
     );
-    final addressController = useTextEditingController(
-      text: customer?.address ?? '',
+    final weighingCountController = useTextEditingController(
+      text: weighingType?.weighingCount.toString() ?? '2',
     );
-    final idCardController = useTextEditingController(
-      text: customer?.idCard ?? '',
+    final noteController = useTextEditingController(
+      text: weighingType?.note ?? '',
     );
-    final issueDateController = useTextEditingController(
-      text: customer?.issueDate ?? '',
-    );
-    final issuePlaceController = useTextEditingController(
-      text: customer?.issuePlace ?? '',
-    );
-    final taxCodeController = useTextEditingController(
-      text: customer?.taxCode ?? '',
-    );
-    final noteController = useTextEditingController(text: customer?.note ?? '');
 
     final isLoading = useState(false);
     final formKey = useMemoized(() => GlobalKey<FormState>());
@@ -93,11 +82,14 @@ class AddEditCustomerSheet extends HookConsumerWidget {
                   // Title and close button
                   Row(
                     children: [
-                      Icon(Iconsax.user, color: Theme.of(context).primaryColor),
+                      Icon(
+                        Iconsax.weight_1,
+                        color: Theme.of(context).primaryColor,
+                      ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          isEditing ? 'Sửa Khách Hàng' : 'Thêm Khách Hàng',
+                          isEditing ? 'Sửa Kiểu Cân' : 'Thêm Kiểu Cân',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -125,90 +117,37 @@ class AddEditCustomerSheet extends HookConsumerWidget {
                   children: [
                     // Basic Information Section
                     _SectionHeader(
-                      icon: Iconsax.profile_circle,
+                      icon: Iconsax.info_circle,
                       title: 'Thông Tin Cơ Bản',
                     ),
                     const SizedBox(height: 8),
                     CustomTextField(
-                      title: 'MÃ KHÁCH HÀNG *',
-                      placeholder: 'Nhập mã khách hàng',
-                      controller: codeController,
-                      textCapitalization: TextCapitalization.characters,
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Vui lòng nhập mã khách hàng';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 8),
-                    CustomTextField(
-                      title: 'TÊN KHÁCH HÀNG *',
-                      placeholder: 'Nhập tên khách hàng',
+                      title: 'TÊN KIỂU CÂN *',
+                      placeholder: 'Nhập tên kiểu cân',
                       controller: nameController,
-                      textCapitalization: TextCapitalization.words,
+                      textCapitalization: TextCapitalization.sentences,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Vui lòng nhập tên khách hàng';
+                          return 'Vui lòng nhập tên kiểu cân';
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 8),
                     CustomTextField(
-                      title: 'SỐ ĐIỆN THOẠI',
-                      placeholder: 'Nhập số điện thoại',
-                      controller: phoneController,
-                      keyboardType: TextInputType.phone,
-                    ),
-                    const SizedBox(height: 8),
-                    CustomTextField(
-                      title: 'ĐỊA CHỈ',
-                      placeholder: 'Nhập địa chỉ',
-                      controller: addressController,
-                      textCapitalization: TextCapitalization.words,
-                      maxLines: 2,
-                    ),
-                    const SizedBox(height: 12),
-
-                    // Tax Information Section
-                    _SectionHeader(
-                      icon: Iconsax.document_text,
-                      title: 'Thông Tin Thuế & Giấy Tờ',
-                    ),
-                    const SizedBox(height: 8),
-                    CustomTextField(
-                      title: 'MÃ SỐ THUẾ',
-                      placeholder: 'Nhập mã số thuế',
-                      controller: taxCodeController,
-                    ),
-                    const SizedBox(height: 8),
-                    CustomTextField(
-                      title: 'CMND/CCCD',
-                      placeholder: 'Nhập số CMND/CCCD',
-                      controller: idCardController,
+                      title: 'SỐ LẦN CÂN *',
+                      placeholder: 'Nhập số lần cân',
+                      controller: weighingCountController,
                       keyboardType: TextInputType.number,
-                    ),
-                    const SizedBox(height: 8),
-                    CustomTextField(
-                      title: 'NGÀY CẤP',
-                      placeholder: 'Chọn ngày cấp',
-                      controller: issueDateController,
-                      readOnly: true,
-                      showIcon: true,
-                      icon: const Icon(
-                        Iconsax.calendar_1,
-                        size: 16,
-                        color: Color(0xFF8F9098),
-                      ),
-                      onTap: () => _selectDate(context, issueDateController),
-                    ),
-                    const SizedBox(height: 8),
-                    CustomTextField(
-                      title: 'NƠI CẤP',
-                      placeholder: 'Nhập nơi cấp',
-                      controller: issuePlaceController,
-                      textCapitalization: TextCapitalization.words,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Vui lòng nhập số lần cân';
+                        }
+                        if (int.tryParse(value) == null) {
+                          return 'Số lần cân phải là số nguyên';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 12),
 
@@ -243,14 +182,8 @@ class AddEditCustomerSheet extends HookConsumerWidget {
                           formKey,
                           isEditing,
                           isLoading,
-                          codeController,
                           nameController,
-                          phoneController,
-                          addressController,
-                          idCardController,
-                          issueDateController,
-                          issuePlaceController,
-                          taxCodeController,
+                          weighingCountController,
                           noteController,
                         ),
                   style: ElevatedButton.styleFrom(
@@ -269,7 +202,7 @@ class AddEditCustomerSheet extends HookConsumerWidget {
                           ),
                         )
                       : Text(
-                          isEditing ? 'Cập nhật' : 'Thêm khách hàng',
+                          isEditing ? 'Cập nhật' : 'Thêm kiểu cân',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -290,14 +223,8 @@ class AddEditCustomerSheet extends HookConsumerWidget {
     GlobalKey<FormState> formKey,
     bool isEditing,
     ValueNotifier<bool> isLoading,
-    TextEditingController codeController,
     TextEditingController nameController,
-    TextEditingController phoneController,
-    TextEditingController addressController,
-    TextEditingController idCardController,
-    TextEditingController issueDateController,
-    TextEditingController issuePlaceController,
-    TextEditingController taxCodeController,
+    TextEditingController weighingCountController,
     TextEditingController noteController,
   ) async {
     if (!formKey.currentState!.validate()) {
@@ -307,23 +234,21 @@ class AddEditCustomerSheet extends HookConsumerWidget {
     isLoading.value = true;
 
     try {
-      final request = CustomerRequest(
-        id: isEditing ? (customer?.id ?? '') : '',
-        code: codeController.text.trim(),
+      final request = WeighingType(
+        id: isEditing ? (weighingType!.id) : 0,
         name: nameController.text.trim(),
-        phone: phoneController.text.trim(),
-        address: addressController.text.trim(),
-        idCard: idCardController.text.trim(),
-        issueDate: issueDateController.text.trim(),
-        issuePlace: issuePlaceController.text.trim(),
-        taxCode: taxCodeController.text.trim(),
+        weighingCount: int.parse(weighingCountController.text.trim()),
         note: noteController.text.trim(),
       );
 
       if (isEditing) {
-        await ref.read(customerListProvider.notifier).updateCustomer(request);
+        await ref
+            .read(weighingTypeListProvider.notifier)
+            .updateWeighingType(request);
       } else {
-        await ref.read(customerListProvider.notifier).addCustomer(request);
+        await ref
+            .read(weighingTypeListProvider.notifier)
+            .addWeighingType(request);
       }
 
       if (context.mounted) {
@@ -331,8 +256,8 @@ class AddEditCustomerSheet extends HookConsumerWidget {
         ConnectionResultSnackbar.showSimple(
           context,
           message: isEditing
-              ? 'Cập nhật khách hàng thành công'
-              : 'Thêm khách hàng thành công',
+              ? 'Cập nhật kiểu cân thành công'
+              : 'Thêm kiểu cân thành công',
           backgroundColor: const Color(0xFF4CAF50),
           icon: Iconsax.tick_circle,
         );
@@ -353,32 +278,6 @@ class AddEditCustomerSheet extends HookConsumerWidget {
       }
     } finally {
       isLoading.value = false;
-    }
-  }
-
-  Future<void> _selectDate(
-    BuildContext context,
-    TextEditingController controller,
-  ) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: Theme.of(context).primaryColor,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-    if (picked != null) {
-      controller.text =
-          "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
     }
   }
 }

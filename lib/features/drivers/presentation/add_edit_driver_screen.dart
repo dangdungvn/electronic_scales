@@ -200,8 +200,16 @@ class AddEditDriverSheet extends HookConsumerWidget {
                     const SizedBox(height: 8),
                     CustomTextField(
                       title: 'NGÀY CẤP',
-                      placeholder: 'Nhập ngày cấp',
+                      placeholder: 'Chọn ngày cấp',
                       controller: issueDateController,
+                      readOnly: true,
+                      showIcon: true,
+                      icon: const Icon(
+                        Iconsax.calendar_1,
+                        size: 16,
+                        color: Color(0xFF8F9098),
+                      ),
+                      onTap: () => _selectDate(context, issueDateController),
                     ),
                     const SizedBox(height: 8),
                     CustomTextField(
@@ -219,8 +227,16 @@ class AddEditDriverSheet extends HookConsumerWidget {
                     const SizedBox(height: 8),
                     CustomTextField(
                       title: 'NGÀY HẾT HẠN',
-                      placeholder: 'Nhập ngày hết hạn',
+                      placeholder: 'Chọn ngày hết hạn',
                       controller: expiryDateController,
+                      readOnly: true,
+                      showIcon: true,
+                      icon: const Icon(
+                        Iconsax.calendar_1,
+                        size: 16,
+                        color: Color(0xFF8F9098),
+                      ),
+                      onTap: () => _selectDate(context, expiryDateController),
                     ),
                     const SizedBox(height: 12),
 
@@ -371,6 +387,32 @@ class AddEditDriverSheet extends HookConsumerWidget {
       }
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> _selectDate(
+    BuildContext context,
+    TextEditingController controller,
+  ) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Theme.of(context).primaryColor,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null) {
+      controller.text =
+          "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
     }
   }
 }

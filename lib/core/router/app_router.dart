@@ -11,6 +11,7 @@ import '../../features/goods_quality/presentation/goods_quality_list_screen.dart
 import '../../features/goods_origin/presentation/goods_origin_list_screen.dart';
 import '../../features/warehouses/presentation/warehouse_list_screen.dart';
 import '../../features/products/presentation/product_list_screen.dart';
+import '../../features/weighing_types/presentation/weighing_type_list_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 
 part 'app_router.g.dart';
@@ -76,6 +77,11 @@ GoRouter goRouter(Ref ref) {
         path: '/products',
         name: 'products',
         builder: (context, state) => const ProductListScreen(),
+      ),
+      GoRoute(
+        path: '/weighing-types',
+        name: 'weighing-types',
+        builder: (context, state) => const WeighingTypeListScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

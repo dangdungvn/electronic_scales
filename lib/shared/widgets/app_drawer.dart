@@ -211,24 +211,24 @@ class AppDrawer extends HookConsumerWidget {
             child: Column(
               children: [
                 const SizedBox(height: 4),
-                _FooterItem(
-                  icon: FontAwesomeIcons.gear,
-                  title: 'Cài đặt',
-                  color: const Color(0xFF607D8B),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    // TODO: Navigate to settings tab
-                  },
-                ),
-                _FooterItem(
-                  icon: FontAwesomeIcons.circleQuestion,
-                  title: 'Trợ giúp',
-                  color: const Color(0xFF607D8B),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    // TODO: Show help dialog
-                  },
-                ),
+                // _FooterItem(
+                //   icon: FontAwesomeIcons.gear,
+                //   title: 'Cài đặt',
+                //   color: const Color(0xFF607D8B),
+                //   onTap: () {
+                //     Navigator.of(context).pop();
+                //     // TODO: Navigate to settings tab
+                //   },
+                // ),
+                // _FooterItem(
+                //   icon: FontAwesomeIcons.circleQuestion,
+                //   title: 'Trợ giúp',
+                //   color: const Color(0xFF607D8B),
+                //   onTap: () {
+                //     Navigator.of(context).pop();
+                //     // TODO: Show help dialog
+                //   },
+                // ),
                 _FooterItem(
                   icon: FontAwesomeIcons.rightFromBracket,
                   title: 'Đăng xuất',
