@@ -22,6 +22,8 @@ class CustomTextField extends StatefulWidget {
   final TextInputType? keyboardType;
   final TextCapitalization textCapitalization;
   final int? maxLines;
+  final bool readOnly;
+  final VoidCallback? onTap;
 
   const CustomTextField({
     super.key,
@@ -44,6 +46,8 @@ class CustomTextField extends StatefulWidget {
     this.keyboardType,
     this.textCapitalization = TextCapitalization.none,
     this.maxLines = 1,
+    this.readOnly = false,
+    this.onTap,
   });
 
   @override
@@ -157,6 +161,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   controller: widget.controller,
                   onChanged: widget.onChanged,
                   enabled: !isInactive,
+                  readOnly: widget.readOnly,
+                  onTap: widget.onTap,
                   keyboardType: widget.keyboardType,
                   textCapitalization: widget.textCapitalization,
                   maxLines: widget.maxLines,
