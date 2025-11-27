@@ -7,9 +7,14 @@ import '../domain/completed_weighing.dart';
 
 /// Dialog hiển thị chi tiết xe đã cân xong
 class CompletedWeighingDetailDialog extends StatelessWidget {
-  const CompletedWeighingDetailDialog({super.key, required this.vehicle});
+  const CompletedWeighingDetailDialog({
+    super.key,
+    required this.vehicle,
+    required this.imageBaseUrl,
+  });
 
   final CompletedWeighing vehicle;
+  final String imageBaseUrl;
 
   // Flat colors theme
   static const Color primaryColor = Color(0xFF2196F3); // Blue
@@ -238,6 +243,108 @@ class CompletedWeighingDetailDialog extends StatelessWidget {
                           ),
                       ],
                     ),
+                  const SizedBox(height: 20),
+
+                  // 6. Hình ảnh
+                  if (_hasImages(vehicle))
+                    _DetailSection(
+                      title: 'Hình ảnh cân',
+                      icon: Iconsax.camera,
+                      color: sectionTitleColor,
+                      bgColor: sectionIconBgColor,
+                      children: [
+                        if (_hasImagesWeighing1(vehicle)) ...[
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 8),
+                            child: Text(
+                              'Lần 1',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 130,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                if (vehicle.vehicleImagePath11 != null)
+                                  _ImageThumbnail(
+                                    path: vehicle.vehicleImagePath11!,
+                                    label: 'Biển số 1',
+                                    imageBaseUrl: imageBaseUrl,
+                                  ),
+                                if (vehicle.panoramaImagePath11 != null)
+                                  _ImageThumbnail(
+                                    path: vehicle.panoramaImagePath11!,
+                                    label: 'Toàn cảnh 1',
+                                    imageBaseUrl: imageBaseUrl,
+                                  ),
+                                if (vehicle.vehicleImagePath12 != null)
+                                  _ImageThumbnail(
+                                    path: vehicle.vehicleImagePath12!,
+                                    label: 'Biển số 2',
+                                    imageBaseUrl: imageBaseUrl,
+                                  ),
+                                if (vehicle.panoramaImagePath12 != null)
+                                  _ImageThumbnail(
+                                    path: vehicle.panoramaImagePath12!,
+                                    label: 'Toàn cảnh 2',
+                                    imageBaseUrl: imageBaseUrl,
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ],
+                        if (_hasImagesWeighing2(vehicle)) ...[
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 8),
+                            child: Text(
+                              'Lần 2',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 130,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                if (vehicle.vehicleImagePath21 != null)
+                                  _ImageThumbnail(
+                                    path: vehicle.vehicleImagePath21!,
+                                    label: 'Biển số 1',
+                                    imageBaseUrl: imageBaseUrl,
+                                  ),
+                                if (vehicle.panoramaImagePath21 != null)
+                                  _ImageThumbnail(
+                                    path: vehicle.panoramaImagePath21!,
+                                    label: 'Toàn cảnh 1',
+                                    imageBaseUrl: imageBaseUrl,
+                                  ),
+                                if (vehicle.vehicleImagePath22 != null)
+                                  _ImageThumbnail(
+                                    path: vehicle.vehicleImagePath22!,
+                                    label: 'Biển số 2',
+                                    imageBaseUrl: imageBaseUrl,
+                                  ),
+                                if (vehicle.panoramaImagePath22 != null)
+                                  _ImageThumbnail(
+                                    path: vehicle.panoramaImagePath22!,
+                                    label: 'Toàn cảnh 2',
+                                    imageBaseUrl: imageBaseUrl,
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
                 ],
               ),
             ),
@@ -257,6 +364,24 @@ class CompletedWeighingDetailDialog extends StatelessWidget {
     } catch (e) {
       return '$value đ';
     }
+  }
+
+  bool _hasImages(CompletedWeighing vehicle) {
+    return _hasImagesWeighing1(vehicle) || _hasImagesWeighing2(vehicle);
+  }
+
+  bool _hasImagesWeighing1(CompletedWeighing vehicle) {
+    return vehicle.vehicleImagePath11 != null ||
+        vehicle.panoramaImagePath11 != null ||
+        vehicle.vehicleImagePath12 != null ||
+        vehicle.panoramaImagePath12 != null;
+  }
+
+  bool _hasImagesWeighing2(CompletedWeighing vehicle) {
+    return vehicle.vehicleImagePath21 != null ||
+        vehicle.panoramaImagePath21 != null ||
+        vehicle.vehicleImagePath22 != null ||
+        vehicle.panoramaImagePath22 != null;
   }
 
   Widget _buildHeader(BuildContext context) {
@@ -315,13 +440,20 @@ class CompletedWeighingDetailDialog extends StatelessWidget {
   }
 
   /// Show detail dialog as popup
-  static void show(BuildContext context, CompletedWeighing vehicle) {
+  static void show(
+    BuildContext context,
+    CompletedWeighing vehicle,
+    String imageBaseUrl,
+  ) {
     showDialog(
       context: context,
       builder: (context) => Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-        child: CompletedWeighingDetailDialog(vehicle: vehicle),
+        child: CompletedWeighingDetailDialog(
+          vehicle: vehicle,
+          imageBaseUrl: imageBaseUrl,
+        ),
       ),
     );
   }
@@ -447,6 +579,130 @@ class _DetailItem extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ImageThumbnail extends StatelessWidget {
+  const _ImageThumbnail({
+    required this.path,
+    required this.label,
+    required this.imageBaseUrl,
+  });
+
+  final String path;
+  final String label;
+  final String imageBaseUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    final url = _convertImagePathToUrl(path);
+
+    return Padding(
+      padding: const EdgeInsets.only(right: 12, bottom: 4),
+      child: Column(
+        children: [
+          InkWell(
+            onTap: () => _showFullScreenImage(context, url),
+            borderRadius: BorderRadius.circular(8),
+            child: Container(
+              width: 120,
+              height: 90,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey[300]!),
+                color: Colors.grey[100],
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(
+                  url,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes!
+                            : null,
+                        strokeWidth: 2,
+                      ),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Center(
+                      child: Icon(Icons.broken_image, color: Colors.grey),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: const TextStyle(fontSize: 11, color: Colors.black54),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _convertImagePathToUrl(String path) {
+    // Tìm phần đường dẫn bắt đầu bằng cấu trúc ngày tháng (VD: 2025_Thang_11)
+    // Pattern: 4 số + "_Thang_" + 2 số
+    final regex = RegExp(r'\d{4}_Thang_\d{2}');
+    final match = regex.firstMatch(path);
+
+    String relativePath;
+    if (match != null) {
+      // Lấy từ vị trí match đến hết chuỗi
+      relativePath = path.substring(match.start);
+    } else {
+      // Fallback nếu không tìm thấy pattern
+      relativePath = path.replaceAll(r'D:\DuLieuAnh\', '');
+    }
+
+    // Thay thế backslash bằng forward slash
+    relativePath = relativePath.replaceAll(r'\', '/');
+
+    // Thêm base URL
+    return '$imageBaseUrl/Images_Data/$relativePath';
+  }
+
+  void _showFullScreenImage(BuildContext context, String url) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: EdgeInsets.zero,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            InteractiveViewer(
+              minScale: 0.5,
+              maxScale: 4.0,
+              child: Image.network(url, fit: BoxFit.contain),
+            ),
+            Positioned(
+              top: 40,
+              right: 20,
+              child: IconButton(
+                icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

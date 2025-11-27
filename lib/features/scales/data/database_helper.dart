@@ -18,7 +18,20 @@ class DatabaseHelper {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 
-    return await openDatabase(path, version: 1, onCreate: _createDB);
+    return await openDatabase(
+      path,
+      version: 2,
+      onCreate: _createDB,
+      onUpgrade: _onUpgrade,
+    );
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute(
+        'ALTER TABLE scale_stations ADD COLUMN image_port INTEGER DEFAULT 85',
+      );
+    }
   }
 
   Future<void> _createDB(Database db, int version) async {
@@ -28,6 +41,7 @@ class DatabaseHelper {
         name TEXT NOT NULL,
         ip TEXT NOT NULL,
         port INTEGER NOT NULL,
+        image_port INTEGER DEFAULT 85,
         username TEXT NOT NULL,
         password TEXT NOT NULL,
         created_at TEXT NOT NULL
@@ -41,6 +55,7 @@ class DatabaseHelper {
       'name': station.name,
       'ip': station.ip,
       'port': station.port,
+      'image_port': station.imagePort,
       'username': station.username,
       'password': station.password,
       'created_at': station.createdAt.toIso8601String(),
@@ -74,6 +89,7 @@ class DatabaseHelper {
         'name': station.name,
         'ip': station.ip,
         'port': station.port,
+        'image_port': station.imagePort,
         'username': station.username,
         'password': station.password,
       },

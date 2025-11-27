@@ -13,6 +13,7 @@ abstract class ScaleStation with _$ScaleStation {
     required String name,
     required String ip,
     required int port,
+    @JsonKey(name: 'image_port') @Default(85) int imagePort,
     required String username,
     required String password,
     @JsonKey(name: 'created_at') required DateTime createdAt,

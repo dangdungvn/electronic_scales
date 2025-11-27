@@ -25,6 +25,9 @@ class AddEditStationScreen extends HookConsumerWidget {
     final portController = useTextEditingController(
       text: station?.port.toString() ?? '',
     );
+    final imagePortController = useTextEditingController(
+      text: station?.imagePort.toString() ?? '85',
+    );
     final usernameController = useTextEditingController(
       text: station?.username ?? '',
     );
@@ -97,6 +100,24 @@ class AddEditStationScreen extends HookConsumerWidget {
                 return null;
               },
             ),
+            const SizedBox(height: 20),
+            CustomTextField(
+              controller: imagePortController,
+              label: 'Cổng hình ảnh (Image Port)',
+              icon: Iconsax.gallery,
+              hint: '85',
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              validator: (value) {
+                if (value != null && value.isNotEmpty) {
+                  final port = int.tryParse(value);
+                  if (port == null || port < 1 || port > 65535) {
+                    return 'Cổng phải từ 1 đến 65535';
+                  }
+                }
+                return null;
+              },
+            ),
             const SizedBox(height: 32),
             // Authentication section
             const FormSectionTitle(
@@ -142,6 +163,11 @@ class AddEditStationScreen extends HookConsumerWidget {
                               name: nameController.text.trim(),
                               ip: ipController.text.trim(),
                               port: int.parse(portController.text.trim()),
+                              imagePort:
+                                  int.tryParse(
+                                    imagePortController.text.trim(),
+                                  ) ??
+                                  85,
                               username: usernameController.text.trim(),
                               password: passwordController.text,
                               createdAt: station?.createdAt ?? DateTime.now(),

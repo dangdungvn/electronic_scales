@@ -9,6 +9,7 @@ import '../../../shared/widgets/loading_widget.dart';
 import '../data/completed_weighing_provider.dart';
 import '../domain/completed_weighing.dart';
 import 'completed_weighing_detail_dialog.dart';
+import '../../scales/data/scale_station_provider.dart';
 
 class CompletedWeighingListScreen extends HookConsumerWidget {
   const CompletedWeighingListScreen({super.key});
@@ -126,13 +127,13 @@ class CompletedWeighingListScreen extends HookConsumerWidget {
   }
 }
 
-class _CompletedWeighingCard extends StatelessWidget {
+class _CompletedWeighingCard extends ConsumerWidget {
   const _CompletedWeighingCard({required this.item});
 
   final CompletedWeighing item;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       elevation: 0,
       color: Colors.white,
@@ -141,7 +142,32 @@ class _CompletedWeighingCard extends StatelessWidget {
         side: BorderSide(color: Colors.grey[200]!),
       ),
       child: InkWell(
-        onTap: () => CompletedWeighingDetailDialog.show(context, item),
+        onTap: () async {
+          try {
+            final stations = await ref.read(scaleStationListProvider.future);
+            if (stations.isNotEmpty && context.mounted) {
+              final station = stations.first;
+              final imageBaseUrl = 'http://${station.ip}:${station.imagePort}';
+              CompletedWeighingDetailDialog.show(context, item, imageBaseUrl);
+            } else if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Không tìm thấy thông tin trạm cân'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          } catch (e) {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Lỗi: ${e.toString()}'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          }
+        },
         borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.all(16),
