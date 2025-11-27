@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import '../../scales/data/scale_station_provider.dart';
 import '../data/pending_weighing_provider.dart';
 import '../domain/pending_weighing.dart';
 import 'pending_weighing_detail_dialog.dart';
@@ -10,10 +11,7 @@ import '../../../shared/widgets/widgets.dart';
 
 /// Screen hiển thị danh sách xe chờ cân lần 2
 class PendingWeighingListScreen extends HookConsumerWidget {
-  const PendingWeighingListScreen({
-    super.key,
-    this.onOpenDrawer,
-  });
+  const PendingWeighingListScreen({super.key, this.onOpenDrawer});
 
   final VoidCallback? onOpenDrawer;
 
@@ -122,8 +120,36 @@ class _PendingVehicleCard extends ConsumerWidget {
       shadowColor: Colors.black12,
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
-        onTap: () {
-          PendingWeighingDetailDialog.show(context, vehicle, gradient);
+        onTap: () async {
+          try {
+            final stations = await ref.read(scaleStationListProvider.future);
+            if (stations.isNotEmpty && context.mounted) {
+              final station = stations.first;
+              final imageBaseUrl = 'http://${station.ip}:${station.imagePort}';
+              PendingWeighingDetailDialog.show(
+                context,
+                vehicle,
+                gradient,
+                imageBaseUrl,
+              );
+            } else if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Không tìm thấy thông tin trạm cân'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          } catch (e) {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Lỗi: ${e.toString()}'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          }
         },
         child: Container(
           decoration: BoxDecoration(

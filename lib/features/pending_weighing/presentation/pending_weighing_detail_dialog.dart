@@ -10,10 +10,12 @@ class PendingWeighingDetailDialog extends StatelessWidget {
     super.key,
     required this.vehicle,
     required this.gradient,
+    required this.imageBaseUrl,
   });
 
   final PendingWeighing vehicle;
   final List<Color> gradient;
+  final String imageBaseUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -198,39 +200,55 @@ class PendingWeighingDetailDialog extends StatelessWidget {
                         ),
                     ],
                   ),
-                  // if (vehicle.vehicleImagePath11?.isNotEmpty == true ||
-                  //     vehicle.vehicleImagePath12?.isNotEmpty == true ||
-                  //     vehicle.panoramaImagePath11?.isNotEmpty == true ||
-                  //     vehicle.panoramaImagePath12?.isNotEmpty == true) ...[
-                  //   const SizedBox(height: 20),
-                  //   _DetailSection(
-                  //     title: 'Hình ảnh cân lần 1',
-                  //     icon: Iconsax.camera,
-                  //     color: gradient[0],
-                  //     children: [
-                  //       if (vehicle.vehicleImagePath11?.isNotEmpty == true)
-                  //         _ImageItem(
-                  //           label: 'Ảnh biển số 1',
-                  //           imagePath: vehicle.vehicleImagePath11!,
-                  //         ),
-                  //       if (vehicle.panoramaImagePath11?.isNotEmpty == true)
-                  //         _ImageItem(
-                  //           label: 'Ảnh toàn cảnh 1',
-                  //           imagePath: vehicle.panoramaImagePath11!,
-                  //         ),
-                  //       if (vehicle.vehicleImagePath12?.isNotEmpty == true)
-                  //         _ImageItem(
-                  //           label: 'Ảnh biển số 2',
-                  //           imagePath: vehicle.vehicleImagePath12!,
-                  //         ),
-                  //       if (vehicle.panoramaImagePath12?.isNotEmpty == true)
-                  //         _ImageItem(
-                  //           label: 'Ảnh toàn cảnh 2',
-                  //           imagePath: vehicle.panoramaImagePath12!,
-                  //         ),
-                  //     ],
-                  //   ),
-                  // ],
+                  if (vehicle.vehicleImagePath11?.isNotEmpty == true ||
+                      vehicle.vehicleImagePath12?.isNotEmpty == true ||
+                      vehicle.panoramaImagePath11?.isNotEmpty == true ||
+                      vehicle.panoramaImagePath12?.isNotEmpty == true) ...[
+                    const SizedBox(height: 20),
+                    _DetailSection(
+                      title: 'Hình ảnh cân lần 1',
+                      icon: Iconsax.camera,
+                      color: gradient[0],
+                      children: [
+                        SizedBox(
+                          height: 130,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                              if (vehicle.vehicleImagePath11?.isNotEmpty ==
+                                  true)
+                                _ImageThumbnail(
+                                  path: vehicle.vehicleImagePath11!,
+                                  label: 'Ảnh biển số 1',
+                                  imageBaseUrl: imageBaseUrl,
+                                ),
+                              if (vehicle.panoramaImagePath11?.isNotEmpty ==
+                                  true)
+                                _ImageThumbnail(
+                                  path: vehicle.panoramaImagePath11!,
+                                  label: 'Ảnh toàn cảnh 1',
+                                  imageBaseUrl: imageBaseUrl,
+                                ),
+                              if (vehicle.vehicleImagePath12?.isNotEmpty ==
+                                  true)
+                                _ImageThumbnail(
+                                  path: vehicle.vehicleImagePath12!,
+                                  label: 'Ảnh biển số 2',
+                                  imageBaseUrl: imageBaseUrl,
+                                ),
+                              if (vehicle.panoramaImagePath12?.isNotEmpty ==
+                                  true)
+                                _ImageThumbnail(
+                                  path: vehicle.panoramaImagePath12!,
+                                  label: 'Ảnh toàn cảnh 2',
+                                  imageBaseUrl: imageBaseUrl,
+                                ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                   if (vehicle.ghiChu?.isNotEmpty == true) ...[
                     const SizedBox(height: 20),
                     _DetailSection(
@@ -323,6 +341,7 @@ class PendingWeighingDetailDialog extends StatelessWidget {
     BuildContext context,
     PendingWeighing vehicle,
     List<Color> gradient,
+    String imageBaseUrl,
   ) {
     showDialog(
       context: context,
@@ -332,6 +351,7 @@ class PendingWeighingDetailDialog extends StatelessWidget {
         child: PendingWeighingDetailDialog(
           vehicle: vehicle,
           gradient: gradient,
+          imageBaseUrl: imageBaseUrl,
         ),
       ),
     );
@@ -454,73 +474,126 @@ class _DetailItem extends StatelessWidget {
   }
 }
 
-/// Widget hiển thị hình ảnh
-// class _ImageItem extends StatelessWidget {
-//   const _ImageItem({required this.label, required this.imagePath});
+class _ImageThumbnail extends StatelessWidget {
+  const _ImageThumbnail({
+    required this.path,
+    required this.label,
+    required this.imageBaseUrl,
+  });
 
-//   final String label;
-//   final String imagePath;
+  final String path;
+  final String label;
+  final String imageBaseUrl;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         Row(
-//           children: [
-//             Icon(Iconsax.image, size: 20, color: Colors.grey[600]),
-//             const SizedBox(width: 12),
-//             Text(
-//               label,
-//               style: TextStyle(
-//                 fontSize: 13,
-//                 color: Colors.grey[600],
-//                 fontWeight: FontWeight.w500,
-//               ),
-//             ),
-//           ],
-//         ),
-//         const SizedBox(height: 8),
-//         Container(
-//           width: double.infinity,
-//           height: 200,
-//           decoration: BoxDecoration(
-//             color: Colors.grey[100],
-//             borderRadius: BorderRadius.circular(8),
-//             border: Border.all(color: Colors.grey[300]!),
-//           ),
-//           child: ClipRRect(
-//             borderRadius: BorderRadius.circular(8),
-//             child: Stack(
-//               fit: StackFit.expand,
-//               children: [
-//                 // Placeholder
-//                 Center(
-//                   child: Column(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     children: [
-//                       Icon(Iconsax.image, size: 48, color: Colors.grey[400]),
-//                       const SizedBox(height: 8),
-//                       Text(
-//                         'Ảnh từ máy cân',
-//                         style: TextStyle(fontSize: 12, color: Colors.grey[500]),
-//                       ),
-//                       const SizedBox(height: 4),
-//                       Text(
-//                         imagePath.split('\\').last,
-//                         style: TextStyle(fontSize: 10, color: Colors.grey[400]),
-//                         textAlign: TextAlign.center,
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//                 // TODO: Load image from network or local path
-//                 // Image.network hoặc Image.file khi có API endpoint
-//               ],
-//             ),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    final url = _convertImagePathToUrl(path);
+
+    return Padding(
+      padding: const EdgeInsets.only(right: 12, bottom: 4),
+      child: Column(
+        children: [
+          InkWell(
+            onTap: () => _showFullScreenImage(context, url),
+            borderRadius: BorderRadius.circular(8),
+            child: Container(
+              width: 120,
+              height: 90,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey[300]!),
+                color: Colors.grey[100],
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(
+                  url,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes!
+                            : null,
+                        strokeWidth: 2,
+                      ),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Center(
+                      child: Icon(Icons.broken_image, color: Colors.grey),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: const TextStyle(fontSize: 11, color: Colors.black54),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _convertImagePathToUrl(String path) {
+    // Tìm phần đường dẫn bắt đầu bằng cấu trúc ngày tháng (VD: 2025_Thang_11)
+    // Pattern: 4 số + "_Thang_" + 2 số
+    final regex = RegExp(r'\d{4}_Thang_\d{2}');
+    final match = regex.firstMatch(path);
+
+    String relativePath;
+    if (match != null) {
+      // Lấy từ vị trí match đến hết chuỗi
+      relativePath = path.substring(match.start);
+    } else {
+      // Fallback nếu không tìm thấy pattern
+      relativePath = path.replaceAll(r'D:\DuLieuAnh\', '');
+    }
+
+    // Thay thế backslash bằng forward slash
+    relativePath = relativePath.replaceAll(r'\', '/');
+
+    // Thêm base URL
+    return '$imageBaseUrl/Images_Data/$relativePath';
+  }
+
+  void _showFullScreenImage(BuildContext context, String url) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: EdgeInsets.zero,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            InteractiveViewer(
+              minScale: 0.5,
+              maxScale: 4.0,
+              child: Image.network(url, fit: BoxFit.contain),
+            ),
+            Positioned(
+              top: 40,
+              right: 20,
+              child: IconButton(
+                icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
