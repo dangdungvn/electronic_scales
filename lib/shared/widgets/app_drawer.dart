@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../features/home/data/permissions_provider.dart';
 import '../../features/scales/data/scale_station_provider.dart';
 import '../../features/pending_weighing/data/pending_weighing_provider.dart';
+import '../../core/router/app_router.dart';
 
 /// App Drawer - Menu chung cho toàn bộ app (trừ feature scales)
 class AppDrawer extends HookConsumerWidget {
@@ -215,7 +216,7 @@ class AppDrawer extends HookConsumerWidget {
                   title: 'Cài đặt',
                   color: const Color(0xFF607D8B),
                   onTap: () {
-                    context.pop();
+                    Navigator.of(context).pop();
                     // TODO: Navigate to settings tab
                   },
                 ),
@@ -224,7 +225,7 @@ class AppDrawer extends HookConsumerWidget {
                   title: 'Trợ giúp',
                   color: const Color(0xFF607D8B),
                   onTap: () {
-                    context.pop();
+                    Navigator.of(context).pop();
                     // TODO: Show help dialog
                   },
                 ),
@@ -233,7 +234,7 @@ class AppDrawer extends HookConsumerWidget {
                   title: 'Đăng xuất',
                   color: const Color(0xFFF44336),
                   onTap: () {
-                    context.pop();
+                    Navigator.of(context).pop();
                     _showLogoutDialog(context, ref);
                   },
                 ),
@@ -247,8 +248,9 @@ class AppDrawer extends HookConsumerWidget {
   }
 
   void _showLogoutDialog(BuildContext context, WidgetRef ref) {
-    // Lưu notifier trước khi show dialog để tránh lỗi unmounted
+    // Lưu notifier và router trước khi show dialog để tránh lỗi unmounted
     final permissionsNotifier = ref.read(userPermissionsProvider.notifier);
+    final router = ref.read(goRouterProvider);
 
     showDialog(
       context: context,
@@ -274,7 +276,10 @@ class AppDrawer extends HookConsumerWidget {
         ),
         content: const Text('Bạn có chắc chắn muốn đăng xuất?'),
         actions: [
-          TextButton(onPressed: () => context.pop(), child: const Text('Hủy')),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: const Text('Hủy'),
+          ),
           FilledButton(
             style: FilledButton.styleFrom(backgroundColor: Colors.red[400]),
             onPressed: () async {
@@ -282,13 +287,13 @@ class AppDrawer extends HookConsumerWidget {
               permissionsNotifier.clearPermissions();
 
               // Close dialog
-              context.pop();
+              Navigator.of(dialogContext).pop();
 
               // Đợi một chút để dialog đóng hoàn toàn
               await Future.delayed(const Duration(milliseconds: 100));
 
-              // Navigate to scale stations list - dùng GoRouter
-              context.go('/scales');
+              // Navigate to scale stations list - dùng router đã lưu
+              router.go('/scales');
             },
             child: const Text('Đăng xuất'),
           ),
@@ -467,7 +472,7 @@ class _DrawerItem extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-            context.pop(); // Close drawer
+            Navigator.of(context).pop(); // Close drawer
 
             if (!isActive) {
               context.push(route);

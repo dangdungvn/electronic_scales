@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../features/scales/presentation/scale_station_list_screen.dart';
 import '../../features/pending_weighing/presentation/pending_weighing_list_screen.dart';
+import '../../features/completed_weighing/presentation/completed_weighing_list_screen.dart';
 import '../../features/registered_vehicles/presentation/registered_vehicle_list_screen.dart';
 import '../../features/customers/presentation/customer_list_screen.dart';
 import '../../features/drivers/presentation/driver_list_screen.dart';
@@ -35,6 +36,11 @@ GoRouter goRouter(Ref ref) {
         path: '/pending-weighing',
         name: 'pending-weighing',
         builder: (context, state) => const PendingWeighingListScreen(),
+      ),
+      GoRoute(
+        path: '/completed-weighing',
+        name: 'completed-weighing',
+        builder: (context, state) => const CompletedWeighingListScreen(),
       ),
       GoRoute(
         path: '/registered-vehicles',
