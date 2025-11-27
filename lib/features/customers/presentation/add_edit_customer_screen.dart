@@ -57,232 +57,222 @@ class AddEditCustomerSheet extends HookConsumerWidget {
     final isLoading = useState(false);
     final formKey = useMemoized(() => GlobalKey<FormState>());
 
-    return DraggableScrollableSheet(
-      initialChildSize: 0.93,
-      minChildSize: 0.93,
-      maxChildSize: 0.93,
-      builder: (context, scrollController) {
-        return GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(20),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Container(
+        height: MediaQuery.of(context).size.height * 0.93,
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          children: [
+            // Header
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor.withOpacity(0.1),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
               ),
-            ),
-            child: Column(
-              children: [
-                // Header
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor.withOpacity(0.1),
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(20),
+              child: Column(
+                children: [
+                  // Drag handle
+                  Container(
+                    width: 40,
+                    height: 4,
+                    margin: const EdgeInsets.only(bottom: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[400],
+                      borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                  child: Column(
+                  // Title and close button
+                  Row(
                     children: [
-                      // Drag handle
-                      Container(
-                        width: 40,
-                        height: 4,
-                        margin: const EdgeInsets.only(bottom: 12),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[400],
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      ),
-                      // Title and close button
-                      Row(
-                        children: [
-                          Icon(
-                            Iconsax.user,
+                      Icon(Iconsax.user, color: Theme.of(context).primaryColor),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          isEditing ? 'Sửa Khách Hàng' : 'Thêm Khách Hàng',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                             color: Theme.of(context).primaryColor,
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Text(
-                              isEditing ? 'Sửa Khách Hàng' : 'Thêm Khách Hàng',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Iconsax.close_circle),
-                            onPressed: () => Navigator.of(context).pop(),
-                          ),
-                        ],
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Iconsax.close_circle),
+                        onPressed: () => Navigator.of(context).pop(),
                       ),
                     ],
                   ),
-                ),
-                // Content - Scrollable form
-                Expanded(
-                  child: Form(
-                    key: formKey,
-                    child: ListView(
-                      controller: scrollController,
-                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-                      children: [
-                        // Basic Information Section
-                        _SectionHeader(
-                          icon: Iconsax.profile_circle,
-                          title: 'Thông Tin Cơ Bản',
-                        ),
-                        const SizedBox(height: 8),
-                        CustomTextField(
-                          title: 'MÃ KHÁCH HÀNG *',
-                          placeholder: 'Nhập mã khách hàng',
-                          controller: codeController,
-                          textCapitalization: TextCapitalization.characters,
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'Vui lòng nhập mã khách hàng';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 8),
-                        CustomTextField(
-                          title: 'TÊN KHÁCH HÀNG *',
-                          placeholder: 'Nhập tên khách hàng',
-                          controller: nameController,
-                          textCapitalization: TextCapitalization.words,
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'Vui lòng nhập tên khách hàng';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 8),
-                        CustomTextField(
-                          title: 'SỐ ĐIỆN THOẠI',
-                          placeholder: 'Nhập số điện thoại',
-                          controller: phoneController,
-                          keyboardType: TextInputType.phone,
-                        ),
-                        const SizedBox(height: 8),
-                        CustomTextField(
-                          title: 'ĐỊA CHỈ',
-                          placeholder: 'Nhập địa chỉ',
-                          controller: addressController,
-                          textCapitalization: TextCapitalization.words,
-                          maxLines: 2,
-                        ),
-                        const SizedBox(height: 12),
-
-                        // Tax Information Section
-                        _SectionHeader(
-                          icon: Iconsax.document_text,
-                          title: 'Thông Tin Thuế & Giấy Tờ',
-                        ),
-                        const SizedBox(height: 8),
-                        CustomTextField(
-                          title: 'MÃ SỐ THUẾ',
-                          placeholder: 'Nhập mã số thuế',
-                          controller: taxCodeController,
-                        ),
-                        const SizedBox(height: 8),
-                        CustomTextField(
-                          title: 'CMND/CCCD',
-                          placeholder: 'Nhập số CMND/CCCD',
-                          controller: idCardController,
-                          keyboardType: TextInputType.number,
-                        ),
-                        const SizedBox(height: 8),
-                        CustomTextField(
-                          title: 'NGÀY CẤP',
-                          placeholder: 'dd/mm/yyyy',
-                          controller: issueDateController,
-                        ),
-                        const SizedBox(height: 8),
-                        CustomTextField(
-                          title: 'NƠI CẤP',
-                          placeholder: 'Nhập nơi cấp',
-                          controller: issuePlaceController,
-                          textCapitalization: TextCapitalization.words,
-                        ),
-                        const SizedBox(height: 12),
-
-                        // Note Section
-                        _SectionHeader(icon: Iconsax.note_1, title: 'Ghi Chú'),
-                        const SizedBox(height: 8),
-                        CustomTextField(
-                          title: 'GHI CHÚ',
-                          placeholder: 'Nhập ghi chú',
-                          controller: noteController,
-                          maxLines: 3,
-                          textCapitalization: TextCapitalization.sentences,
-                        ),
-                        const SizedBox(height: 8),
-                      ],
-                    ),
-                  ),
-                ),
-
-                // Fixed bottom button
-                Container(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                  decoration: const BoxDecoration(color: Colors.transparent),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: isLoading.value
-                          ? null
-                          : () => _handleSave(
-                              context,
-                              ref,
-                              formKey,
-                              isEditing,
-                              isLoading,
-                              codeController,
-                              nameController,
-                              phoneController,
-                              addressController,
-                              idCardController,
-                              issueDateController,
-                              issuePlaceController,
-                              taxCodeController,
-                              noteController,
-                            ),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: isLoading.value
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : Text(
-                              isEditing ? 'Cập nhật' : 'Thêm khách hàng',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      },
+            // Content - Scrollable form
+            Expanded(
+              child: Form(
+                key: formKey,
+                child: ListView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                  children: [
+                    // Basic Information Section
+                    _SectionHeader(
+                      icon: Iconsax.profile_circle,
+                      title: 'Thông Tin Cơ Bản',
+                    ),
+                    const SizedBox(height: 8),
+                    CustomTextField(
+                      title: 'MÃ KHÁCH HÀNG *',
+                      placeholder: 'Nhập mã khách hàng',
+                      controller: codeController,
+                      textCapitalization: TextCapitalization.characters,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Vui lòng nhập mã khách hàng';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    CustomTextField(
+                      title: 'TÊN KHÁCH HÀNG *',
+                      placeholder: 'Nhập tên khách hàng',
+                      controller: nameController,
+                      textCapitalization: TextCapitalization.words,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Vui lòng nhập tên khách hàng';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    CustomTextField(
+                      title: 'SỐ ĐIỆN THOẠI',
+                      placeholder: 'Nhập số điện thoại',
+                      controller: phoneController,
+                      keyboardType: TextInputType.phone,
+                    ),
+                    const SizedBox(height: 8),
+                    CustomTextField(
+                      title: 'ĐỊA CHỈ',
+                      placeholder: 'Nhập địa chỉ',
+                      controller: addressController,
+                      textCapitalization: TextCapitalization.words,
+                      maxLines: 2,
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Tax Information Section
+                    _SectionHeader(
+                      icon: Iconsax.document_text,
+                      title: 'Thông Tin Thuế & Giấy Tờ',
+                    ),
+                    const SizedBox(height: 8),
+                    CustomTextField(
+                      title: 'MÃ SỐ THUẾ',
+                      placeholder: 'Nhập mã số thuế',
+                      controller: taxCodeController,
+                    ),
+                    const SizedBox(height: 8),
+                    CustomTextField(
+                      title: 'CMND/CCCD',
+                      placeholder: 'Nhập số CMND/CCCD',
+                      controller: idCardController,
+                      keyboardType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 8),
+                    CustomTextField(
+                      title: 'NGÀY CẤP',
+                      placeholder: 'dd/mm/yyyy',
+                      controller: issueDateController,
+                    ),
+                    const SizedBox(height: 8),
+                    CustomTextField(
+                      title: 'NƠI CẤP',
+                      placeholder: 'Nhập nơi cấp',
+                      controller: issuePlaceController,
+                      textCapitalization: TextCapitalization.words,
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Note Section
+                    _SectionHeader(icon: Iconsax.note_1, title: 'Ghi Chú'),
+                    const SizedBox(height: 8),
+                    CustomTextField(
+                      title: 'GHI CHÚ',
+                      placeholder: 'Nhập ghi chú',
+                      controller: noteController,
+                      maxLines: 3,
+                      textCapitalization: TextCapitalization.sentences,
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                ),
+              ),
+            ),
+
+            // Fixed bottom button
+            Container(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              decoration: const BoxDecoration(color: Colors.transparent),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: isLoading.value
+                      ? null
+                      : () => _handleSave(
+                          context,
+                          ref,
+                          formKey,
+                          isEditing,
+                          isLoading,
+                          codeController,
+                          nameController,
+                          phoneController,
+                          addressController,
+                          idCardController,
+                          issueDateController,
+                          issuePlaceController,
+                          taxCodeController,
+                          noteController,
+                        ),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: isLoading.value
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : Text(
+                          isEditing ? 'Cập nhật' : 'Thêm khách hàng',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
