@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:intl/intl.dart';
+import '../data/home_statistics_provider.dart';
 import 'home_screen.dart';
 
 /// Tab Trang chủ - Hiển thị dashboard và thống kê
@@ -9,6 +11,8 @@ class HomeTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final statsAsync = ref.watch(homeStatisticsDataProvider);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -35,139 +39,159 @@ class HomeTab extends ConsumerWidget {
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Welcome card
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF2196F3), Color(0xFF64B5F6)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          return ref.refresh(homeStatisticsDataProvider.future);
+        },
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Welcome card
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF2196F3), Color(0xFF64B5F6)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF2196F3).withOpacity(0.3),
+                      blurRadius: 15,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
                 ),
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF2196F3).withOpacity(0.3),
-                    blurRadius: 15,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Icon(
-                    Iconsax.emoji_happy,
-                    color: Colors.white,
-                    size: 40,
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Chào mừng trở lại!',
-                    style: TextStyle(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(
+                      Iconsax.emoji_happy,
                       color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                      size: 40,
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Hệ thống quản lý trạm cân điện tử',
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.9),
-                      fontSize: 16,
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Chào mừng trở lại!',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 8),
+                    Text(
+                      'Hệ thống quản lý trạm cân điện tử',
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.9),
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 24),
-            // Statistics cards
-            Text(
-              'Thống Kê',
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: _StatCard(
-                    icon: Iconsax.weight_1,
-                    title: 'Tổng cân',
-                    value: '0',
-                    color: const Color(0xFF2196F3),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _StatCard(
-                    icon: Iconsax.truck_fast,
-                    title: 'Hôm nay',
-                    value: '0',
-                    color: const Color(0xFF4CAF50),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: _StatCard(
-                    icon: Iconsax.status,
-                    title: 'Hoạt động',
-                    value: '0',
-                    color: const Color(0xFFFF9800),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _StatCard(
-                    icon: Iconsax.chart,
-                    title: 'Tuần này',
-                    value: '0',
-                    color: const Color(0xFF9C27B0),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            // Quick actions
-            Text(
-              'Thao Tác Nhanh',
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            _QuickActionCard(
-              icon: Iconsax.add_circle,
-              title: 'Cân hàng mới',
-              subtitle: 'Thêm phiếu cân mới',
-              color: const Color(0xFF2196F3),
-              onTap: () {
-                // TODO: Navigate to weighing screen
-              },
-            ),
-            const SizedBox(height: 12),
-            _QuickActionCard(
-              icon: Iconsax.document,
-              title: 'Xem báo cáo',
-              subtitle: 'Thống kê và báo cáo',
-              color: const Color(0xFF4CAF50),
-              onTap: () {
-                // TODO: Navigate to reports screen
-              },
-            ),
-          ],
+              const SizedBox(height: 24),
+              // Statistics cards
+              Text(
+                'Thống Kê Hôm Nay',
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+              statsAsync.when(
+                data: (stats) {
+                  final currencyFormat = NumberFormat("#,##0", "vi_VN");
+                  return Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _StatCard(
+                              icon: Iconsax.truck_fast,
+                              title: 'Xe chờ cân',
+                              value: stats.pendingCount.toString(),
+                              color: const Color(0xFFFF9800),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: _StatCard(
+                              icon: Iconsax.verify,
+                              title: 'Xe đã cân',
+                              value: stats.completedCountToday.toString(),
+                              color: const Color(0xFF4CAF50),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _StatCard(
+                              icon: Iconsax.weight_1,
+                              title: 'Tổng khối lượng (kg)',
+                              value: currencyFormat.format(
+                                stats.totalWeightToday,
+                              ),
+                              color: const Color(0xFF2196F3),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: _StatCard(
+                              icon: Iconsax.people,
+                              title: 'Khách hàng',
+                              value: stats.customerCount.toString(),
+                              color: const Color(0xFF9C27B0),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stack) =>
+                    Center(child: Text('Lỗi tải dữ liệu: $error')),
+              ),
+              // const SizedBox(height: 24),
+              // // Quick actions
+              // Text(
+              //   'Thao Tác Nhanh',
+              //   style: Theme.of(
+              //     context,
+              //   ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+              // ),
+              // const SizedBox(height: 16),
+              // _QuickActionCard(
+              //   icon: Iconsax.add_circle,
+              //   title: 'Cân hàng mới',
+              //   subtitle: 'Thêm phiếu cân mới',
+              //   color: const Color(0xFF2196F3),
+              //   onTap: () {
+              //     // TODO: Navigate to weighing screen
+              //   },
+              // ),
+              // const SizedBox(height: 12),
+              // _QuickActionCard(
+              //   icon: Iconsax.document,
+              //   title: 'Xem báo cáo',
+              //   subtitle: 'Thống kê và báo cáo',
+              //   color: const Color(0xFF4CAF50),
+              //   onTap: () {
+              //     // TODO: Navigate to reports screen
+              //   },
+              // ),
+            ],
+          ),
         ),
       ),
     );
