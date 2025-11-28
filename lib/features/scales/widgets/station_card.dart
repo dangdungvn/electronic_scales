@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../domain/scale_station.dart';
-import '../presentation/station_detail_screen.dart';
+import '../presentation/add_edit_station_screen.dart';
 
 /// Widget card hiển thị thông tin trạm cân trong list
 class StationCard extends StatelessWidget {
@@ -118,49 +118,23 @@ class StationCard extends StatelessWidget {
                   ],
                 ),
               ),
-              // Detail button
+              // Edit button
               IconButton(
-                onPressed: () => _navigateToDetail(context),
+                onPressed: () =>
+                    showAddEditStationSheet(context: context, station: station),
                 icon: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: gradient[0].withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(
-                    Iconsax.arrow_right_3,
-                    color: gradient[0],
-                    size: 18,
-                  ),
+                  child: Icon(Iconsax.edit, color: gradient[0], size: 18),
                 ),
-                tooltip: 'Xem chi tiết',
+                tooltip: 'Sửa trạm cân',
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  void _navigateToDetail(BuildContext context) {
-    Navigator.push(
-      context,
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            StationDetailScreen(stationId: station.id!),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = Offset(1.0, 0.0);
-          const end = Offset.zero;
-          const curve = Curves.easeInOutCubic;
-          var tween = Tween(
-            begin: begin,
-            end: end,
-          ).chain(CurveTween(curve: curve));
-          return SlideTransition(
-            position: animation.drive(tween),
-            child: child,
-          );
-        },
       ),
     );
   }

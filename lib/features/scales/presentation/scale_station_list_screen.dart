@@ -70,26 +70,7 @@ class ScaleStationListScreen extends HookConsumerWidget {
   }
 
   void _navigateToAddStation(BuildContext context) {
-    Navigator.push(
-      context,
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            const AddEditStationScreen(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = Offset(0.0, 1.0);
-          const end = Offset.zero;
-          const curve = Curves.easeInOutCubic;
-          var tween = Tween(
-            begin: begin,
-            end: end,
-          ).chain(CurveTween(curve: curve));
-          return SlideTransition(
-            position: animation.drive(tween),
-            child: child,
-          );
-        },
-      ),
-    );
+    showAddEditStationSheet(context: context);
   }
 }
 
@@ -124,10 +105,59 @@ class _StationList extends ConsumerWidget {
             itemCount: stations.length,
             itemBuilder: (context, index) {
               final station = stations[index];
-              return StationCard(
-                station: station,
-                index: index,
-                onTest: () => _testConnection(context, station, ref),
+              return Dismissible(
+                key: ValueKey(station.id),
+                direction: DismissDirection.endToStart,
+                background: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 4),
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.only(right: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: const Icon(Iconsax.trash, color: Colors.white),
+                ),
+                confirmDismiss: (direction) async {
+                  return await showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Xác nhận xóa'),
+                      content: Text(
+                        'Bạn có chắc chắn muốn xóa trạm cân "${station.name}" không?',
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(false),
+                          child: const Text('Hủy'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(true),
+                          child: const Text(
+                            'Xóa',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                onDismissed: (direction) {
+                  ref
+                      .read(scaleStationListProvider.notifier)
+                      .deleteStation(station.id!);
+                  ConnectionResultSnackbar.showSimple(
+                    context,
+                    message: 'Đã xóa trạm cân ${station.name}',
+                    backgroundColor: Colors.green,
+                    icon: Iconsax.tick_circle,
+                  );
+                },
+                child: StationCard(
+                  station: station,
+                  index: index,
+                  onTest: () => _testConnection(context, station, ref),
+                ),
               );
             },
           );

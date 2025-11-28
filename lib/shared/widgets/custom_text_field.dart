@@ -24,6 +24,7 @@ class CustomTextField extends StatefulWidget {
   final int? maxLines;
   final bool readOnly;
   final VoidCallback? onTap;
+  final bool obscureText;
 
   const CustomTextField({
     super.key,
@@ -48,6 +49,7 @@ class CustomTextField extends StatefulWidget {
     this.maxLines = 1,
     this.readOnly = false,
     this.onTap,
+    this.obscureText = false,
   });
 
   @override
@@ -166,6 +168,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   keyboardType: widget.keyboardType,
                   textCapitalization: widget.textCapitalization,
                   maxLines: widget.maxLines,
+                  obscureText: widget.obscureText,
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 14,
