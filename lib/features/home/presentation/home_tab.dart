@@ -107,7 +107,6 @@ class HomeTab extends ConsumerWidget {
               const SizedBox(height: 16),
               statsAsync.when(
                 data: (stats) {
-                  final currencyFormat = NumberFormat("#,##0", "vi_VN");
                   return Column(
                     children: [
                       Row(
@@ -137,10 +136,8 @@ class HomeTab extends ConsumerWidget {
                           Expanded(
                             child: _StatCard(
                               icon: Iconsax.weight_1,
-                              title: 'Tổng khối lượng (kg)',
-                              value: currencyFormat.format(
-                                stats.totalWeightToday,
-                              ),
+                              title: 'Tổng KL (tấn)',
+                              value: stats.totalWeightToday.toString(),
                               color: const Color(0xFF2196F3),
                             ),
                           ),
